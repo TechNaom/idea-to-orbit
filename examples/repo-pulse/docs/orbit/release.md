@@ -6,8 +6,8 @@ Date: 2026-12-04. Commit: 5c1e9a0. Decision: **go**
 
 | ID | Acceptance check | Result | Evidence |
 |---|---|---|---|
-| R1 | 3 issues + 1 pull request fixture lists exactly 3 | pass | `pytest tests/test_issues.py` 4 passed; staging email lists this week's 6 issues |
-| R2 | Failed runs on main only | pass | `pytest tests/test_runs.py` 3 passed; staging email matches the Actions tab (2 failures) |
+| R1 | 3 issues + 1 pull request fixture lists exactly 3 | pass | `pytest tests/test_issues.py` 3 passed; staging email lists this week's 6 issues |
+| R2 | Failed runs on main only | pass | `pytest tests/test_runs.py` 2 passed; staging email matches the Actions tab (2 failures) |
 | R3 | 5 stars, 2 old, shows 3 | pass | `pytest tests/test_stars.py` 2 passed |
 | R4 | Monday 08:00-08:05 IST; quiet repositories left out | pass | Staging schedule moved to Thursday 08:00 IST for the test: email at 08:00:41; 27 of 31 repositories correctly left out |
 | R5 | Quiet-week email | pass | Snapshot test; staging run against an empty fixture account |

@@ -1,0 +1,17 @@
+{
+  "description": "Idea to Orbit: at the start of every session, tell Claude where the product is and which rules apply.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear|compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run.cmd\" session-start",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

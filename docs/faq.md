@@ -10,6 +10,16 @@ A gate passes only on your explicit yes, so you are always in control of the pac
 want to move fast, read the summary and say "approved". What the gate does not do is assume
 your yes.
 
+**Why does Build use several agents?**
+The agent that writes code reads what it meant, not what it wrote. A fresh builder works from
+the task card alone, so a vague card shows up at once; two fresh checkers then read the
+change with no memory of how it was made. Without the Agent tool, Claude does each check as a
+separate pass instead.
+
+**Can I turn off the session-start hook?**
+Yes: `/plugin` lets you disable the plugin. The hook only reads `STATE.md` and prints text;
+it never changes a file.
+
 **What counts as approval?**
 Clear words like "approved", "go", "yes, proceed". A question, a comment, "looks good but..."
 or silence is treated as feedback, and the stage continues.

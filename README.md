@@ -1,5 +1,7 @@
 # Idea to Orbit
 
+[![check](https://github.com/TechNaom/idea-to-orbit/actions/workflows/check.yml/badge.svg)](https://github.com/TechNaom/idea-to-orbit/actions/workflows/check.yml)
+
 **From idea to orbit, and it stays up.**
 
 Idea to Orbit is a Claude Code plugin that takes a product from a rough idea to a running
@@ -15,14 +17,46 @@ A TechNaom AI R&D Labs project.
 |---|---|---|
 | 1. **Ignite** | Questions until the idea is clear: problem, users, scope, success | `brief.md`, `prd.md` |
 | 2. **Blueprint** | Architecture with options weighed, data model, interfaces, diagrams | `architecture.md`, `adr/` |
-| 3. **Assemble** | The plan becomes small, ordered, testable tasks | `tasks.md`, GitHub issues |
-| 4. **Build** | Each task built test-first, reviewed, committed in small steps | Code and tests |
+| 3. **Assemble** | The plan becomes small, ordered tasks, each with exact files, steps and commands | `tasks.md`, GitHub issues |
+| 4. **Build** | Each task built test-first by a fresh agent, then checked by two more | Code, tests, pull requests |
 | 5. **Test flight** | The release gate: tests, risks, security, cost, rollback | `release.md` |
 | 6. **Launch** | A budget-guarded deploy that sleeps when idle, with a backup first | `deploy-plan.md`, a live product |
 | 7. **Orbit** | Watchdog, alerts, self-healing within limits, root cause on failure | `runbook.md`, `rca/` |
 
 Every stage ends at a **gate**: Claude shows what it made and waits for you to say go.
 Nothing moves forward on a guess.
+
+## The rules it holds to
+
+Four rules, with no exceptions written in. If you choose to skip one, Claude says what it
+protects, follows your decision and records it.
+
+| Rule | What it means |
+|---|---|
+| **No production code without a failing test first** | The test is written, run and seen to fail before the code exists. A one-line fix too. |
+| **No fix without a known cause** | Bugs are reproduced and traced to their cause before anything changes. After two failed fixes, stop and question the design. |
+| **No claim without fresh evidence** | "Done", "fixed" and "passing" come with the command and its output, run after the last change. |
+| **No gate without your yes** | "Looks good, but..." is feedback, not approval. |
+
+How they hold:
+
+- **At the start of every session** a hook tells Claude the product's stage, its open
+  questions and these rules, before your first message.
+- **Every skill lists its red flags**: the thoughts that come just before a shortcut, such as
+  "it's only a typo" or "the agent said the tests pass", with what to do instead.
+- **The writer never approves its own work.** Each task is built by a fresh agent from a task
+  card, then checked by two more: one against the card, one for code quality. Each
+  milestone gets a review as a whole.
+
+## Helper skills
+
+| Skill | Use it when |
+|---|---|
+| **review** | A change needs checking by someone who did not write it, or review feedback arrives |
+| **debug** | Something breaks, a test fails unexpectedly, or a fix did not work |
+| **verify** | Before saying anything is done, fixed, passing or deployed |
+
+The stages call them for you. You can also ask for one directly: "debug this failing test".
 
 ## Install
 
@@ -70,13 +104,15 @@ docs/orbit/
   from the brief to an incident report.
 - [Concepts](docs/concepts.md), [Stage reference](docs/stages.md),
   [Existing projects](docs/existing-projects.md), [FAQ](docs/faq.md),
-  [Troubleshooting](docs/troubleshooting.md).
+  [Troubleshooting](docs/troubleshooting.md), [Testing the plugin](docs/testing.md).
 
 ## Principles
 
 - **The owner decides.** Each gate needs an explicit yes. Silence is not approval.
 - **Docs before code.** The brief, PRD and architecture are approved before any code.
 - **Test first.** A task is done when its tests pass, not when the code is written.
+- **Fresh eyes.** Nothing reaches main checked only by the one who wrote it.
+- **Evidence, not claims.** Every status comes with the output that proves it.
 - **Small steps.** Small commits, pushed often, each one working.
 - **Budget first.** A spending cap and alerts exist before anything is deployed.
 - **Scale to zero.** Nothing runs when nobody is using it.
@@ -87,8 +123,9 @@ docs/orbit/
 
 ## Status
 
-Version 0.2: the seven stages, their templates, the `/orbit` command, the docs and a complete
-sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
+Version 0.3: the seven stages and three helper skills, the session-start hook, a build stage
+with fresh-agent checks on every task, task cards, red flags in every skill, 13 pressure
+scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
 for how it works and what comes next.
 
 ## License

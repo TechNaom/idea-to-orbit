@@ -37,14 +37,26 @@ Write `docs/orbit/runbook.md` from `templates/runbook.md` and build these as tas
 1. Stabilise first: if users are affected and a fix is not quick, roll back to the last
    known good tag.
 2. Open `docs/orbit/rca/<YYYY-MM-DD>-<slug>.md` from `templates/rca.md`.
-3. Find the root cause from evidence (logs, runs, traces, metrics), not guesses. Ask "why"
-   until the answer is something you can change.
-4. Fix it test-first, as in the build stage: a test that reproduces the failure, then the
+3. Find the root cause with the debug skill: reproduce it, read the evidence (logs, runs,
+   traces, metrics), and test one idea at a time. Ask "why" until the answer is something
+   you can change.
+4. Fix it test-first, through the build loop with both checks: a test that reproduces the failure, then the
    fix. Add a check so the same failure is caught earlier next time.
 5. Tell the owner: what happened, the impact, the root cause, the fix, and what now
    prevents it.
 
 Ask the owner before any fix to a part of a live product that is working.
+
+## Red flags: stop if you think
+
+| Thought | What to do instead |
+|---|---|
+| "The product can report its own failures." | A job that never started reports nothing. The watcher runs on its own clock. |
+| "Retry until it works." | Every retry has a cap on attempts and on spend, then it alerts the owner. |
+| "Just run it again, it was a blip." | Check first that it did not already do the job, so nothing happens twice. |
+| "It's fixed, no need for a root cause." | Every incident gets an RCA, a test that reproduces it, and a check that catches it earlier. |
+| "The run was green, so it worked." | Green that delivered nothing is a failure. Check the result where the user sees it. |
+| "I'll quickly patch the live product." | Ask the owner first. Fixes go through the build loop, test first. |
 
 ## Gate
 

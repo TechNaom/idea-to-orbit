@@ -36,6 +36,17 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
    secrets in `.env` with a committed `.env.example`.
 5. Run the gate.
 
+## Red flags: stop if you think
+
+| Thought | What to do instead |
+|---|---|
+| "There's only one sensible option." | Write down at least one other and why it loses. That is what the ADR is for. |
+| "We'll use what I know best." | Choose from the PRD's needs: budget, scale, the owner's skills and accounts. |
+| "Cost can be worked out at launch." | Cost decides the design. Estimate it now, per part, at expected and ten times the load. |
+| "It won't fail, it's a managed service." | Every outside call fails sometimes. Write its detection and recovery. |
+| "A diagram is enough, no need for interfaces." | Builders need the contracts: inputs, outputs, errors, limits. |
+| "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR. |
+
 ## Gate
 
 Exit list:

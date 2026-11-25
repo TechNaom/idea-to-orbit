@@ -24,3 +24,29 @@ Version <n>, <YYYY-MM-DD>. Architecture: [architecture.md](architecture.md)
 | R1 | T3 |
 
 Gaps: <requirements with no task, or "none">
+
+## Task cards
+
+### T1 Repository, CI and `.env.example`
+
+Serves: N1. Depends on: none. Size: S. Issue: <#>
+
+**Files**
+- Create: `<path>`
+- Change: `<path>`
+- Test: `<tests/path>`
+
+**Interfaces**
+- `<name(args) -> result>`: <what it does, and what it raises or returns on failure>
+
+**Steps**
+1. Write the test `<tests/path>::<test_name>`: <what it asserts>.
+   Run `<command>`. Expect: `<the failing line, e.g. 1 failed ... NameError: name 'x' is not defined>`.
+2. Write `<path>`: <the smallest code that passes>.
+   Run `<command>`. Expect: `<e.g. 1 passed>`.
+3. Run the whole suite: `<command>`. Expect: `<e.g. 12 passed>`.
+4. Commit: `<message>`.
+
+**Done check:** `<command>`. Expect: `<output>`.
+
+**Watch out:** <edge cases and failure paths from architecture.md>

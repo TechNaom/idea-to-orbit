@@ -32,6 +32,17 @@ The idea in any form: a sentence, a voice note transcript, a list, an existing d
    (R1, R2, ...) and an acceptance check, so later stages can trace it.
 6. Run the gate.
 
+## Red flags: stop if you think
+
+| Thought | What to do instead |
+|---|---|
+| "The idea is clear enough, let's start building." | If the problem, the users and success are not written down, it is not clear. Ask. |
+| "I'll fill in the details myself." | Your guess becomes the owner's product. Ask the question; mark it open if they don't know yet. |
+| "Everything is a must-have." | Ask what the first version can ship without. A list with no out-of-scope section is not finished. |
+| "Success means it works." | Success is a number the owner can check: users, time saved, money, errors. |
+| "Let me sketch the architecture while we talk." | Design comes in blueprint, after the PRD is approved. |
+| "The owner said 'sounds good', that's approval." | Only an explicit yes passes a gate. Ask for it. |
+
 ## Gate
 
 Exit list:

@@ -113,22 +113,33 @@ File: [tasks.md](../examples/repo-pulse/docs/orbit/tasks.md)
 ```text
 You: /orbit
 
-AI:  Next task: T5 "List new issues from the last 7 days" (R1).
-     Its dependencies T1-T4 are done.
+AI:  Next task: T5 "New issues in the last 7 days" (R1).
+     Its dependencies T1-T4 are done. Suite on main: 13 passed.
 
-     Red: wrote tests/test_issues.py::test_lists_issues_opened_in_window
-     $ pytest tests/test_issues.py
-     FAILED - ImportError: cannot import name 'new_issues'   (expected)
+     Sent T5's card to a fresh builder. Its report:
+       Status: done
+       Red:   pytest tests/test_issues.py
+              1 failed - ImportError: cannot import name 'new_issues'
+       Green: pytest -q
+              14 passed
 
-     Green: added pulse/issues.py (31 lines)
-     $ pytest
-     14 passed
+     Task check (fresh agent): FAIL
+       Missing: card step 3, "pull requests excluded" - the issues API
+       returns pull requests too, and nothing filters them.
+     Builder added test_excludes_pull_requests (red, then green) and the
+     filter. Task check again: PASS.
 
-     Review: found one problem - pull requests come back from the issues API
-     too. Added a test for it, then filtered them out. 15 passed.
+     Code check (fresh agent):
+       Must fix: none
+       Should fix: pulse/issues.py:18 - "since" filters on update time;
+       an old issue with a new comment would be listed. Check created_at.
+     Fixed, with test_old_issue_with_new_comment_is_left_out.
 
-     Pushed t5-new-issues, opened PR #12 (T5, R1). CI green. Merged.
-     Closed issue #5. Next: T6.
+     Verified myself: pytest -q -> 16 passed. Done check: a real run lists
+     this week's 6 issues and no pull requests.
+
+     Pushed t5-new-issues, opened PR #12 (T5, R1; 13 -> 16 tests; both
+     checks passed). CI green. Merged. Closed issue #5. Next: T6.
 ```
 
 ### Test flight
@@ -225,7 +236,7 @@ AI:  Decision: NO-GO
      N2 fails: the email took 9 minutes for 31 repos (target: under 2).
      Cause: one API call per repo per check, run one after another.
      Must change: fetch repos in parallel, with a limit of 5 at a time.
-     Added T12 to tasks.md. Test flight goes back to Build.
+     Added a new task to tasks.md. Test flight goes back to Build.
 ```
 
 Nothing ships on a no-go. Once the new task is built, run `/orbit test-flight` again.

@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Idea to Orbit: SessionStart hook.
+# Reads docs/orbit/STATE.md in the project, if there is one, and prints context for Claude:
+# the product's stage and status, and the rules that hold for the whole session.
+# It only reads; it never changes a file. Output is one line of JSON for Claude Code.
+
+set -u
+
+project="${CLAUDE_PROJECT_DIR:-$PWD}"
+state="$project/docs/orbit/STATE.md"
+
+json_escape() {
+  # Escape backslash, quote and tab, drop CR, and join lines with \n, for a JSON string.
+  printf '%s' "$1" | awk 'BEGIN { ORS = "" }
+    {
+      gsub(/\r/, "")
+      gsub(/\\/, "\\\\")
+      gsub(/"/, "\\\"")
+      gsub(/\t/, "\\t")
+      if (NR > 1) print "\\n"
+      print
+    }'
+}
+
+field() {
+  # The value after "- <name>:" on the first matching line, without an HTML comment.
+  sed -n "s/^- $1:[[:space:]]*//p" "$state" | head -n 1 | sed 's/[[:space:]]*<!--.*//' | tr -d '\r'
+}
+
+if [ -f "$state" ]; then
+  product=$(sed -n 's/^# Product state:[[:space:]]*//p' "$state" | head -n 1 | tr -d '\r')
+  stage=$(field Stage)
+  status=$(field Status)
+  questions=$(awk '/^## Open questions/ { on = 1; next } /^## / { on = 0 }
+    on && /^- / && !/^- [Nn]one/ && !/<question>/ { n++ } END { print n + 0 }' "$state")
+  [ -n "$stage" ] || stage="unknown"
+  [ -n "$status" ] || status="unknown"
+
+  text="This repository is a product built with Idea to Orbit: ${product:-unnamed}.
+Stage: ${stage}. Status: ${status}. Open questions: ${questions}.
+
+These rules hold for this whole session:
+1. Before working on this product, read docs/orbit/STATE.md and use the skill for the current stage (idea-to-orbit:${stage}). Follow its steps and stop at its red flags.
+2. A stage starts only when the stage before it is approved in STATE.md. A gate passes only on the owner's explicit yes in this conversation; a question, a comment or silence is not a yes.
+3. No production code without a failing test that you ran and watched fail first. This holds in every stage, for every change, however small or urgent.
+4. When something breaks, use idea-to-orbit:debug and find the cause before changing code.
+5. Before saying that anything is done, fixed, passing or deployed, run the check and show its output (idea-to-orbit:verify).
+6. If the owner asks to skip a step, say which rule it breaks and what could go wrong, then follow the owner's decision and record it in STATE.md."
+else
+  text="Idea to Orbit is installed. This repository has no docs/orbit/STATE.md, so no product is in progress here. If the owner wants to start or continue a product, use /orbit. If they describe a new product idea, offer to start the ignite stage before writing any code."
+fi
+
+printf '{"hookSpecificOutput":{"hookEventName":"SessionStart","additionalContext":"%s"}}\n' "$(json_escape "$text")"

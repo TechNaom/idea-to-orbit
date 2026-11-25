@@ -11,6 +11,7 @@ New here? Start with **Getting started**, then read one recipe in **Examples**.
 | [Existing projects](existing-projects.md) | Your product already has code, or is already live |
 | [FAQ](faq.md) | You have a question about how it behaves |
 | [Troubleshooting](troubleshooting.md) | Something does not work as expected |
+| [Testing the plugin](testing.md) | You change a skill and want to check it still holds |
 | [Design](DESIGN.md) | You want to know how it is built and what comes next |
 
 A complete sample product, with every document a run produces, is in

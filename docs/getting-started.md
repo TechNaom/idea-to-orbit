@@ -19,6 +19,9 @@ Restart Claude Code if it asks you to. Check it is there:
 
 You should see `idea-to-orbit` in the list.
 
+From now on, every session started in a product repository begins with the product's stage
+and the rules Claude follows, so you never have to remind it.
+
 ## 2. Open your product's repository
 
 Make an empty repository for the new product (or open an existing one, see

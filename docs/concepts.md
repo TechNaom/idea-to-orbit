@@ -1,6 +1,6 @@
 # Concepts
 
-Five ideas explain how Idea to Orbit behaves.
+Six ideas explain how Idea to Orbit behaves.
 
 ## Stages
 
@@ -34,6 +34,23 @@ and waits. The next stage starts only after an explicit yes from you: "approved"
 
 Gates exist because the cheapest moment to catch a wrong idea is while it is still one
 paragraph in a brief, not a thousand lines of code or a bill.
+
+## Rules that hold
+
+Four rules hold in every stage: no production code without a failing test first, no fix
+without a known cause, no claim without fresh evidence, and no gate without your yes.
+
+Three things keep them from slipping when a session gets long or a deadline gets close:
+
+- **A session-start hook** reads `STATE.md` and tells Claude the stage and the rules at the
+  start of every session, and again after `/clear` or a context compaction.
+- **Red flags** in every skill name the thoughts that come just before a shortcut, with what
+  to do instead.
+- **Fresh eyes:** the agent that writes a change never approves it. A task check and a code
+  check by fresh agents come before every merge.
+
+You stay in charge: if you choose to skip a rule, Claude says what it protects, does what
+you decide, and writes the decision in the log.
 
 ## The state file
 

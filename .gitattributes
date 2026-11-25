@@ -1,0 +1,6 @@
+# The hook launcher is read by cmd.exe, which needs CRLF. Its first line ends in a comment,
+# so the CR is harmless to a shell.
+hooks/run.cmd text eol=crlf
+# Shell scripts must keep LF line endings on every platform.
+hooks/session-start text eol=lf
+*.sh text eol=lf

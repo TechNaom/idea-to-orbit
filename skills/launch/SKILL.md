@@ -41,6 +41,17 @@ owner before running anything that creates resources or costs money.
 Ask the owner before any step that spends money, needs a payment method, or changes a
 product that is already live.
 
+## Red flags: stop if you think
+
+| Thought | What to do instead |
+|---|---|
+| "I'll set the budget cap after the first deploy." | The cap and alerts come before the first resource. Always. |
+| "Deploy from my machine just this once." | Deploy from CI, so it can be repeated and rolled back. |
+| "The deploy succeeded, so we're live." | Live means the smoke test passed on the real product and delivery was confirmed. |
+| "No need for a backup tag, it's the first release." | Tag it. The first rollback target is the one you'll want most. |
+| "Keep a small instance running so it's fast." | Scale to zero unless the owner approves an always-on cost in writing. |
+| "Reuse the other product's keys, it's quicker." | One silo per product: its own keys, data, quotas and alerts. |
+
 ## Gate
 
 Exit list:

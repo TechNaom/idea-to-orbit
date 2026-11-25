@@ -38,6 +38,17 @@ needs evidence: a command and its output, a link to a CI run, or a screenshot.
 9. Decide: **go** only if every must-have requirement passes and nothing in the list above
    is red. Otherwise **no-go**, with what must change.
 
+## Red flags: stop if you think
+
+| Thought | What to do instead |
+|---|---|
+| "All the tests pass, so it's a go." | Tests are one line of the gate. Run every check on the list. |
+| "We can't test failure paths without production." | Block the dependency in staging, or in a test, and watch what happens. |
+| "Rollback is just redeploying the old version." | Rehearse it. An untested rollback fails when you need it. |
+| "Nothing was left untested." | Write 'nothing' only after looking. Most releases have something. |
+| "The owner needs this live tomorrow, mark it go." | Give the honest decision. The owner may accept a risk in writing; you never hide one. |
+| "It's a small release, skip the cost check." | Small releases still add loops, retries and calls. Check the estimate. |
+
 ## Gate
 
 Show the owner the decision, the failures if any, the cost estimate and the not-tested list,

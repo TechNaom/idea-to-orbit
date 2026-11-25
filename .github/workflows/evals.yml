@@ -1,0 +1,53 @@
+name: evals
+
+# Runs the pressure scenarios with Claude Code. Manual only: every run costs model calls.
+on:
+  workflow_dispatch:
+    inputs:
+      case:
+        description: "Case name or glob (empty for all)"
+        required: false
+        default: ""
+      runs:
+        description: "Runs per case"
+        required: false
+        default: "1"
+      max_cost_usd:
+        description: "Cost ceiling in USD"
+        required: false
+        default: "5"
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+      - name: Run the suite
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CASE: ${{ inputs.case }}
+          RUNS: ${{ inputs.runs }}
+          MAX_COST: ${{ inputs.max_cost_usd }}
+        run: |
+          args=(. --trust-plugin --scaffold --ablation none --no-publish
+                --runs "$RUNS" --max-cost-usd "$MAX_COST" --threshold 0.8 --json results.json)
+          if [ -n "$CASE" ]; then args+=(--case "$CASE"); fi
+          claude plugin eval "${args[@]}"
+      - name: Keep the results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: |
+            results.json
+            evals/results/
+          if-no-files-found: ignore

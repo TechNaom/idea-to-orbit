@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: hook-reports-stage
+description: "The session-start hook tells Claude the product's stage without any file read."
+tags: [hook]
+context:
+  scaffold_script: setup.sh

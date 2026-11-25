@@ -30,8 +30,8 @@ The full instructions Claude follows are in `skills/<stage>/SKILL.md`. The sampl
 |---|---|
 | Start | `/orbit assemble`, or "break this into tasks" |
 | Needs | Approved architecture |
-| Writes | `tasks.md`, then one GitHub issue per task |
-| Gate | Every requirement has a task; every task has a test, a done check, dependencies and size S or M; first milestone ends deployed end to end; CI, budget guard and operations tasks included |
+| Writes | `tasks.md` with a task card per task (files, steps, commands, expected output), then one GitHub issue per task |
+| Gate | Every requirement has a task; every task has a test, a done check, dependencies and size S or M; every first-milestone task has a card; first milestone ends deployed end to end; CI, budget guard and operations tasks included |
 | Sample | [tasks](../examples/repo-pulse/docs/orbit/tasks.md) |
 
 ## 4. Build
@@ -40,8 +40,9 @@ The full instructions Claude follows are in `skills/<stage>/SKILL.md`. The sampl
 |---|---|
 | Start | `/orbit build`, or "build the next task" |
 | Needs | Approved tasks |
+| How | A fresh builder agent per task, briefed from its card, test first; then a task check and a code check by two more fresh agents; you verify; a branch check per milestone. Independent tasks can run in parallel worktrees |
 | Writes | Code, tests, one pull request per task; updates `tasks.md` |
-| Gate | Every task done with a merged pull request; full suite and CI green on main |
+| Gate | Every task had a test seen failing first, both checks and a merged pull request; every milestone had a branch check; full suite and CI green on main |
 | Sample | The task loop in [Examples, recipe 1](examples.md#recipe-1-a-new-product-start-to-finish) |
 
 ## 5. Test flight
@@ -73,6 +74,14 @@ The full instructions Claude follows are in `skills/<stage>/SKILL.md`. The sampl
 | Writes | `runbook.md`, and `rca/YYYY-MM-DD-*.md` for each incident |
 | Gate | Health check, alerts, self-healing, cost report and last-known-good tag each proven by a deliberate failure; runbook complete |
 | Sample | [runbook](../examples/repo-pulse/docs/orbit/runbook.md), [incident](../examples/repo-pulse/docs/orbit/rca/2026-12-14-token-expired.md) |
+
+## Helper skills
+
+| Skill | What it does | Used by |
+|---|---|---|
+| review | The task check, code check and branch check by fresh agents, and how to answer findings: fixed, wrong (with evidence) or later (with a task) | Build, and any change before merge |
+| debug | Reproduce, read the evidence, trace back, one hypothesis at a time, a failing test for the cause, one fix; stop after two failed fixes | Build, Orbit, any failure |
+| verify | Before any claim, run the proof now and quote it | Every stage and gate |
 
 ## The /orbit command
 

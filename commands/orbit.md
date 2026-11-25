@@ -24,6 +24,9 @@ You are running Idea to Orbit for the product in the current repository.
 
 Stage order: ignite → blueprint → assemble → build → test-flight → launch → orbit.
 
+Inside every stage, use the helper skills: **review** before any change is merged, **debug**
+when something fails, and **verify** before any status you report.
+
 Never mark a gate approved without an explicit yes from the owner in this conversation.
 
 Arguments: $ARGUMENTS

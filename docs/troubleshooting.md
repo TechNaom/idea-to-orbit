@@ -6,6 +6,22 @@ The plugin is not installed or not enabled. Run `/plugin`, check that `idea-to-o
 the list and enabled, then restart Claude Code. If it is missing, install it again (see
 [Getting started](getting-started.md)).
 
+## Claude doesn't mention the product's stage at the start
+
+The session-start hook did not run or found no `STATE.md`. Check:
+
+- Claude Code was started in the repository's root folder, where `docs/orbit/STATE.md` is.
+- On Windows, Git for Windows is installed (the hook runs with Git Bash). Without it, the
+  hook stays silent and everything else still works; run `/orbit status` instead.
+- Run the hook by hand from the repository root. It should print one line of JSON:
+  `bash "<plugin folder>/hooks/run.cmd" session-start`
+
+## Claude refuses to skip the tests
+
+That is the build stage's rule. If you really want to skip a test for one change, say so
+plainly ("skip the test for this change, I accept the risk"). Claude will say what the test
+would protect, do it your way and record the decision in `STATE.md`.
+
 ## It started Ignite on a product that already has docs
 
 `/orbit` looks for `docs/orbit/STATE.md` in the folder Claude Code was started in. Start
