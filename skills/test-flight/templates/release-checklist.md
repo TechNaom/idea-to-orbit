@@ -18,6 +18,7 @@ Date: <YYYY-MM-DD>. Commit: <sha>. Decision: **<go | no-go>**
 | Burst of requests | | |
 | No secrets in repository or history | | |
 | Least-privilege keys | | |
+| Every credential's expiry date recorded, with a warning before it | | |
 | Dependency scan | | |
 | Cost at expected load: <amount> | | |
 | Cost at 10x load: <amount> | | |

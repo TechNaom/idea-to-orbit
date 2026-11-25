@@ -27,7 +27,8 @@ needs evidence: a command and its output, a link to a CI run, or a screenshot.
    failure path in `architecture.md` really happens. Send a burst of requests and confirm
    limits, retries and timeouts hold.
 5. **Security:** no secrets in the repository or its history; least-privilege keys;
-   inputs validated; dependencies scanned.
+   every credential's expiry date known, with a warning set before it; inputs validated;
+   dependencies scanned.
 6. **Cost:** estimate the monthly cost at the expected load and at ten times that load.
    Both must fit the PRD's budget, or the owner must accept the risk in writing.
 7. **Rollback:** rehearse it. Deploy the release to staging, roll back to the previous

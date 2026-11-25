@@ -61,6 +61,17 @@ docs/orbit/
   rca/                one file per incident
 ```
 
+## Docs and examples
+
+- [Getting started](docs/getting-started.md): install and run your first stage in ten minutes.
+- [Examples](docs/examples.md): real sessions, start to finish, showing what you type and
+  what you get back.
+- [Sample product: Repo Pulse](examples/repo-pulse/): every document a full run produces,
+  from the brief to an incident report.
+- [Concepts](docs/concepts.md), [Stage reference](docs/stages.md),
+  [Existing projects](docs/existing-projects.md), [FAQ](docs/faq.md),
+  [Troubleshooting](docs/troubleshooting.md).
+
 ## Principles
 
 - **The owner decides.** Each gate needs an explicit yes. Silence is not approval.
@@ -76,8 +87,9 @@ docs/orbit/
 
 ## Status
 
-Version 0.1: the seven stages, their templates and the `/orbit` command. See
-[docs/DESIGN.md](docs/DESIGN.md) for how it works and what comes next.
+Version 0.2: the seven stages, their templates, the `/orbit` command, the docs and a complete
+sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
+for how it works and what comes next.
 
 ## License
 
