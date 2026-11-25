@@ -1,6 +1,9 @@
 name: evals
 
-# Runs the pressure scenarios with Claude Code. Manual only: every run costs model calls.
+# Runs the pressure scenarios with Claude Code. Manual only.
+# Sign-in: CLAUDE_CODE_OAUTH_TOKEN (your Claude Pro or Max plan, from `claude setup-token`)
+# is used first, so runs count against the plan with no extra bill. ANTHROPIC_API_KEY
+# (pay per use) is only a fallback.
 on:
   workflow_dispatch:
     inputs:
@@ -33,11 +36,16 @@ jobs:
         run: npm install -g @anthropic-ai/claude-code
       - name: Run the suite
         env:
-          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           CASE: ${{ inputs.case }}
           RUNS: ${{ inputs.runs }}
           MAX_COST: ${{ inputs.max_cost_usd }}
         run: |
+          if [ -z "$CLAUDE_CODE_OAUTH_TOKEN" ]; then
+            if [ -z "$API_KEY" ]; then echo "Add CLAUDE_CODE_OAUTH_TOKEN (or ANTHROPIC_API_KEY) as a repository secret."; exit 1; fi
+            export ANTHROPIC_API_KEY="$API_KEY"
+          fi
           args=(. --trust-plugin --scaffold --ablation none --no-publish
                 --runs "$RUNS" --max-cost-usd "$MAX_COST" --threshold 0.8 --json results.json)
           if [ -n "$CASE" ]; then args+=(--case "$CASE"); fi

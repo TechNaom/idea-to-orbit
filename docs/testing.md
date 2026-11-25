@@ -56,11 +56,17 @@ claude plugin eval . --runs 1 --scaffold --max-cost-usd 5
 claude plugin eval . --runs 3 --scaffold --ablation with-without --max-cost-usd 15
 ```
 
-Results go to `evals/results/`, which is not committed. Each run is a real model call billed
-to your plan or API account, so start with one case and `--runs 1`.
+Results go to `evals/results/`, which is not committed.
+
+**What it costs.** Each run is a real conversation with Claude, the same as using Claude Code
+yourself. Signed in with a Claude Pro or Max plan, runs count against the plan's usage, with
+no extra bill. Only with an API key are they billed per use. People who install the plugin
+never run these; they are for whoever changes the skills.
 
 The **Evals** workflow (`.github/workflows/evals.yml`) runs the suite by hand from the
-Actions tab. It needs an `ANTHROPIC_API_KEY` repository secret and has a cost ceiling.
+Actions tab. To run it on your plan, create a token with `claude setup-token` and add it as
+the repository secret `CLAUDE_CODE_OAUTH_TOKEN`. An `ANTHROPIC_API_KEY` secret works as a
+fallback, billed per use, with the cost ceiling as a guard.
 
 ## Adding a case
 
