@@ -1,7 +1,7 @@
 # Stage reference
 
 For each stage: how to start it, what it needs, what it writes, and what its gate checks.
-The full instructions Claude follows are in `skills/<stage>/SKILL.md`. The sample product in
+The full instructions Claude follows are in `skills/<stage>/SKILL.md` (for stage 7, Orbit: `skills/keep-running/SKILL.md`). The sample product in
 [examples/repo-pulse](../examples/repo-pulse/) shows every output filled in.
 
 ## 1. Ignite

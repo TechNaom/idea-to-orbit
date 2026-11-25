@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.1 - 2026-11-26
+
+- Fixed: typing `/orbit` could load the stage-7 skill instead of the `/orbit` command, because
+  both were named `orbit`. The stage is still called Orbit; its skill is now `keep-running`.
+  A new offline check fails if any skill shares a name with a command.
+
 ## 0.3.0 - 2026-11-26
 
 - **Session-start hook:** every session in a product repository begins with the product's

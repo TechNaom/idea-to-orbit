@@ -16,6 +16,9 @@ import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 STAGES = ["ignite", "blueprint", "assemble", "build", "test-flight", "launch", "orbit"]
+# The skill for each stage. Stage 7 is "orbit", but its skill is "keep-running": a skill named "orbit" would
+# clash with the /orbit command.
+STAGE_SKILLS = {s: ("keep-running" if s == "orbit" else s) for s in STAGES}
 HELPERS = ["review", "debug", "verify"]
 failures: list[str] = []
 
@@ -70,7 +73,7 @@ def check_versions(data: dict) -> None:
 
 
 def check_skills() -> None:
-    for name in STAGES + HELPERS:
+    for name in list(STAGE_SKILLS.values()) + HELPERS:
         path = ROOT / "skills" / name / "SKILL.md"
         if not path.exists():
             fail(f"missing skill: skills/{name}/SKILL.md")
@@ -88,11 +91,20 @@ def check_skills() -> None:
             fail(f"skills/{name}: description does not say when to use it")
         if "## Red flags" not in text:
             fail(f"skills/{name}: no red flags section")
-        if name in STAGES and "## Gate" not in text:
+        if name in STAGE_SKILLS.values() and "## Gate" not in text:
             fail(f"skills/{name}: no gate section")
-    extra = {p.name for p in (ROOT / "skills").iterdir() if p.is_dir()} - set(STAGES + HELPERS)
+    extra = {p.name for p in (ROOT / "skills").iterdir() if p.is_dir()} - set(STAGE_SKILLS.values()) - set(HELPERS)
     if extra:
         fail(f"skills not covered by this check: {sorted(extra)}")
+
+
+def check_name_clashes() -> None:
+    """A skill and a command with the same name collide: typing /orbit loaded the stage-7 skill instead of the
+    /orbit command (found 2026-11-26 on Explainer Studio). Every command name must be free of skills."""
+    skills = {p.name for p in (ROOT / "skills").iterdir() if p.is_dir()}
+    for cmd in (ROOT / "commands").glob("*.md"):
+        if cmd.stem in skills:
+            fail(f"commands/{cmd.name} and skills/{cmd.stem}/ share the name {cmd.stem!r}: /{cmd.stem} may load the skill")
 
 
 def check_links() -> None:
@@ -170,6 +182,7 @@ def main() -> int:
     data = check_json()
     check_versions(data)
     check_skills()
+    check_name_clashes()
     check_links()
     check_evals()
     check_hook()

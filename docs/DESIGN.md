@@ -14,7 +14,7 @@ The first user is the owner, building TechNaom products. Anyone else can use it 
 
 Idea to Orbit is a Claude Code plugin:
 
-- **Seven stage skills**, one per stage, in `skills/<stage>/SKILL.md`. Each says what the
+- **Seven stage skills**, one per stage, in `skills/<stage>/SKILL.md` (stage 7's skill is `keep-running`, so it never clashes with the `/orbit` command). Each says what the
   stage needs as input, what it does, what it writes, its red flags and what its gate checks.
 - **Three helper skills** that every stage uses: `review`, `debug` and `verify`.
 - **Templates** for every document a stage writes, in `skills/<stage>/templates/`, and

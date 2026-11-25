@@ -1,5 +1,5 @@
 ---
-name: orbit
+name: keep-running
 description: "Idea to Orbit stage 7. Keep a live product running: a health check on its own clock, alerts that reach the owner, self-healing retries within limits, a cost report, and a root cause analysis with a fix for every incident. Use after launch is approved, when a live product fails, or when the owner asks how a product is doing."
 ---
 
