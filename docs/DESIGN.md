@@ -1,6 +1,6 @@
 # Design
 
-Version 0.3, 2026-11-26.
+Version 0.4, 2026-11-26.
 
 ## Goal
 

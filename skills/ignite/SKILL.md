@@ -32,6 +32,32 @@ The idea in any form: a sentence, a voice note transcript, a list, an existing d
    (R1, R2, ...) and an acceptance check, so later stages can trace it.
 6. Run the gate.
 
+## Existing product
+
+When the repository already has code, catch the documents up from what exists instead of
+asking from a blank page:
+
+1. Pull first (other sessions may be working), then read the code, tests, README, history,
+   CI and any design notes. Run the tests now and note the result.
+2. Write `brief.md`, `prd.md` and `architecture.md` from what is built, each marked
+   **reconstructed** with the date. Give every requirement a state (built, not built, or
+   built but its acceptance check not met). Mark every line you inferred rather than read as
+   *(inferred)*, so the owner can correct it.
+3. **ADRs:** where the decisions and their options are already written down (a design doc,
+   a README section), cite that source in `architecture.md` and list the decisions there;
+   writing them as ADRs is an open question for the owner at the Blueprint gate. Where a
+   decision has no written reason, write the ADR with "why" as a question for the owner.
+4. **Work in flight:** anything half-done when the product joins (a running job, an
+   unfinished branch, a stopped run) is recorded in `STATE.md` under its own heading, with
+   what is known about it, and paused until Assemble turns it into a task. Do not continue it.
+5. Record gaps you found (no alerts, no spending cap, no rollback) as open questions.
+6. Show the owner a short summary and ask whether this is an accurate picture of the product.
+   Only an explicit yes records Ignite and Blueprint as `approved`. Then go on by where the
+   product is: code but not deployed → Assemble; live without monitoring → Orbit setup
+   (skill **keep-running**); live with a new feature → Ignite for the feature only.
+
+Do not rewrite or redo code that works.
+
 ## Red flags: stop if you think
 
 | Thought | What to do instead |

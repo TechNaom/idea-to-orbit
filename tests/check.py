@@ -107,6 +107,23 @@ def check_name_clashes() -> None:
             fail(f"commands/{cmd.name} and skills/{cmd.stem}/ share the name {cmd.stem!r}: /{cmd.stem} may load the skill")
 
 
+def check_existing_products() -> None:
+    """A product that already has code must not start Ignite from a blank page. /orbit sends it to the ignite
+    skill's catch-up steps, which live in the skill itself (docs/ is not installed with the plugin) and say what to do
+    with ADRs and with work already in flight (both were missing when Explainer Studio joined on 2026-11-26)."""
+    cmd = read(ROOT / "commands" / "orbit.md")
+    if "already has code" not in cmd:
+        fail("commands/orbit.md: does not say what to do when the repository already has code")
+    ignite = read(ROOT / "skills" / "ignite" / "SKILL.md")
+    m = re.search(r"## Existing product\n(.*?)(\n## |\Z)", ignite.replace("\r\n", "\n"), re.S)
+    if not m:
+        fail("skills/ignite: no '## Existing product' section")
+        return
+    for must in ("reconstructed", "inferred", "ADR", "in flight", "explicit yes"):
+        if must not in m.group(1):
+            fail(f"skills/ignite: the existing-product steps do not cover {must!r}")
+
+
 def check_links() -> None:
     link = re.compile(r"\[[^\]]*\]\(([^)\s]+)\)")
     for md in ROOT.rglob("*.md"):
@@ -174,8 +191,211 @@ def check_hook() -> None:
                 continue
             if expect not in ctx:
                 fail(f"hook {label}: expected {expect!r} in {ctx[:200]!r}")
+        # The skill names the hook gives must exist: the orbit stage's skill is keep-running, and the
+        # "idea-to-orbit:" prefix only exists when installed as a plugin (CLAUDE_PLUGIN_ROOT is set).
+        proj = pathlib.Path(tmp) / "names"
+        (proj / "docs" / "orbit").mkdir(parents=True)
+        shutil.copy(sample, proj / "docs" / "orbit" / "STATE.md")
+        for plugin_root, want, wrong in ((None, "(keep-running)", "idea-to-orbit:"),
+                                         (str(ROOT), "(idea-to-orbit:keep-running)", "idea-to-orbit:orbit")):
+            env = {k: v for k, v in os.environ.items() if k != "CLAUDE_PLUGIN_ROOT"}
+            env["CLAUDE_PROJECT_DIR"] = str(proj)
+            if plugin_root:
+                env["CLAUDE_PLUGIN_ROOT"] = plugin_root
+            run = subprocess.run([bash, hook, "session-start"], cwd=proj, env=env, capture_output=True, text=True, timeout=30)
+            ctx = json.loads(run.stdout)["hookSpecificOutput"]["additionalContext"]
+            how = "as a plugin" if plugin_root else "by the install script"
+            if want not in ctx or wrong in ctx:
+                fail(f"hook installed {how}: expected {want!r} and no {wrong!r} in {ctx[:400]!r}")
     if b"\r\n" not in (ROOT / "hooks" / "run.cmd").read_bytes() and os.name == "nt":
         fail("hooks/run.cmd: needs CRLF line endings on Windows (see .gitattributes)")
+
+
+def installers() -> list:
+    """(name, cmd) for each installer this machine can run; cmd(args, env) gives the argv."""
+    bash = find_bash()
+    pwsh = shutil.which("pwsh") or shutil.which("powershell")
+    runners = []
+    if bash:
+        runners.append(("install.sh", lambda args, env: [bash, str(ROOT / "install.sh"), *args]))
+    if pwsh and os.name == "nt":
+        runners.append(("install.ps1", lambda args, env: [pwsh, "-NoProfile", "-ExecutionPolicy", "Bypass", "-File",
+                                                          str(ROOT / "install.ps1"), *args]))
+    return runners
+
+
+def check_install_safety() -> None:
+    """Cases from the code check of 2026-11-26: the owner's settings and skills are never damaged."""
+    runners = installers()
+    skills = sorted(list(STAGE_SKILLS.values()) + HELPERS)
+
+    def run(cmd, cfg: pathlib.Path, *args: str) -> subprocess.CompletedProcess:
+        env = dict(os.environ, CLAUDE_CONFIG_DIR=str(cfg))
+        return subprocess.run(cmd(args, env), env=env, capture_output=True, text=True, timeout=60)
+
+    for name, cmd in runners:
+        if not (ROOT / name).exists():
+            continue
+        # 1. a hook of the owner's whose path happens to contain "idea-to-orbit" survives install and uninstall
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = pathlib.Path(tmp) / "claude"
+            cfg.mkdir()
+            mine = {"matcher": "startup", "hooks": [{"type": "command", "command": "bash C:/src/idea-to-orbit-dev/mine.sh"}]}
+            (cfg / "settings.json").write_text(json.dumps({"hooks": {"SessionStart": [mine]}}), encoding="utf-8")
+            run(cmd, cfg)
+            run(cmd, cfg, "--uninstall")
+            after = json.loads((cfg / "settings.json").read_text(encoding="utf-8"))
+            if mine not in after.get("hooks", {}).get("SessionStart", []):
+                fail(f"{name}: deleted the owner's own hook that mentions idea-to-orbit: {after}")
+        # 2. a settings.json saved with a byte order mark (Notepad, PowerShell 5.1) installs fine and stays readable
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = pathlib.Path(tmp) / "claude"
+            cfg.mkdir()
+            (cfg / "settings.json").write_text("\ufeff" + json.dumps({"model": "opus"}), encoding="utf-8")
+            r = run(cmd, cfg)
+            text = (cfg / "settings.json").read_text(encoding="utf-8-sig")
+            if r.returncode != 0 or '"opus"' not in text or "session-start" not in text:
+                fail(f"{name}: settings.json with a BOM: exit {r.returncode}, settings {text[:200]!r} {r.stderr[-200:]}")
+        # 3. a settings.json that is not a JSON object stops the install before anything is copied
+        for bad in ("{ not json", "[]", '{"hooks": null}'):
+            with tempfile.TemporaryDirectory() as tmp:
+                cfg = pathlib.Path(tmp) / "claude"
+                cfg.mkdir()
+                (cfg / "settings.json").write_text(bad, encoding="utf-8")
+                r = run(cmd, cfg)
+                copied = (cfg / "skills").exists() or (cfg / "idea-to-orbit").exists()
+                if r.returncode == 0 or copied or (cfg / "settings.json").read_text(encoding="utf-8") != bad:
+                    fail(f"{name}: settings.json {bad!r}: exit {r.returncode}, copied={copied}; must stop untouched")
+        # 4. a skill of the owner's with one of our names is never overwritten, even if it mentions the plugin,
+        #    and neither is a same-named folder without SKILL.md
+        for folder, content in (("build", "---\nname: build\ndescription: inspired by Idea to Orbit\n---\nmine\n"),
+                                ("debug", None)):
+            with tempfile.TemporaryDirectory() as tmp:
+                cfg = pathlib.Path(tmp) / "claude"
+                (cfg / "skills" / folder).mkdir(parents=True)
+                keep = cfg / "skills" / folder / ("SKILL.md" if content else "notes.txt")
+                keep.write_text(content or "draft", encoding="utf-8")
+                r = run(cmd, cfg)
+                if r.returncode == 0 or not keep.exists() or (content and "mine" not in keep.read_text(encoding="utf-8")):
+                    fail(f"{name}: overwrote the owner's own {folder!r} folder (exit {r.returncode})")
+        # 6. the owner's own commands/orbit.md is never replaced by install nor deleted by uninstall
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = pathlib.Path(tmp) / "claude"
+            (cfg / "commands").mkdir(parents=True)
+            own = cfg / "commands" / "orbit.md"
+            own.write_text("my own orbit command, not Idea to Orbit\n", encoding="utf-8")
+            r = run(cmd, cfg)
+            if r.returncode == 0 or "my own" not in own.read_text(encoding="utf-8") or (cfg / "skills").exists():
+                fail(f"{name}: replaced the owner's own commands/orbit.md (exit {r.returncode})")
+            run(cmd, cfg, "--uninstall")
+            if not own.exists():
+                fail(f"{name} --uninstall: deleted the owner's own commands/orbit.md")
+        # 7. an empty SessionStart list of the owner's survives; a skill folder of ours that this version no
+        #    longer ships is still removed by --uninstall
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = pathlib.Path(tmp) / "claude"
+            cfg.mkdir()
+            (cfg / "settings.json").write_text(json.dumps({"hooks": {"PreToolUse": [], "SessionStart": []}}),
+                                               encoding="utf-8")
+            run(cmd, cfg)
+            stale = cfg / "skills" / "old-stage"
+            stale.mkdir(parents=True)
+            (stale / ".idea-to-orbit").write_text("x", encoding="utf-8")
+            run(cmd, cfg, "--uninstall")
+            after = json.loads((cfg / "settings.json").read_text(encoding="utf-8"))
+            if after != {"hooks": {"PreToolUse": [], "SessionStart": []}}:
+                fail(f"{name}: did not restore the owner's settings exactly: {after}")
+            if stale.exists():
+                fail(f"{name} --uninstall: left a skill folder it had installed (old-stage)")
+    # 5. installed by one script, removed by the other
+    if len(runners) == 2 and all((ROOT / n).exists() for n, _ in runners):
+        for (a, ca), (b, cb) in (runners, runners[::-1]):
+            with tempfile.TemporaryDirectory() as tmp:
+                cfg = pathlib.Path(tmp) / "claude"
+                cfg.mkdir()
+                run(ca, cfg)
+                run(cb, cfg, "--uninstall")
+                left = [s for s in skills if (cfg / "skills" / s).exists()]
+                hook_left = (cfg / "settings.json").exists() and "session-start" in (cfg / "settings.json").read_text(
+                    encoding="utf-8-sig")
+                if left or hook_left:
+                    fail(f"installed with {a}, removed with {b}: left skills {left}, hook left {hook_left}")
+
+
+def check_install() -> None:
+    """install.sh and install.ps1 put the skills, /orbit and the session-start hook into a Claude config folder,
+    keep the owner's own settings, never add the hook twice, and --uninstall removes only what they added."""
+    runners = installers()
+    bash = find_bash()
+    if not runners:
+        fail("install: neither bash nor PowerShell found, cannot test the installers")
+    skills = sorted(list(STAGE_SKILLS.values()) + HELPERS)
+    for name, cmd in runners:
+        if not (ROOT / name).exists():
+            fail(f"install: {name} is missing")
+            continue
+        with tempfile.TemporaryDirectory() as tmp:
+            cfg = pathlib.Path(tmp) / "claude"
+            cfg.mkdir()
+            other = {"matcher": "startup", "hooks": [{"type": "command", "command": "echo mine"}]}
+            (cfg / "settings.json").write_text(json.dumps({"model": "opus", "hooks": {"SessionStart": [other]}}),
+                                               encoding="utf-8")
+            env = dict(os.environ, CLAUDE_CONFIG_DIR=str(cfg))
+
+            def run(*args: str) -> subprocess.CompletedProcess:
+                return subprocess.run(cmd(args, env), env=env, capture_output=True, text=True, timeout=60)
+
+            for attempt in (1, 2):  # the second run must change nothing
+                r = run()
+                if r.returncode != 0:
+                    fail(f"{name} run {attempt}: exit {r.returncode}: {r.stdout[-300:]} {r.stderr[-300:]}")
+                    break
+                missing = [s for s in skills if not (cfg / "skills" / s / "SKILL.md").exists()]
+                if missing:
+                    fail(f"{name} run {attempt}: skills not installed: {missing}")
+                if not (cfg / "commands" / "orbit.md").exists():
+                    fail(f"{name} run {attempt}: /orbit command not installed")
+                try:
+                    settings = json.loads((cfg / "settings.json").read_text(encoding="utf-8"))
+                except Exception as e:  # noqa: BLE001
+                    fail(f"{name} run {attempt}: settings.json is no longer valid JSON ({e})")
+                    break
+                starts = settings.get("hooks", {}).get("SessionStart", [])
+                ours = [h for g in starts for h in g.get("hooks", []) if "idea-to-orbit" in h.get("command", "")]
+                if settings.get("model") != "opus" or other not in starts:
+                    fail(f"{name} run {attempt}: the owner's own settings were not kept: {settings}")
+                if len(ours) != 1:
+                    fail(f"{name} run {attempt}: expected one session-start hook of ours, found {len(ours)}")
+            if bash and (cfg / "idea-to-orbit" / "hooks" / "run.cmd").exists():
+                proj = pathlib.Path(tmp) / "proj"
+                (proj / "docs" / "orbit").mkdir(parents=True)
+                shutil.copy(ROOT / "examples" / "repo-pulse" / "docs" / "orbit" / "STATE.md", proj / "docs" / "orbit")
+                h = subprocess.run([bash, str(cfg / "idea-to-orbit" / "hooks" / "run.cmd"), "session-start"], cwd=proj,
+                                   env=dict(env, CLAUDE_PROJECT_DIR=str(proj)), capture_output=True, text=True, timeout=30)
+                if "Stage: orbit" not in h.stdout:
+                    fail(f"{name}: the installed hook does not report the stage: {h.stdout[:200]!r} {h.stderr[:200]!r}")
+            else:
+                fail(f"{name}: hooks not installed to idea-to-orbit/hooks/")
+            r = run("--uninstall")
+            if r.returncode != 0:
+                fail(f"{name} --uninstall: exit {r.returncode}: {r.stderr[-300:]}")
+                continue
+            left = [s for s in skills if (cfg / "skills" / s).exists()] + [
+                p for p in ("commands/orbit.md", "idea-to-orbit") if (cfg / p).exists()]
+            if left:
+                fail(f"{name} --uninstall: still there: {left}")
+            settings = json.loads((cfg / "settings.json").read_text(encoding="utf-8"))
+            starts = settings.get("hooks", {}).get("SessionStart", [])
+            if settings.get("model") != "opus" or other not in starts or "idea-to-orbit" in json.dumps(settings):
+                fail(f"{name} --uninstall: settings not restored to the owner's own: {settings}")
+        with tempfile.TemporaryDirectory() as tmp:  # someone else's skill with one of our names is never overwritten
+            cfg = pathlib.Path(tmp) / "claude"
+            (cfg / "skills" / "build").mkdir(parents=True)
+            (cfg / "skills" / "build" / "SKILL.md").write_text("---\nname: build\n---\nmine\n", encoding="utf-8")
+            r = subprocess.run(cmd((), None), env=dict(os.environ, CLAUDE_CONFIG_DIR=str(cfg)),
+                               capture_output=True, text=True, timeout=60)
+            if r.returncode == 0 or "mine" not in (cfg / "skills" / "build" / "SKILL.md").read_text(encoding="utf-8"):
+                fail(f"{name}: overwrote a different skill named 'build' (exit {r.returncode})")
 
 
 def main() -> int:
@@ -183,15 +403,18 @@ def main() -> int:
     check_versions(data)
     check_skills()
     check_name_clashes()
+    check_existing_products()
     check_links()
     check_evals()
     check_hook()
+    check_install()
+    check_install_safety()
     if failures:
         print(f"{len(failures)} problem(s):")
         for f in failures:
             print(f"  - {f}")
         return 1
-    print("All checks passed: JSON, versions, skills, links, evals and the session-start hook.")
+    print("All checks passed: JSON, versions, skills, links, evals, the session-start hook and the installers.")
     return 0
 
 

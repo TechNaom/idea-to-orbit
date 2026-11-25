@@ -11,6 +11,9 @@ there, the product moves on like any other.
 
 ## Steps
 
+The full steps are in the ignite skill, under **Existing product**; `/orbit` starts them by
+itself when a repository has code but no `docs/orbit/STATE.md`. In short:
+
 ```text
 You: /orbit
      This product already exists. Catch up the docs from the code.

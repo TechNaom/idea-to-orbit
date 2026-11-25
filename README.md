@@ -75,6 +75,22 @@ Or type the commands yourself:
 
 Restart Claude Code afterwards so the skills and the session-start hook load.
 
+### No `/plugin` command? Use the install script
+
+Some Claude Code surfaces (for example the VS Code extension) do not offer `/plugin`. Clone the
+repository and run the installer; it works on every surface:
+
+```bash
+git clone https://github.com/TechNaom/idea-to-orbit
+./idea-to-orbit/install.sh             # macOS, Linux, Git Bash
+.\idea-to-orbit\install.ps1            # Windows PowerShell
+```
+
+It copies the skills and `/orbit` into your Claude config folder (`~/.claude`, or
+`$CLAUDE_CONFIG_DIR`) and adds the session-start hook to its `settings.json`, keeping your own
+settings. Run it again to update. `--uninstall` removes exactly what it added. It never
+overwrites a skill of yours that happens to share a name; it stops and tells you instead.
+
 ## Use
 
 Open your product's repository in Claude Code and run:
@@ -131,7 +147,8 @@ docs/orbit/
 
 ## Status
 
-Version 0.3: the seven stages and three helper skills, the session-start hook, a build stage
+Version 0.4: the seven stages and three helper skills, the session-start hook, install scripts for
+surfaces without `/plugin`, catch-up steps for products that already have code, a build stage
 with fresh-agent checks on every task, task cards, red flags in every skill, 13 pressure
 scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
 for how it works and what comes next.

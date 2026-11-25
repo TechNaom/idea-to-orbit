@@ -7,7 +7,7 @@
 
 ## Who it is for
 - **Users:** <who uses it>
-- **Buyer:** <who pays, if different>
+- **Buyer:** <who pays, if different; "none, it is the owner's own tool" is a fine answer>
 
 ## What changes when it works
 <The outcome for the user, in their words.>
