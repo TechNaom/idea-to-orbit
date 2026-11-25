@@ -60,12 +60,20 @@ The stages call them for you. You can also ask for one directly: "debug this fai
 
 ## Install
 
-In Claude Code:
+The easy way: in any Claude Code session, ask
+
+```
+Install the Claude Code plugin from https://github.com/TechNaom/idea-to-orbit
+```
+
+Or type the commands yourself:
 
 ```
 /plugin marketplace add TechNaom/idea-to-orbit
 /plugin install idea-to-orbit@idea-to-orbit
 ```
+
+Restart Claude Code afterwards so the skills and the session-start hook load.
 
 ## Use
 

@@ -4,7 +4,8 @@ This takes about ten minutes, and ends with an approved brief for your product.
 
 ## 1. Install
 
-Idea to Orbit is a Claude Code plugin. In Claude Code, type:
+Idea to Orbit is a Claude Code plugin. The easy way is to ask Claude in any session:
+"Install the Claude Code plugin from https://github.com/TechNaom/idea-to-orbit". Or type:
 
 ```text
 /plugin marketplace add TechNaom/idea-to-orbit
