@@ -67,7 +67,8 @@ These rules hold for this whole session:
 7. Use the Settings in STATE.md (code host, branches, builders, test commands) instead of assuming GitHub, main or subagents. New work on a product past build goes through a lane (feature, fix or hotfix, see /orbit), listed under In flight.
 8. Record every change, every fix made in review and every roadblock (cause, how it was cleared, the lesson) in docs/orbit/JOURNAL.md, or the journal STATE.md points to.
 9. Load the skill before acting, not only its rules from memory: ${pre}verify before any status, report or message that says something works or passes; ${pre}review before any merge; ${pre}learn when the same kind of problem comes back or the owner asks for a lesson; and the stage's skill for any stage work.
-10. A model setting (temperature, top_p, tools, a new model ID) gets one real call before a test pins it: a test against a stub passes even when the real model refuses the setting."
+10. A model setting (temperature, top_p, tools, a new model ID) gets one real call before a test pins it: a test against a stub passes even when the real model refuses the setting.
+11. A request to add, improve, ramp up or 'make it like' something on a built or live product is a feature lane: use ${pre}ignite first (requirements with acceptance checks, out of scope, the lane under In flight, the owner's yes) before any build plan or list of steps."
 else
   text="Idea to Orbit is installed. This repository has no docs/orbit/STATE.md, so no product is in progress here. If the owner wants to start or continue a product, use /orbit. If they describe a new product idea, offer to start the ignite stage before writing any code."
 fi

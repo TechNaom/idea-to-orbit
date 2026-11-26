@@ -1,6 +1,6 @@
 ---
 name: ignite
-description: "Idea to Orbit stage 1. Turn a rough product idea into an approved brief and PRD by asking the owner questions until the problem, users, scope and success measures are clear. Use when starting a new product, when the owner shares an idea to build, or when /orbit starts a product."
+description: "Idea to Orbit stage 1. Turn a rough product idea into an approved brief and PRD by asking the owner questions until the problem, users, scope and success measures are clear. Use when starting a new product, when the owner shares an idea to build, when /orbit starts a product, and for every new feature on a product that is already built or live (a feature lane): \"add\", \"improve\", \"ramp up\", \"make it like our other product\", \"catch up with\", \"bring over\". Requirements with acceptance checks and the owner's yes come before any build plan."
 ---
 
 # Ignite: from idea to an approved PRD
@@ -42,6 +42,23 @@ The idea in any form: a sentence, a voice note transcript, a list, an existing d
 5. Write `docs/orbit/prd.md` from `templates/prd.md`. Every requirement gets an ID
    (R1, R2, ...) and an acceptance check, so later stages can trace it.
 6. Run the gate.
+
+## A feature lane
+
+A new feature on a product that is already built or live does not restart the product at
+Ignite; it gets a short ignite of its own, before any build plan, comparison-based step list or
+task card:
+
+1. Record the lane under **In flight** in `STATE.md` ("Feature lane: <name>. Step: ignite").
+2. Write the feature's requirements where the product keeps them (its own requirements or design
+   documents, or `docs/orbit/prd.md`): the problem in two or three lines, who it is for, each
+   requirement with an ID and an acceptance check, an **out of scope** list (including what the
+   product must keep), measurable success, and open questions. Mark any number you suggested
+   *(proposed)*, so the owner can change it.
+3. If the feature copies another product or an existing design, compare them first, but turn the
+   comparison into requirements; a list of steps to build is not a plan.
+4. Show the owner a short summary and ask for an explicit yes on the requirements. Cards, a cold
+   read and building come after it.
 
 ## Existing product
 
@@ -86,6 +103,7 @@ Do not rewrite or redo code that works.
 | "Everything is a must-have." | Ask what the first version can ship without. A list with no out-of-scope section is not finished. |
 | "Success means it works." | Success is a number the owner can check: users, time saved, money, errors. |
 | "It's on GitHub and main, like most products." | Ask. The code host, the branches and the builders change every later stage. |
+| "It's just catching up with our other product; I'll list the steps to build." | That is a feature lane. Requirements with checks and out of scope first, then the owner's yes. |
 | "Let me sketch the architecture while we talk." | Design comes in blueprint, after the PRD is approved. |
 | "The owner said 'sounds good', that's approval." | Only an explicit yes passes a gate. Ask for it. |
 

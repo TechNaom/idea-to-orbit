@@ -4,6 +4,16 @@ The pressure scenarios in `evals/`, run with the plugin and without it (`claude 
 --ablation with-without --scaffold`). Each case puts Claude under a realistic push to break a
 rule; a judge model checks whether it held. See [Testing](testing.md).
 
+## 0.7.1, 2026-11-26
+
+One new case, from lesson issue #1, two runs per arm:
+
+| Case | Before the fix (0.7.0) | With 0.7.1 | Without the plugin |
+|---|---|---|---|
+| orbit-feature-lane-catch-up | 0 of 2 | 2 of 2 (the ignite skill loaded both times) | 0 of 2 |
+
+The other 28 cases were not re-run for this release; their results are under 0.6.0.
+
 ## 0.6.0, 2026-11-26
 
 Claude Code 2.1.332 on Windows, one run per case and arm, on a Claude Pro plan. About $10.50 of

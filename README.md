@@ -156,7 +156,7 @@ stage with fresh-agent checks on every task, a bounded fix loop and support for 
 builders (Cursor, Kiro), a cold read of the design and of the cards, a mockup step for screens,
 GitHub or GitLab, startup and enterprise profiles, checks for AI features, lanes for work on a
 live product, a journal and a learn skill that also reads past sessions, red flags in every
-skill, 28 pressure scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
+skill, 29 pressure scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
 for how it works and what comes next.
 
 ## License

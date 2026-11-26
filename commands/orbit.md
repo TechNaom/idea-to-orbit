@@ -27,7 +27,10 @@ You are running Idea to Orbit for the product in the current repository.
    clash with this command). Refuse to start a stage whose previous stage is not
    `approved` in `STATE.md`, and say which gate is open.
 4. If the owner asks for a feature, a fix or a hotfix on a product that is past Build, use a
-   **lane** (below) instead of moving the whole product back a stage.
+   **lane** (below) instead of moving the whole product back a stage. A request to add,
+   improve, "ramp up", "catch up with" or "make it like" another product or design is a
+   **feature** lane: start with its ignite (the ignite skill, "A feature lane"), never with a
+   list of build steps.
 5. Otherwise continue the current stage, or start the next one if the current one is
    approved.
 

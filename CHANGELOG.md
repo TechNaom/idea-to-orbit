@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.1 - 2026-11-26
+
+From lesson issue #1: a feature request on a live product ("make our assistant like our other
+product's") was planned as a list of build steps, without the feature lane's ignite.
+
+- Ignite has a **feature lane** section (lane under In flight, requirements with IDs and checks,
+  out of scope, proposed numbers marked, the owner's yes before cards), and its description
+  names the request shapes that start one ("add", "improve", "ramp up", "make it like").
+- `/orbit`, the session-start hook (rule 11) and a build red flag say the same.
+- New scenario `orbit-feature-lane-catch-up` (29 in all): failed 2 of 2 runs before the change.
+
 ## 0.7.0 - 2026-11-26
 
 - **Session scanner** for the learn skill (`skills/learn/scan_sessions.py`, standard library

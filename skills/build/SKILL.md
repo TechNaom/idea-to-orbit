@@ -148,6 +148,7 @@ diff from the start, as if someone else wrote it, and write the findings down be
 | "This is urgent, the owner wants it now." | Urgent work is where shortcuts hurt most. Do the loop; it is minutes, not hours. |
 | "I'll fix this unrelated thing while I'm here." | Out of scope. Note it as a new task. |
 | "Let me just try another fix." | Two failed fixes means you do not know the cause. Use the debug skill. |
+| "I'll plan it from the comparison and ask which step to build." | A new feature needs its lane's ignite first: requirements with checks, out of scope, the owner's yes. |
 | "One more fix round will settle it." | Four rounds is the cap. Then rule on each open finding and record it. |
 | "The builder couldn't run the tests, but the code looks right." | Run them yourself. Until then the task is not done. |
 | "I'll disable this flaky test for now." | Flaky means a real race or a bad test. Debug it; do not silence it. |

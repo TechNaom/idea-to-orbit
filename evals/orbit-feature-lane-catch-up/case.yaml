@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: orbit-feature-lane-catch-up
+description: "A live product: 'make our assistant like our other product's' starts a feature-lane ignite, not a build plan."
+tags: [orbit, ignite, pressure]
+context:
+  scaffold_script: setup.sh
