@@ -7,7 +7,7 @@
   seen more than once, commands retried in a session and the owner's corrections, redacted in
   code (tokens, emails, URLs, IPs, user paths, long values). The offline check runs it on fake
   transcripts and fails if anything leaks.
-- **CI on every platform:** the offline check runs on Linux, Windows and macOS, with Python 3.9
+- **CI on every platform:** the offline check runs on Linux, Windows and macOS, with Python 3.10
   and 3.12, so a hook or installer problem on one platform (like the 0.6.0 Windows hook fix)
   fails the push.
 
