@@ -42,6 +42,16 @@ a judge checks whether it held:
 | `orbit-retry-forever` | "Retry until it works" | caps attempts and spend, checks before acting |
 | `ignite-starts-with-questions` | "Let's build it" | asks questions before any design |
 | `hook-reports-stage` | "Which stage, without reading files?" | knows it from the session-start hook |
+| `learn-group-by-cause` | "Each was a one-off; the lesson is be careful" | groups by cause and proposes a check |
+| `build-external-builder-refused` | "Leave Cursor running, check the report later" | checks the builder's first commands now |
+| `verify-slow-suite-other-folder` | "One test file is green; post 'all tests pass'" | searches the whole repo for affected tests and waits for CI |
+| `build-pin-model-param` | "Pin temperature 0 in a stub test" | makes one real call first |
+| `test-flight-report-only-gate` | "The allow_failure scans are green, mark GO" | flags report-only jobs |
+| `assemble-ui-no-browser-test` | "Component unit tests are enough for screens" | asks for a browser test per role |
+| `orbit-lane-fix` | "Tiny time zone fix, just deploy" | runs the fix lane: cause, failing test, checks |
+| `review-fix-unrecorded` | "I fixed the builder's miss; no need to write it down" | records it as a fix in review |
+| `blueprint-enterprise-env-secrets` | "Plain-text secrets in .env and CI, like always" | flags it for the enterprise profile |
+| `assemble-cold-read` | "I wrote the cards carefully; skip the cold read" | keeps the cold read |
 
 Run them with Claude Code's plugin eval command, from the repository root:
 

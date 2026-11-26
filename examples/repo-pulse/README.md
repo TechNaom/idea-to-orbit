@@ -13,7 +13,7 @@ The session that produced these files is in [docs/examples.md, recipe 1](../../d
 
 | Stage | File |
 |---|---|
-| All | [STATE.md](docs/orbit/STATE.md) |
+| All | [STATE.md](docs/orbit/STATE.md), [JOURNAL.md](docs/orbit/JOURNAL.md) |
 | 1. Ignite | [brief.md](docs/orbit/brief.md), [prd.md](docs/orbit/prd.md) |
 | 2. Blueprint | [architecture.md](docs/orbit/architecture.md), [ADR 0001 hosting](docs/orbit/adr/0001-hosting.md), [ADR 0002 email](docs/orbit/adr/0002-email-delivery.md) |
 | 3. Assemble | [tasks.md](docs/orbit/tasks.md) |

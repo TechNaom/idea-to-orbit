@@ -56,6 +56,35 @@ sequenceDiagram
 - Auth: <how users and services prove who they are>
 - Data: <what is sensitive, how it is protected>
 
+## AI
+
+Delete this section if the product calls no model.
+
+| Job | Model | Why (ADR) | Cost per call | Monthly at expected load |
+|---|---|---|---|---|
+
+- Never decided by the model: <ratings, approvals, prices ...>
+- Checks in code on every output: <numbers against the source, citations resolve, banned phrases>
+- When a check fails, the user sees: <the template text, a "withheld" note ...>
+- Evals: <cases>, judge <model>, bars: <figures 1.00, groundedness 0.95> (requirements <N..>)
+- Metering and budget: <per call, per tenant per day, what happens at the cap>
+
+## Screens
+
+Delete this section if the product has no UI.
+
+| Screen | Route | Heading | Roles that open it | Roles refused | Key controls |
+|---|---|---|---|---|---|
+
+Mockup: <link>. Browser tests load this list (or `<path>/screens.yaml`).
+
+## Compliance
+
+For the enterprise profile; otherwise one line on any law that applies.
+
+| Control area | How the design meets it | Where |
+|---|---|---|
+
 ## Cost
 
 | Part | Expected monthly cost | Free tier used |

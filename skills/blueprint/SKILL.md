@@ -30,11 +30,50 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
    - **Cost:** the expected monthly cost per part, and the spending cap.
    - **Failure modes:** what breaks, how it is detected, how it recovers.
    - **Traceability:** which parts satisfy which requirement IDs.
-   Use Mermaid for every diagram so it renders on GitHub.
-4. Apply the defaults unless the PRD or the owner says otherwise: scale to zero, one silo
-   per product (its own keys, database, quotas and alerts), budget guard before deploy,
-   secrets in `.env` with a committed `.env.example`.
+   - **AI** (when the product calls a model): see below.
+   - **Screens** (when the product has a UI): see below.
+   Use Mermaid for every diagram so it renders on GitHub, GitLab and most editors.
+4. Apply the defaults of the product's **profile** (`STATE.md`), unless the PRD or the owner
+   says otherwise. See below.
 5. Run the gate.
+
+## Profiles
+
+| | startup | enterprise |
+|---|---|---|
+| Hosting | Scales to zero, free tier where possible | Scales to zero where it can; managed databases and private networks where the data needs them, each justified in an ADR |
+| Secrets | A gitignored `.env` locally, the provider's secret store in CI and production; a committed `.env.example` | A managed secret store (for example AWS Secrets Manager) everywhere, rotated; nothing secret in a `.env` on a shared machine or in CI variables in plain text |
+| Isolation | One silo per product: own keys, database, quotas, alerts | The same, plus one silo per tenant's data where customers share the product |
+| Compliance | Note any law that applies | A control mapping (for example DPDP, GDPR, ISO 27001, SOC 2) in `architecture.md`; data classification; audit log with opaque user IDs; no personal data or secrets in logs |
+| Release | `main` deploys | A work branch, then staging, then prod after a manual approval (the **Promotion** setting) |
+
+A secret in a plain-text file that other people or machines can read is a finding in either
+profile: say so, and keep it out of the design.
+
+## AI
+
+When the product calls a model, `architecture.md` also covers:
+
+- **Which model for which job,** with at least two options weighed in an ADR: quality on
+  this task, cost per call and per month at the expected load, latency, and where the data
+  goes.
+- **Guardrails:** what the model may never decide (money, ratings, approvals, anything with
+  legal weight), how its output is checked in code (numbers against the source, citations
+  that resolve, banned judgements), and what the user sees when a check fails.
+- **Evals:** the cases, the scorer or judge, and the bars a release must meet (for example
+  figures 1.00, groundedness 0.95). The bars are requirements in `prd.md`, with IDs; if
+  Ignite did not set them, add them to the PRD and mark ignite `needs review` in `STATE.md`.
+- **Metering:** every call recorded with tokens and cost, a budget per tenant or per day,
+  and what happens when it is reached.
+
+## Screens
+
+When the product has a UI, `architecture.md` also has a **screen list**: every screen, its
+route, its heading, which roles may open it and which see a refusal, and its key controls.
+It is the source for the browser tests in build and the owner's checklist in test flight,
+so keep it in a form both can read (a table, or a `screens.yaml` the tests load). Agree the
+look with wireframes or a mockup before Assemble; a UI changed after it is built costs ten
+times more.
 
 ## Red flags: stop if you think
 
@@ -45,6 +84,9 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
 | "Cost can be worked out at launch." | Cost decides the design. Estimate it now, per part, at expected and ten times the load. |
 | "It won't fail, it's a managed service." | Every outside call fails sometimes. Write its detection and recovery. |
 | "A diagram is enough, no need for interfaces." | Builders need the contracts: inputs, outputs, errors, limits. |
+| "The model will handle it, it's smart." | Write what the model may never decide, the check in code on its output, and the eval bar. |
+| "We'll design the screens while building." | List every screen and role now, and agree a mockup. Browser tests and the owner's checklist come from that list. |
+| "A `.env` file is fine for the secrets." | Fine on a laptop in the startup profile. Anywhere shared, or in enterprise, use the secret store. |
 | "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR. |
 
 ## Gate
@@ -56,6 +98,9 @@ Exit list:
 - [ ] The monthly cost is estimated and within the PRD's budget.
 - [ ] Each failure mode has detection and recovery.
 - [ ] Nothing in the design needs an always-on server unless an ADR justifies it.
+- [ ] The profile's defaults are applied, or an ADR says why not.
+- [ ] If the product calls a model: model choice, guardrails, eval bars and metering are written.
+- [ ] If the product has a UI: the screen list exists and the owner has seen a mockup.
 
 Show the owner the container diagram, the decisions in one line each, the monthly cost and
 any open questions, and ask for approval. Record an explicit yes in `STATE.md` and say that

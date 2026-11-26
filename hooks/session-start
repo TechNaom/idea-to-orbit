@@ -33,8 +33,19 @@ if [ -f "$state" ]; then
   status=$(field Status)
   questions=$(awk '/^## Open questions/ { on = 1; next } /^## / { on = 0 }
     on && /^- / && !/^- [Nn]one/ && !/<question>/ { n++ } END { print n + 0 }' "$state")
+  profile=$(field Profile)
+  host=$(field "Code host")
+  branch=$(field "Work branch")
+  builders=$(field Builders)
+  inflight=$(awk '/^## .*[Ii]n flight/ { on = 1; next } /^## / { on = 0 }
+    on && /^- / && !/^- [Nn]one/ { n++ } END { print n + 0 }' "$state")
   [ -n "$stage" ] || stage="unknown"
   [ -n "$status" ] || status="unknown"
+  # Products started before 0.5 have no Settings: say so, rather than state 0.4's defaults as facts.
+  settings="Profile: ${profile:-startup}. Code host: ${host:-github}. Work branch: ${branch:-main}. Builders: ${builders:-subagents}. In flight: ${inflight}."
+  if ! grep -q '^## Settings' "$state"; then
+    settings="Settings: not set in STATE.md (assuming GitHub, main, Claude's subagents, startup profile; ask the owner and fill them in). In flight: ${inflight}."
+  fi
   # Skill names: stage 7's skill is keep-running (a skill named orbit would clash with /orbit), and the
   # "idea-to-orbit:" prefix exists only when installed as a plugin; the install scripts add plain names.
   pre=""
@@ -44,6 +55,7 @@ if [ -f "$state" ]; then
 
   text="This repository is a product built with Idea to Orbit: ${product:-unnamed}.
 Stage: ${stage}. Status: ${status}. Open questions: ${questions}.
+${settings}
 
 These rules hold for this whole session:
 1. Before working on this product, read docs/orbit/STATE.md and use the skill for the current stage (${pre}${skill}). Follow its steps and stop at its red flags.
@@ -51,7 +63,9 @@ These rules hold for this whole session:
 3. No production code without a failing test that you ran and watched fail first. This holds in every stage, for every change, however small or urgent.
 4. When something breaks, use ${pre}debug and find the cause before changing code.
 5. Before saying that anything is done, fixed, passing or deployed, run the check and show its output (${pre}verify).
-6. If the owner asks to skip a step, say which rule it breaks and what could go wrong, then follow the owner's decision and record it in STATE.md."
+6. If the owner asks to skip a step, say which rule it breaks and what could go wrong, then follow the owner's decision and record it as a Skipped rule row in JOURNAL.md, with a line in the STATE.md log.
+7. Use the Settings in STATE.md (code host, branches, builders, test commands) instead of assuming GitHub, main or subagents. New work on a product past build goes through a lane (feature, fix or hotfix, see /orbit), listed under In flight.
+8. Record every change, every fix made in review and every roadblock (cause, how it was cleared, the lesson) in docs/orbit/JOURNAL.md, or the journal STATE.md points to."
 else
   text="Idea to Orbit is installed. This repository has no docs/orbit/STATE.md, so no product is in progress here. If the owner wants to start or continue a product, use /orbit. If they describe a new product idea, offer to start the ignite stage before writing any code."
 fi

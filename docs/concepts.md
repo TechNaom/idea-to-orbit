@@ -1,6 +1,6 @@
 # Concepts
 
-Six ideas explain how Idea to Orbit behaves.
+Nine ideas explain how Idea to Orbit behaves.
 
 ## Stages
 
@@ -74,6 +74,45 @@ Statuses:
 | approved | You approved it; the next stage may start |
 | needs review | An earlier stage changed, so this one must be checked again |
 
+## Settings
+
+`STATE.md` also holds the product's Settings: the code host (GitHub or GitLab), the work branch
+and release branch, how releases promote (for example `dev`, then staging, then prod after a
+manual approval), who builds (Claude's subagents, or an outside agent such as Cursor or Kiro
+through a launcher), the fast tests, and the full suite with how long it takes. Every stage
+reads them, so nothing assumes GitHub, `main` or a quick suite.
+
+## Profiles
+
+A product has one of two profiles, set in Ignite:
+
+| | startup | enterprise |
+|---|---|---|
+| Hosting | Scales to zero, free tier | Scales to zero where it can; managed databases and private networks where the data needs them |
+| Secrets | `.env` on your laptop, the secret store in CI and production | A managed secret store everywhere |
+| Compliance | Note any law that applies | A control mapping, data classification, audit log, no personal data in logs |
+| Release | `main` deploys | A work branch, then staging, then prod after approval |
+
+## Lanes
+
+Once a product is past Build, new work runs in a lane instead of moving the whole product back
+a stage:
+
+| Lane | For | In short |
+|---|---|---|
+| Feature | New behaviour | A short ignite for the feature, cards, build, the release lines it touches |
+| Fix | A bug, not urgent | Find the cause, a failing test, the build loop |
+| Hotfix | Users affected now | Roll back first, then the fix lane, then a root cause analysis |
+
+Each lane is listed under **In flight** in `STATE.md` until it is merged. Several can run at
+once when they change different files.
+
+## The journal
+
+`docs/orbit/JOURNAL.md` records every change, every fix made in review, and every roadblock:
+what went wrong, its cause, how it was cleared, and the lesson. The learn skill reads it at
+the end of each milestone and turns repeated trouble into checks.
+
 ## The workspace
 
 Everything the stages write lives in your product's repository under `docs/orbit/`, next to
@@ -89,7 +128,7 @@ and get an answer from the files.
 
 ## Defaults
 
-Unless you choose otherwise for a product:
+For the startup profile, unless you choose otherwise:
 
 - a spending cap and alerts are set before anything is deployed
 - hosting scales to zero, so an idle product costs nothing

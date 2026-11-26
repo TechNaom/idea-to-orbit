@@ -26,8 +26,8 @@ Each builder works in its own worktree, so they never overwrite each other's fil
 
 ```bash
 git fetch origin
-git worktree add ../<repo>-t5 -b t5-new-issues origin/main
-git worktree add ../<repo>-t6 -b t6-failed-runs origin/main
+git worktree add ../<repo>-t5 -b t5-new-issues origin/<work branch>
+git worktree add ../<repo>-t6 -b t6-failed-runs origin/<work branch>
 git worktree list
 ```
 
@@ -43,7 +43,7 @@ never committed.
 2. Start them together.
 3. As each one reports, run its task check and code check as usual. Checks for different
    tasks may also run at the same time.
-4. Merge one at a time. After each merge, rebase the next branch on the new main and run the
+4. Merge one at a time. After each merge, rebase the next branch on the updated work branch and run the
    full suite again before merging it. A clean merge does not mean the code works together.
 5. When all are merged, remove the worktrees:
 

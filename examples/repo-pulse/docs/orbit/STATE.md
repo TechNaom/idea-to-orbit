@@ -6,6 +6,18 @@ Started: 2026-11-23
 
 - Stage: orbit
 - Status: approved
+- Profile: startup
+
+## Settings
+
+- Code host: github
+- Work branch: main
+- Release branch: main
+- Promotion: none
+- Builders: subagents
+- Fast tests: `pytest -q -x`
+- Full suite: `pytest -q` (about 1 minute)
+- CI: GitHub Actions; a run per commit on main
 
 ## Gates
 
@@ -18,6 +30,10 @@ Started: 2026-11-23
 | test-flight | approved | owner | 2026-12-04 |
 | launch | approved | owner | 2026-12-07 |
 | orbit | approved | owner | 2026-12-07 |
+
+## In flight
+
+- Fix lane: digest skips repos with a renamed default branch (issue #14). Step: failing test written.
 
 ## Open questions
 

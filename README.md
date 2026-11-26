@@ -55,6 +55,7 @@ How they hold:
 | **review** | A change needs checking by someone who did not write it, or review feedback arrives |
 | **debug** | Something breaks, a test fails unexpectedly, or a fix did not work |
 | **verify** | Before saying anything is done, fixed, passing or deployed |
+| **learn** | At the end of a milestone or after an incident: turn repeated trouble into checks |
 
 The stages call them for you. You can also ask for one directly: "debug this failing test".
 
@@ -107,7 +108,8 @@ Everything the stages write lives in your product repository, under `docs/orbit/
 
 ```
 docs/orbit/
-  STATE.md            current stage, gate approvals, open questions
+  STATE.md            current stage, settings, gate approvals, work in flight, open questions
+  JOURNAL.md          every change, fix in review and roadblock, with its cause and lesson
   brief.md            one page: the problem, who has it, why now
   prd.md              requirements and success measures
   architecture.md     the design, with diagrams
@@ -139,6 +141,7 @@ docs/orbit/
 - **Evidence, not claims.** Every status comes with the output that proves it.
 - **Small steps.** Small commits, pushed often, each one working.
 - **Budget first.** A spending cap and alerts exist before anything is deployed.
+- **Learn from trouble.** Every roadblock is written down with its cause; patterns become checks.
 - **Scale to zero.** Nothing runs when nobody is using it.
 - **One silo per product.** Its own keys, database, quotas and alerts, so one product can
   never break another.
@@ -147,10 +150,12 @@ docs/orbit/
 
 ## Status
 
-Version 0.4: the seven stages and three helper skills, the session-start hook, install scripts for
+Version 0.5: the seven stages and four helper skills, the session-start hook, install scripts for
 surfaces without `/plugin`, catch-up steps for products that already have code, a build stage
-with fresh-agent checks on every task, task cards, red flags in every skill, 13 pressure
-scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
+with fresh-agent checks on every task and support for outside builders (Cursor, Kiro), task
+cards with a cold read, GitHub or GitLab, startup and enterprise profiles, checks for AI
+features and screens, lanes for work on a live product, a journal and a learn skill, red flags
+in every skill, 23 pressure scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
 for how it works and what comes next.
 
 ## License

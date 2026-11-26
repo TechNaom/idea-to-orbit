@@ -28,6 +28,12 @@ AI:  Read the repository: 4,200 lines of Python, 63 tests, a deploy workflow,
      Is this an accurate picture of the product today?
 ```
 
+Claude also fills the **Settings** in `STATE.md` from the repository (the code host, the
+branches, who builds, the test commands and how long the full suite takes) and marks what it
+inferred. If the product already keeps its own plan, task list, decision records or journal,
+`STATE.md` points to them and the stages use them as they are; Claude writes an orbit
+document only where nothing covers it.
+
 When you confirm, Claude records Ignite and Blueprint as approved and suggests where to go
 next:
 
@@ -35,7 +41,7 @@ next:
 |---|---|
 | Code but not deployed | Assemble, for the missing work, then Build |
 | Live without monitoring | Orbit setup |
-| Live, with a new feature to add | Ignite for the feature only, as a change |
+| Live, with a new feature to add | A feature lane (see [Concepts](concepts.md#lanes)) |
 
 ## Adding a feature to a live product
 

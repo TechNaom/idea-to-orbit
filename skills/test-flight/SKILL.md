@@ -10,8 +10,10 @@ claim and a list of what could not be tested.
 
 ## Inputs
 
-The built product on main, `prd.md`, `architecture.md` and `tasks.md`. Build must be
-`approved` in `STATE.md`.
+The built product on the **Release branch** (`STATE.md` Settings), `prd.md`,
+`architecture.md` and `tasks.md`. Build must be `approved` in `STATE.md`. If the work branch
+is not the release branch, merge it into the release branch through a pull or merge request
+first; the release commit is that merge.
 
 ## Steps
 
@@ -21,6 +23,10 @@ needs evidence: a command and its output, a link to a CI run, or a screenshot.
 1. **Requirements:** for each requirement ID, run its acceptance check. Pass or fail, with
    evidence.
 2. **Tests:** the full suite and CI are green on the release commit.
+   **CI that cannot fail:** list every CI job that is allowed to fail (`allow_failure`,
+   `continue-on-error`, a manual job that nothing waits for). Each one either blocks the
+   release, or has a written reason and an owner. A check that cannot fail the pipeline is
+   not evidence; a security scan that is "reported only" is not a security check.
 3. **End to end:** run the main flows against a production-like environment (a shadow or
    staging deploy that sends nothing to real users).
 4. **Failure and load:** kill or block each outside dependency in turn and confirm the
@@ -28,14 +34,24 @@ needs evidence: a command and its output, a link to a CI run, or a screenshot.
    limits, retries and timeouts hold.
 5. **Security:** no secrets in the repository or its history; least-privilege keys;
    every credential's expiry date known, with a warning set before it; inputs validated;
-   dependencies scanned.
-6. **Cost:** estimate the monthly cost at the expected load and at ten times that load.
+   dependencies scanned, with the scan blocking. In the enterprise profile, also: the
+   control mapping in `architecture.md` checked against what is built, no personal data or
+   secrets in logs, and a passive security scan of the deployed staging site.
+6. **AI** (when the product calls a model): the eval suite runs on the release commit
+   against the live model and meets every bar in the PRD; guardrail checks are tested; AI
+   spend is metered and inside its budget at the expected load.
+7. **Screens** (when the product has a UI): the browser tests cover every screen in the
+   screen list for every role, plus accessibility and phone width. Give the owner a
+   screen-by-screen checklist from the same list (each screen, each role, what to do, what
+   they should see), and record what they found. A person finds what tests were never
+   told to look for.
+8. **Cost:** estimate the monthly cost at the expected load and at ten times that load.
    Both must fit the PRD's budget, or the owner must accept the risk in writing.
-7. **Rollback:** rehearse it. Deploy the release to staging, roll back to the previous
+9. **Rollback:** rehearse it. Deploy the release to staging, roll back to the previous
    version, and confirm it works.
-8. **Not tested:** list what could not be tested and why. Never leave this empty without
+10. **Not tested:** list what could not be tested and why. Never leave this empty without
    saying "nothing".
-9. Decide: **go** only if every must-have requirement passes and nothing in the list above
+11. Decide: **go** only if every must-have requirement passes and nothing in the list above
    is red. Otherwise **no-go**, with what must change.
 
 ## Red flags: stop if you think
@@ -48,6 +64,8 @@ needs evidence: a command and its output, a link to a CI run, or a screenshot.
 | "Nothing was left untested." | Write 'nothing' only after looking. Most releases have something. |
 | "The owner needs this live tomorrow, mark it go." | Give the honest decision. The owner may accept a risk in writing; you never hide one. |
 | "It's a small release, skip the cost check." | Small releases still add loops, retries and calls. Check the estimate. |
+| "That scan is reported only, but it's green." | Green by luck is not a gate. Make it block, or write why it may not. |
+| "The evals passed last week." | Run them on the release commit, against the live model. Models and prompts drift. |
 
 ## Gate
 

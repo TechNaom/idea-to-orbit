@@ -19,7 +19,7 @@ STAGES = ["ignite", "blueprint", "assemble", "build", "test-flight", "launch", "
 # The skill for each stage. Stage 7 is "orbit", but its skill is "keep-running": a skill named "orbit" would
 # clash with the /orbit command.
 STAGE_SKILLS = {s: ("keep-running" if s == "orbit" else s) for s in STAGES}
-HELPERS = ["review", "debug", "verify"]
+HELPERS = ["review", "debug", "verify", "learn"]
 failures: list[str] = []
 
 
@@ -176,6 +176,7 @@ def check_hook() -> None:
     with tempfile.TemporaryDirectory() as tmp:
         for label, with_state, expect in [
             ("with a product", True, "Stage: orbit. Status: approved. Open questions: 0."),
+            ("with a product's settings", True, "Profile: startup. Code host: github. Work branch: main. Builders: subagents. In flight: 1."),
             ("without a product", False, "no docs/orbit/STATE.md"),
         ]:
             proj = pathlib.Path(tmp) / label.replace(" ", "-")
@@ -191,6 +192,26 @@ def check_hook() -> None:
                 continue
             if expect not in ctx:
                 fail(f"hook {label}: expected {expect!r} in {ctx[:200]!r}")
+        # A STATE.md from before 0.5 has no Settings: the hook says so instead of stating defaults as facts.
+        old = pathlib.Path(tmp) / "old-state"
+        (old / "docs" / "orbit").mkdir(parents=True)
+        (old / "docs" / "orbit" / "STATE.md").write_text(
+            "# Product state: Old\n\n## Current\n\n- Stage: build\n- Status: in progress\n\n"
+            "## Work in flight\n\n- branch t4-retry, half done\n\n## Open questions\n\n- None.\n", encoding="utf-8")
+        run = subprocess.run([bash, hook, "session-start"], cwd=old, env=dict(os.environ, CLAUDE_PROJECT_DIR=str(old)),
+                             capture_output=True, text=True, timeout=30)
+        ctx = json.loads(run.stdout)["hookSpecificOutput"]["additionalContext"]
+        if "Settings: not set in STATE.md" not in ctx or "In flight: 1." not in ctx:
+            fail(f"hook with a 0.4 STATE.md: expected 'Settings: not set' and 'In flight: 1.' in {ctx[:400]!r}")
+        # The template itself, with its HTML comments, gives clean values.
+        tpl = pathlib.Path(tmp) / "template"
+        (tpl / "docs" / "orbit").mkdir(parents=True)
+        shutil.copy(ROOT / "skills" / "ignite" / "templates" / "state.md", tpl / "docs" / "orbit" / "STATE.md")
+        run = subprocess.run([bash, hook, "session-start"], cwd=tpl, env=dict(os.environ, CLAUDE_PROJECT_DIR=str(tpl)),
+                             capture_output=True, text=True, timeout=30)
+        ctx = json.loads(run.stdout)["hookSpecificOutput"]["additionalContext"]
+        if "Profile: startup. Code host: github. Work branch: main. Builders: subagents. In flight: 0." not in ctx:
+            fail(f"hook with the STATE.md template: expected clean Settings values in {ctx[:400]!r}")
         # The skill names the hook gives must exist: the orbit stage's skill is keep-running, and the
         # "idea-to-orbit:" prefix only exists when installed as a plugin (CLAUDE_PLUGIN_ROOT is set).
         proj = pathlib.Path(tmp) / "names"

@@ -1,6 +1,6 @@
 # Design
 
-Version 0.4, 2026-11-26.
+Version 0.5, 2026-11-26.
 
 ## Goal
 
@@ -16,7 +16,8 @@ Idea to Orbit is a Claude Code plugin:
 
 - **Seven stage skills**, one per stage, in `skills/<stage>/SKILL.md` (stage 7's skill is `keep-running`, so it never clashes with the `/orbit` command). Each says what the
   stage needs as input, what it does, what it writes, its red flags and what its gate checks.
-- **Three helper skills** that every stage uses: `review`, `debug` and `verify`.
+- **Four helper skills:** `review`, `debug` and `verify`, which every stage uses, and `learn`,
+  run at the end of each milestone and after incidents.
 - **Templates** for every document a stage writes, in `skills/<stage>/templates/`, and
   **briefs** for the fresh agents that build and check work: `skills/build/builder-brief.md`
   and `skills/review/*-check.md`.
@@ -27,6 +28,29 @@ Idea to Orbit is a Claude Code plugin:
 
 All output goes into the product's own repository under `docs/orbit/`, so the plan, the
 decisions and the history travel with the code.
+
+## Settings and profiles
+
+`STATE.md` holds the product's **Settings**: the code host, the work and release branches and
+how they promote, who builds (Claude's subagents or an outside agent through a launcher), the
+fast tests and the full suite with its time, and the **profile** (startup or enterprise). The
+skills read them, so the same stages work on GitHub or GitLab, on one `main` or a `dev` branch
+with staged promotion, and with Claude's subagents or Cursor and Kiro as builders. A product
+started before 0.5 has no Settings; the hook says so and asks Claude to fill them in.
+
+## Lanes
+
+Once a product is past Build, new work runs in a **lane** beside its stage instead of moving
+the product back: a feature (a short ignite, cards, build, the release lines it touches), a fix
+(cause, failing test, build loop) or a hotfix (stabilise, fix, RCA). Each lane is listed under
+**In flight** in `STATE.md`. The rules are the same in every lane.
+
+## Learning
+
+`JOURNAL.md` records every change, every fix made in review and every roadblock with its cause
+and lesson. The `learn` helper groups those rows by cause and turns the top patterns into
+checks, card lines, red flags or eval cases, so the same trouble does not cost time three
+times.
 
 ## Holding the line
 
@@ -124,6 +148,9 @@ These hold unless the owner chooses otherwise for a product:
 
 - Build one real product end to end with the plugin and record the time, cost, test count
   and number of fixes after launch. This is the test that matters most.
+- Run the 0.5 pressure scenarios with and without the plugin and publish the pass rates.
+- Ready-made launchers and allow-lists for the common outside builders (Cursor, Kiro, Codex).
+- Time and cost per task, from the journal.
 - Publish eval results for each release: pass rate with the plugin and without it.
 - A product dashboard that reads every product's `STATE.md`.
 - Ready-made deploy templates for the common targets (AWS Lambda with EventBridge,

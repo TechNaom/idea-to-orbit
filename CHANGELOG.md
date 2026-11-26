@@ -1,5 +1,43 @@
 # Changelog
 
+## 0.5.0 - 2026-11-26
+
+From a review against a second, larger product: an enterprise app on GitLab and AWS, built by
+outside agents (Cursor, Kiro), with AI features and many screens. Each new rule has an eval case.
+
+- **Settings in `STATE.md`:** the code host (GitHub or GitLab), the work and release branches,
+  promotion (work branch, then staging, then prod), who builds, the fast tests and the full
+  suite with its time, and a **profile**. Every stage reads them instead of assuming GitHub,
+  `main` and Claude's subagents. The session-start hook reports them.
+- **Profiles:** *startup* (the old defaults) and *enterprise* (a managed secret store, a
+  compliance mapping, data classification, no personal data in logs, staged promotion).
+  Plain-text secrets on shared machines are a finding in both.
+- **Outside builders:** `skills/build/external-builders.md`: a launcher, a per-worktree
+  allow-list, commands written for the builder's shell (Git Bash eats backslashes), a probe
+  run, and a check of the builder's first command within minutes. The builder changes files;
+  the supervisor commits.
+- **A slow suite:** the verify skill says what counts as "tests pass" when the full suite takes
+  hours: the affected tests, found by a repository-wide search for every test that reads a
+  changed file, then CI green for that exact commit.
+- **Cold read:** before the Assemble gate a fresh agent reads the cards and lists where a
+  builder would guess (`skills/review/cold-read.md`).
+- **AI products:** Blueprint covers model choice, guardrails checked in code, eval bars and
+  metering; cards for model calls carry an eval case; test flight runs the evals on the
+  release commit; a red flag for pinning a model setting without one real call.
+- **Screens:** Blueprint keeps a screen list (route, roles, key controls) and agrees a mockup;
+  every UI card has a browser test per role; test flight gives the owner a screen-by-screen
+  checklist.
+- **Journal:** `JOURNAL.md` for every change, fix made in review and roadblock (cause, how it
+  was cleared, the lesson).
+- **Learn:** a fourth helper skill that groups the journal by cause and turns the top patterns
+  into checks, card lines, red flags and eval cases.
+- **Lanes:** feature, fix and hotfix lanes for work on a product that is past Build, listed
+  under **In flight** in `STATE.md`, with the same rules and fewer steps.
+- **Test flight:** every CI job that is allowed to fail is made blocking or justified.
+- **Existing products:** the catch-up fills the Settings from the repository and maps the
+  product's own plan, task list and journal instead of copying them.
+- 10 new pressure scenarios (23 in all); the offline check covers the new hook output.
+
 ## 0.4.0 - 2026-11-26
 
 From running the first real product (Explainer Studio) through the plugin:

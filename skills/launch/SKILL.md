@@ -25,12 +25,16 @@ owner before running anything that creates resources or costs money.
 2. **Own silo.** The product gets its own keys, database or database project, quotas and
    alert channel. Nothing is shared with another product that could take it down.
 3. **Secrets** go into the provider's secret store or the CI secrets, never into the
-   repository. `.env.example` lists every one.
+   repository. `.env.example` lists every one. In the enterprise profile they live only in
+   the managed secret store, and the deploy reads them from there.
 4. **Backup tag.** Tag the current production commit (`stable-<YYYY-MM-DD>`) before the
    deploy, so there is a known way back.
-5. **Deploy** from CI, not from a laptop, so any machine can repeat it. Hosting scales to
-   zero: serverless functions, scheduled triggers and managed services with free tiers by
-   default. Set concurrency limits and timeouts on everything.
+5. **Deploy** from CI, not from a laptop, so any machine can repeat it. Follow the
+   **Promotion** setting: when it names stages (work branch, then staging, then prod after
+   a manual approval), deploy and smoke-test each in turn, and never push straight to the
+   release branch to skip one. Hosting scales to zero: serverless functions, scheduled
+   triggers and managed services with free tiers by default (the enterprise profile keeps
+   what its ADRs justify). Set concurrency limits and timeouts on everything.
 6. **Smoke test** the live product: the main flow end to end, plus a health check. If it
    fails, roll back to the backup tag at once and tell the owner.
 7. **Confirm delivery, not just success.** Check the product actually did its job (the

@@ -16,7 +16,8 @@ Write the test. Run it. Watch it fail, for the reason you expect. Only then writ
 Code written before its test is deleted and written again after the test, not kept "as a
 reference". This holds for features, bug fixes, refactors and one-line changes, in every
 stage, however urgent the request. If the owner asks to skip it, say what the test would
-protect, then follow their decision and record it in `STATE.md`.
+protect, then follow their decision and record it as a Skipped rule row in `JOURNAL.md`, with a
+line in the `STATE.md` log.
 
 ## Inputs
 
@@ -26,12 +27,18 @@ write it (see the assemble skill) before building that task.
 
 ## Set up, once per milestone
 
-1. Pull and rebase: other sessions may be working in the same repository.
-2. Run the full test suite on main and record the count. If it is not green, fix that first:
-   you cannot tell a new failure from an old one on a red baseline.
-3. Decide how tasks will run:
+1. Read the **Settings** in `STATE.md`: the code host, the work branch, who builds, and the
+   test commands. Below, "the work branch" is that branch (`main` unless it says otherwise),
+   and "pull request" means a merge request on GitLab.
+2. Pull and rebase: other sessions may be working in the same repository.
+3. Run the full test suite on the work branch and record the count. If it is not green, fix
+   that first: you cannot tell a new failure from an old one on a red baseline.
+4. Decide how tasks will run:
    - **Delegated** (the default, when the Agent tool is available): a fresh builder agent per
      task, with no memory of this conversation, briefed from `builder-brief.md`.
+   - **Outside builders**, when **Builders** names Cursor, Kiro or another CLI agent: the
+     same loop, with a launcher, an allow-list and a check on the first command. See
+     `external-builders.md`.
    - **Solo**: you build each task yourself, in this session, following the same loop.
    - **Parallel**: tasks with no dependency on each other and no shared files run at the
      same time, each in its own worktree. See `parallel.md`.
@@ -39,8 +46,8 @@ write it (see the assemble skill) before building that task.
 ## The loop, for each task
 
 1. **Pick** the next task whose dependencies are done. Say which one and why.
-2. **Branch:** `t<id>-<slug>` from an up-to-date main, in its own worktree when running in
-   parallel.
+2. **Branch:** `t<id>-<slug>` from an up-to-date work branch, in its own worktree when
+   running in parallel or with outside builders.
 3. **Brief** the builder from `builder-brief.md`, pasting in the full task card, the
    requirement text it serves and the relevant part of `architecture.md`. Never tell it to
    "read the plan": give it what it needs.
@@ -48,7 +55,9 @@ write it (see the assemble skill) before building that task.
    - **Red:** write the test from the card. Run it. Show it fails, and why.
    - **Green:** write the smallest code that passes. Run the whole suite.
    - **Clean:** tidy names and duplication with the suite still green. No new behaviour.
-   - **Commit** each green step with a clear message.
+   - **Commit** each green step with a clear message. An outside builder does not commit:
+     it leaves its changes in the worktree, and you commit them (see
+     `external-builders.md`).
    - **Report** using the report form in the brief: status, what was built, test output, and
      any doubts.
 5. **Handle the report:**
@@ -66,12 +75,17 @@ write it (see the assemble skill) before building that task.
    handling, tests, secrets and cost. Use the review skill's `code-check.md`. Fix every
    "must fix" finding; fix or explain every "should fix". Check again after fixes.
 8. **Verify:** run the card's done check and the full suite yourself, and read the output.
-   A report saying "tests pass" is a claim, not evidence. See the verify skill.
-9. **Push and pull request:** push the branch and open a pull request that names the task,
-   its requirement IDs, the test count before and after, and both check results. Merge only
-   when CI is green and the repository's merge rules allow it. Close the task's issue with a
+   A report saying "tests pass" is a claim, not evidence. When the full suite is slow, the
+   verify skill says what counts instead.
+9. **Push and pull request:** push the branch and open a pull request (`gh pr create`, or
+   `glab mr create`) into the work branch that names the task, its requirement IDs, the test
+   count before and after, and both check results. Merge only when CI is green for that
+   exact commit and the repository's merge rules allow it. Close the task's issue with a
    link to the pull request.
-10. **Record:** mark the task done in `tasks.md` and add a line to the log in `STATE.md`.
+10. **Record:** mark the task done in `tasks.md`, add a line to the log in `STATE.md` and a
+    row to `JOURNAL.md`. If you or a check fixed something the builder missed, record it as
+    **Fix in review**: what was missed, by whom, and why. Those rows show where the cards or
+    the checks need to improve.
 
 Solo mode uses the same loop: you build, then the two checks still run as separate fresh
 agents. Without the Agent tool, do each check as its own pass: re-read the card and the full
@@ -83,7 +97,9 @@ diff from the start, as if someone else wrote it, and write the findings down be
    using the review skill's `branch-check.md`: how the pieces fit, duplication across tasks,
    and anything the per-task checks could not see.
 2. Show the owner what works now, with real output, before the next milestone starts.
-3. Write or refresh the task cards for the next milestone using what this one taught.
+3. Write or refresh the task cards for the next milestone using what this one taught, and
+   run a cold read on them (the review skill's `cold-read.md`).
+4. Run the learn skill on this milestone's journal rows.
 
 ## When something goes wrong
 
@@ -112,6 +128,8 @@ diff from the start, as if someone else wrote it, and write the findings down be
 | "Let me just try another fix." | Two failed fixes means you do not know the cause. Use the debug skill. |
 | "I'll disable this flaky test for now." | Flaky means a real race or a bad test. Debug it; do not silence it. |
 | "Mock everything, then it's easy to test." | A test of mocks tests nothing. Mock only what crosses the product's edge. |
+| "Pin the model setting in a test, it's obviously supported." | Make one real call with it first. Models refuse settings (temperature, top_p, tools), and a test against a stub passes anyway. |
+| "I fixed the builder's miss myself, no need to note it." | Record it as Fix in review in `JOURNAL.md`. Unrecorded fixes hide which cards and checks fail. |
 
 ## Gate
 
@@ -119,7 +137,9 @@ Exit list:
 - [ ] Every task in `tasks.md` is done, with a merged pull request and a closed issue.
 - [ ] Every task had a test seen failing before its code, a task check and a code check.
 - [ ] Every milestone had a branch review, and its findings are fixed or recorded as tasks.
-- [ ] The full test suite and CI are green on main, and you ran it yourself.
+- [ ] The full test suite and CI are green on the work branch, and you ran it yourself (or,
+  for a slow suite, as the verify skill says).
+- [ ] Every fix made in review is a row in `JOURNAL.md`.
 - [ ] No open TODOs that block a requirement.
 
 Show the owner the milestones delivered, the test count, the checks' findings and how they

@@ -20,8 +20,8 @@ Write `docs/orbit/runbook.md` from `templates/runbook.md` and build these as tas
 1. **Health check on its own clock.** A scheduled check, on a different trigger from the
    product itself, that asks "did it do its job?", not only "is it up?". A job that never
    started cannot report itself, so the watcher must not share its trigger.
-2. **Alerts** go to the owner as GitHub issues (or the owner's chosen channel), one per
-   problem per day, never a flood. Each alert says what failed, since when, and the first
+2. **Alerts** go to the owner as issues on the **Code host** (or the owner's chosen
+   channel), one per problem per day, never a flood. Each alert says what failed, since when, and the first
    thing to check.
 3. **Self-healing within limits.** When a run fails, retry it automatically, with a
    different input or a fallback provider where the failure calls for it, but with a hard
@@ -43,9 +43,17 @@ Write `docs/orbit/runbook.md` from `templates/runbook.md` and build these as tas
 4. Fix it test-first, through the build loop with both checks: a test that reproduces the failure, then the
    fix. Add a check so the same failure is caught earlier next time.
 5. Tell the owner: what happened, the impact, the root cause, the fix, and what now
-   prevents it.
+   prevents it. Add a Roadblock row to `JOURNAL.md` that links the RCA.
 
 Ask the owner before any fix to a part of a live product that is working.
+
+## New work on a live product
+
+A bug report, a feature request or an urgent failure on a live product runs in a **lane**
+(see `/orbit`, Lanes): **fix** (debug to a known cause, a failing test, the build loop with
+both checks, then release it), **feature** (a short ignite for the feature, cards, build,
+release) or **hotfix** (stabilise first, then the fix lane, then an RCA). List it under
+**In flight** in `STATE.md`. Never patch the live product directly.
 
 ## Red flags: stop if you think
 

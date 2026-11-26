@@ -1,24 +1,25 @@
 ---
 name: review
-description: "Idea to Orbit helper. Get a change checked by a fresh agent that did not write it, and handle the findings well. Three checks: the task check (does the change do exactly what its task card asks), the code check (correctness, edge cases, tests, secrets, cost) and the branch check (a whole milestone together). Use in build after every task and milestone, before merging any change to a product, or when review feedback arrives."
+description: "Idea to Orbit helper. Get a change checked by a fresh agent that did not write it, and handle the findings well. The task check (does the change do exactly what its task card asks), the code check (correctness, edge cases, tests, secrets, cost), the branch check (a whole milestone together) and the cold read (where task cards would make a builder guess). Use in build after every task and milestone, before merging any change to a product, or when review feedback arrives."
 ---
 
 # Review: a fresh pair of eyes on every change
 
-Goal: no change reaches main checked only by the agent that wrote it. The writer knows what
+Goal: no change is merged checked only by the agent that wrote it. The writer knows what
 the code is meant to do, so they read what they meant, not what they wrote. A reviewer
 with no memory of the work reads what is there.
 
-## The three checks
+## The checks
 
 | Check | Asks | When | Brief |
 |---|---|---|---|
 | Task check | Does the change do everything the task card asks, and nothing it does not? | After each task is built | `task-check.md` |
 | Code check | Is the code correct, safe, tested and affordable? | After the task check passes | `code-check.md` |
 | Branch check | Do the pieces fit together? | At the end of each milestone, or before a release | `branch-check.md` |
+| Cold read | Where would a builder have to guess? | Before the Assemble gate, or before a card goes to a builder | `cold-read.md` |
 
-Run them in this order. A code check on a change that does the wrong thing wastes the
-review.
+The task, code and branch checks run in that order: a code check on a change that does the
+wrong thing wastes the review. The cold read runs on cards, before anything is built.
 
 ## Asking for a check
 
@@ -50,6 +51,9 @@ Rules:
   "Note" findings are optional.
 - If a check finds nothing on a large or risky change, ask a second fresh agent to look at
   the riskiest file. An empty review is not proof of a clean change.
+- Every **fixed** finding on a builder's work is a **Fix in review** row in `JOURNAL.md`:
+  what was missed and why. A pattern in those rows means a card template or a check brief
+  needs to change; the learn skill looks for it.
 
 ## Feedback from people
 
