@@ -21,8 +21,8 @@ Write `docs/orbit/runbook.md` from `templates/runbook.md` and build these as tas
    product itself, that asks "did it do its job?", not only "is it up?". A job that never
    started cannot report itself, so the watcher must not share its trigger.
 2. **Alerts** go to the owner as issues on the **Code host** (or the owner's chosen
-   channel), one per problem per day, never a flood. Each alert says what failed, since when, and the first
-   thing to check.
+   channel), one per problem per day, never a flood. Each alert says what failed, since
+   when, and the first thing to check.
 3. **Self-healing within limits.** When a run fails, retry it automatically, with a
    different input or a fallback provider where the failure calls for it, but with a hard
    cap on attempts and on spend. It must never do the same job twice (check before acting),
@@ -40,8 +40,8 @@ Write `docs/orbit/runbook.md` from `templates/runbook.md` and build these as tas
 3. Find the root cause with the debug skill: reproduce it, read the evidence (logs, runs,
    traces, metrics), and test one idea at a time. Ask "why" until the answer is something
    you can change.
-4. Fix it test-first, through the build loop with both checks: a test that reproduces the failure, then the
-   fix. Add a check so the same failure is caught earlier next time.
+4. Fix it test-first, through the build loop with both checks: a test that reproduces the
+   failure, then the fix. Add a check so the same failure is caught earlier next time.
 5. Tell the owner: what happened, the impact, the root cause, the fix, and what now
    prevents it. Add a Roadblock row to `JOURNAL.md` that links the RCA.
 

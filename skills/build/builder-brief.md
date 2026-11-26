@@ -59,7 +59,8 @@ Reply in this form and nothing else (an outside builder writes it to <report fil
 worktree):
 
 ```
-Status: done | done with doubts | needs context | blocked (if blocked by the shell: "blocked: shell refused <command>")
+Status: done | done with doubts | needs context | blocked
+        (blocked by the shell: "blocked: shell refused <command>")
 Built: <one or two lines>
 Files: <each file changed, one per line>
 Red: <the failing test run: command and the key lines of output>

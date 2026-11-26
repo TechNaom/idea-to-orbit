@@ -12,8 +12,8 @@ skill, a line on a card or brief template, or an eval case.
 ## Inputs
 
 `docs/orbit/JOURNAL.md` (or the product's own journal, if `STATE.md` points to one), its
-Skipped rule rows, the log in `STATE.md`, and `docs/orbit/rca/`. If the product keeps no journal yet,
-start one from the ignite skill's `templates/journal.md` and say that there is little to learn
+Skipped rule rows, the log in `STATE.md`, and `docs/orbit/rca/`. If the product keeps no
+journal yet, start one from the ignite skill's `templates/journal.md` and say that there is little to learn
 from until it has rows.
 
 ## Steps

@@ -43,8 +43,8 @@ never committed.
 2. Start them together.
 3. As each one reports, run its task check and code check as usual. Checks for different
    tasks may also run at the same time.
-4. Merge one at a time. After each merge, rebase the next branch on the updated work branch and run the
-   full suite again before merging it. A clean merge does not mean the code works together.
+4. Merge one at a time. After each merge, rebase the next branch on the updated work branch
+   and run the full suite again before merging it. A clean merge does not mean the code works together.
 5. When all are merged, remove the worktrees:
 
 ```bash

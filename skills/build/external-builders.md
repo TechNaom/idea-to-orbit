@@ -25,7 +25,8 @@ gets its brief, what it may run, and how you know it is working.
    dependency, install it in the worktree yourself before starting the builder.
 3. **The shell.** Find out which shell the builder's commands run in, and write every
    command in the brief for that shell. On Windows many agents run Git Bash, which eats
-   backslashes: write `.venv/Scripts/python.exe -m pytest`, not `.venv\Scripts\python.exe -m pytest`.
+   backslashes: write `.venv/Scripts/python.exe -m pytest`, not
+   `.venv\Scripts\python.exe -m pytest`.
    Some agents put `cd "<folder>" &&` before each command; allow `cd`, or tell the builder
    not to change folder.
 4. **A probe.** Run the launcher once on a throwaway worktree with a one-line brief ("run the

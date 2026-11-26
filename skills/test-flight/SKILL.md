@@ -69,6 +69,21 @@ needs evidence: a command and its output, a link to a CI run, or a screenshot.
 
 ## Gate
 
+Exit list:
+- [ ] Every requirement's acceptance check was run on the release commit, with evidence.
+- [ ] The full suite and CI are green on the release commit; every CI job allowed to fail is
+  blocking, or has a written reason and an owner.
+- [ ] Each outside dependency was failed in turn, and a burst was sent; the failure paths held.
+- [ ] No secrets in the repository or its history; credential expiry dates and warnings set;
+  dependency scan blocking. Enterprise: the control mapping checked against what is built.
+- [ ] If the product calls a model: the evals passed every bar on the release commit.
+- [ ] If the product has a UI: browser tests for every screen and role, and the owner's
+  screen checklist done, with what they found recorded.
+- [ ] The cost at the expected load and at ten times it fits the budget, or the owner
+  accepted the risk in writing.
+- [ ] Rollback rehearsed on staging.
+- [ ] The not-tested list is filled in ("nothing" only after looking).
+
 Show the owner the decision, the failures if any, the cost estimate and the not-tested list,
 and ask for approval to launch. Record an explicit yes in `STATE.md` and say that **launch**
 is next. A no-go sends the product back to build with new tasks in `tasks.md`.

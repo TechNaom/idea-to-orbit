@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.5.1 - 2026-11-26
+
+- Test flight's gate has an exit list, like every other stage.
+- Long lines from 0.5.0 re-wrapped.
+
 ## 0.5.0 - 2026-11-26
 
 From a review against a second, larger product: an enterprise app on GitLab and AWS, built by

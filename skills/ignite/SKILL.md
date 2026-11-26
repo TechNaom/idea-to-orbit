@@ -58,8 +58,8 @@ asking from a blank page:
    and use them as they are. Write an orbit document only where nothing covers it; if the
    product keeps no journal, copy `templates/journal.md` to `docs/orbit/JOURNAL.md`. Two
    copies of the same plan drift apart within a week.
-4. Where step 3 found nothing, write `brief.md`, `prd.md` and `architecture.md` from what is built, each marked
-   **reconstructed** with the date. Give every requirement a state (built, not built, or
+4. Where step 3 found nothing, write `brief.md`, `prd.md` and `architecture.md` from what
+   is built, each marked **reconstructed** with the date. Give every requirement a state (built, not built, or
    built but its acceptance check not met). Mark every line you inferred rather than read as
    *(inferred)*, so the owner can correct it.
 5. **ADRs:** where the decisions and their options are already written down (a design doc,

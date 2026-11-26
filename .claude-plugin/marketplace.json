@@ -1,13 +1,13 @@
 {
   "name": "idea-to-orbit",
   "owner": { "name": "TechNaom AI R&D Labs" },
-  "metadata": { "description": "From idea to orbit, and it stays up.", "version": "0.5.0" },
+  "metadata": { "description": "From idea to orbit, and it stays up.", "version": "0.5.1" },
   "plugins": [
     {
       "name": "idea-to-orbit",
       "source": "./",
       "description": "Seven stages from idea to a running, self-healing product, with an owner approval at every gate.",
-      "version": "0.5.0",
+      "version": "0.5.1",
       "author": { "name": "Manohar Papasani" },
       "license": "MIT"
     }
