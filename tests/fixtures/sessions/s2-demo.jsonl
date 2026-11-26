@@ -1,0 +1,7 @@
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "b1", "name": "Bash", "input": {"command": "pytest -q tests/test_import.py"}}]}}
+{"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "b1", "is_error": true, "content": "Permission to use Bash with command pytest has been denied."}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "b2", "name": "Bash", "input": {"command": "python -m build"}}]}}
+{"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "b2", "is_error": true, "content": "Error: No module named build at /home/ravi/ledger"}]}}
+{"type": "assistant", "message": {"content": [{"type": "tool_use", "id": "b3", "name": "Bash", "input": {"command": "python -m build"}}]}}
+{"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "b3", "is_error": true, "content": "Error: No module named build at /home/ravi/ledger"}]}}
+{"type": "user", "message": {"content": "Thanks, carry on"}}

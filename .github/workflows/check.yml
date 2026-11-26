@@ -9,12 +9,19 @@ permissions:
 
 jobs:
   check:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
+    # Every platform the plugin runs on: the session-start hook and the installers behave
+    # differently on each (Windows: Git Bash and PowerShell; macOS: bash 3.2 and BSD tools).
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python: ["3.9", "3.12"]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python }}
       - name: Offline plugin checks
         run: python tests/check.py

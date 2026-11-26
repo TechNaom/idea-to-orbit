@@ -17,7 +17,11 @@ journal yet, start one from the ignite skill's `templates/journal.md`.
 
 **Past sessions,** when the journal is thin or the owner asks: Claude Code keeps each session's
 transcript on this machine, as `.jsonl` files under the Claude config folder's `projects/`, in
-the folder named after the project's path (its separators replaced by dashes). Read them for what the journal misses: a tool call refused or retried several
+the folder named after the project's path (its separators replaced by dashes). Run the scanner that comes with this skill first:
+`python <this skill's folder>/scan_sessions.py --project <the repository's path>` (add
+`--days 30` to limit it). It reports refused commands, repeated tool errors, commands retried
+in a session and the owner's corrections, already redacted. Then read them for what the
+journal misses: a tool call refused or retried several
 times, the same command failing in several sessions, the owner correcting the same thing twice,
 a rule skipped under pressure, a long detour before the cause was found. Read only this
 product's sessions; summarise, and quote only the line that shows the pattern. Never copy a

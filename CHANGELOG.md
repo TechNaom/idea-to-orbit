@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.0 - 2026-11-26
+
+- **Session scanner** for the learn skill (`skills/learn/scan_sessions.py`, standard library
+  only): it reads a project's Claude Code transcripts and reports refused commands, tool errors
+  seen more than once, commands retried in a session and the owner's corrections, redacted in
+  code (tokens, emails, URLs, IPs, user paths, long values). The offline check runs it on fake
+  transcripts and fails if anything leaks.
+- **CI on every platform:** the offline check runs on Linux, Windows and macOS, with Python 3.9
+  and 3.12, so a hook or installer problem on one platform (like the 0.6.0 Windows hook fix)
+  fails the push.
+
 ## 0.6.0 - 2026-11-26
 
 Deeper build discipline and design, from a comparison with another Claude Code plugin

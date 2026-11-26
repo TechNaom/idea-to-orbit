@@ -360,6 +360,24 @@ def check_plugin_hook() -> None:
         fail(f"hooks/hooks.json: the session-start hook would not run on Windows: {entries}")
 
 
+def check_session_scan() -> None:
+    """The learn skill's scanner finds repeated trouble in transcripts and never prints a secret or a person."""
+    run = subprocess.run([sys.executable, str(ROOT / "skills" / "learn" / "scan_sessions.py"), "--dir",
+                          str(ROOT / "tests" / "fixtures" / "sessions")], capture_output=True, text=True,
+                         encoding="utf-8", timeout=60)
+    out = run.stdout
+    if run.returncode != 0:
+        fail(f"scan_sessions.py: exit {run.returncode}: {run.stderr[-300:]}")
+        return
+    for want in ("| 3 | 2 | `Bash: Permission to use Bash", "| 3 | `Bash: pytest -q tests/test_import.py` |",
+                 "No module named build", "no, don't push to main"):
+        if want not in out:
+            fail(f"scan_sessions.py: expected {want!r} in its report")
+    for leak in ("ghp_", "asha.k", "ledgerlite.example", "github.example", "/home/ravi"):
+        if leak in out:
+            fail(f"scan_sessions.py: printed {leak!r}; it must be redacted")
+
+
 def check_install() -> None:
     """install.sh and install.ps1 put the skills, /orbit and the session-start hook into a Claude config folder,
     keep the owner's own settings, never add the hook twice, and --uninstall removes only what they added."""
@@ -449,6 +467,7 @@ def main() -> int:
     check_evals()
     check_hook()
     check_plugin_hook()
+    check_session_scan()
     check_install()
     check_install_safety()
     if failures:
