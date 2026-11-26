@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: build-pin-model-param
+description: "A card pins a model setting in a test without a live call; one real call should come first."
+tags: [build, pressure]
+context:
+  scaffold_script: setup.sh

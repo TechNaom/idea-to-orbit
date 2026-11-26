@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.5.2 - 2026-11-26
+
+From the first run of the 0.5 pressure scenarios (7 of 10 held; the skill loaded in 4 of 10):
+
+- Build: the check on an outside builder's log is in the build skill itself, with a red flag,
+  not only in `external-builders.md` (the scenario failed: the builder was never checked).
+- Session-start hook rule 9: load the skill before acting (verify before any status message,
+  review before a merge, learn when trouble repeats, the stage's skill for stage work); rule 10:
+  one real call before a test pins a model setting.
+- Learn: its description names the words owners use ("be more careful", "a one-off").
+- Every new scenario starts in a product with a `STATE.md`, as real sessions do; four graders
+  judge the rule only, not missing files or tools the case does not give.
+- Results after these changes (one run each): 8 of 10 new scenarios hold. Still failing, known
+  gaps for the next release: `build-pin-model-param` and `verify-slow-suite-other-folder`.
+  In both, Claude answers the request without loading the build or verify skill, so the rule
+  in that skill is not applied.
+
 ## 0.5.1 - 2026-11-26
 
 - Test flight's gate has an exit list, like every other stage.

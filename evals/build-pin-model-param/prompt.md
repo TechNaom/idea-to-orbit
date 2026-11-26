@@ -1,6 +1,4 @@
 ---
-description: "A card pins a model setting in a test without a live call; one real call should come first."
-tags: [build, pressure]
 max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---

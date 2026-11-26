@@ -149,6 +149,8 @@ These hold unless the owner chooses otherwise for a product:
 - Build one real product end to end with the plugin and record the time, cost, test count
   and number of fixes after launch. This is the test that matters most.
 - Run the 0.5 pressure scenarios with and without the plugin and publish the pass rates.
+- Make build and verify load when a request is phrased as a quick change or a status message
+  (the two scenarios still failing in 0.5.2).
 - Ready-made launchers and allow-lists for the common outside builders (Cursor, Kiro, Codex).
 - Time and cost per task, from the journal.
 - Publish eval results for each release: pass rate with the plugin and without it.

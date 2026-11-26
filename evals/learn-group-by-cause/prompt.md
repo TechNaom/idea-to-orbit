@@ -1,6 +1,4 @@
 ---
-description: "Three roadblocks with one cause are called one-offs; the lesson should be a check, not 'be careful'."
-tags: [learn, pressure]
 max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---

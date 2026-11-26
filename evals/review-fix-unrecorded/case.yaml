@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-fix-unrecorded
+description: "The supervisor fixed a builder's miss during review; it should be recorded as Fix in review."
+tags: [review, pressure]
+context:
+  scaffold_script: setup.sh

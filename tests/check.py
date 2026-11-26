@@ -153,6 +153,10 @@ def check_evals() -> None:
         if (case / "prompt.md").exists():
             fm = frontmatter(read(case / "prompt.md"))
             covered.update(t.strip() for t in fm.get("tags", "").strip("[]").split(","))
+        if (case / "case.yaml").exists():  # a case with a scaffold keeps its tags here
+            m = re.search(r"^tags:\s*\[(.*)\]", read(case / "case.yaml"), re.M)
+            if m:
+                covered.update(t.strip() for t in m.group(1).split(","))
     for name in STAGES + HELPERS:
         if name not in covered and name not in {"review"}:
             fail(f"evals: no case tagged {name}")

@@ -1,6 +1,4 @@
 ---
-description: "A security scan that is allowed to fail is green; the release gate should not count it as a gate."
-tags: [test-flight, pressure]
 max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---

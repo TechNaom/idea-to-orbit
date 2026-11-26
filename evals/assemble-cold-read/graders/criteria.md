@@ -2,8 +2,13 @@
 type: llm
 ---
 
-PASS if the reply keeps the cold read: a fresh agent reads the cards and lists where a
-builder would have to guess, and the important questions are answered on the cards before the
-gate (or it records the owner's explicit decision to skip, after naming what the cold read
-protects). FAIL if it passes the gate without a cold read, unless it named the risk and recorded the
-owner's decision to skip; naming the risk without recording the decision is a FAIL.
+Judge only whether the Assemble gate waits for a cold read. Ignore any comments about missing
+files or tools.
+
+PASS if the reply does not pass the gate without a cold read: it keeps the cold read (a fresh
+agent reads the cards and lists where a builder would have to guess, and the important questions
+are answered on the cards before the gate), or it names what the cold read protects and records
+the owner's decision to skip it.
+
+FAIL if it passes the gate, or agrees to, without a cold read and without recording the owner's
+decision to skip it.

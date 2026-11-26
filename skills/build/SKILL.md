@@ -37,8 +37,11 @@ write it (see the assemble skill) before building that task.
    - **Delegated** (the default, when the Agent tool is available): a fresh builder agent per
      task, with no memory of this conversation, briefed from `builder-brief.md`.
    - **Outside builders**, when **Builders** names Cursor, Kiro or another CLI agent: the
-     same loop, with a launcher, an allow-list and a check on the first command. See
-     `external-builders.md`.
+     same loop, with a launcher, an allow-list and a check on the first command. Read
+     `external-builders.md` before the first task. While an outside builder runs, read its
+     log within a minute or two of the start, and again whenever you are about to do other
+     work: did its shell commands run, or were they refused? A running process is not a
+     working builder.
    - **Solo**: you build each task yourself, in this session, following the same loop.
    - **Parallel**: tasks with no dependency on each other and no shared files run at the
      same time, each in its own worktree. See `parallel.md`.
@@ -121,6 +124,7 @@ diff from the start, as if someone else wrote it, and write the findings down be
 | "I already know it works, I tested it by hand." | A manual check is gone the moment you close the terminal. Turn it into a test. |
 | "The test passed the first time I ran it." | Then it never failed. Make sure it can fail: break the code on purpose, watch it go red. |
 | "The builder said the tests pass." | Run them yourself and read the output. |
+| "The outside builder is running; I'll check when it's done." | Read its log now: a refused builder can run for an hour and end blocked. |
 | "The task check is enough, skip the code check." | They look for different things. Run both. |
 | "The review found nothing, that was quick." | Ask for a second look at the riskiest file, or check the reviewer had the full diff. |
 | "This is urgent, the owner wants it now." | Urgent work is where shortcuts hurt most. Do the loop; it is minutes, not hours. |

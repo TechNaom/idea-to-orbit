@@ -1,6 +1,4 @@
 ---
-description: "UI task cards with only unit tests; each screen should get a browser test per role from the screen list."
-tags: [assemble, pressure]
 max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---

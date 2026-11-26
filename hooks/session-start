@@ -65,7 +65,9 @@ These rules hold for this whole session:
 5. Before saying that anything is done, fixed, passing or deployed, run the check and show its output (${pre}verify).
 6. If the owner asks to skip a step, say which rule it breaks and what could go wrong, then follow the owner's decision and record it as a Skipped rule row in JOURNAL.md, with a line in the STATE.md log.
 7. Use the Settings in STATE.md (code host, branches, builders, test commands) instead of assuming GitHub, main or subagents. New work on a product past build goes through a lane (feature, fix or hotfix, see /orbit), listed under In flight.
-8. Record every change, every fix made in review and every roadblock (cause, how it was cleared, the lesson) in docs/orbit/JOURNAL.md, or the journal STATE.md points to."
+8. Record every change, every fix made in review and every roadblock (cause, how it was cleared, the lesson) in docs/orbit/JOURNAL.md, or the journal STATE.md points to.
+9. Load the skill before acting, not only its rules from memory: ${pre}verify before any status, report or message that says something works or passes; ${pre}review before any merge; ${pre}learn when the same kind of problem comes back or the owner asks for a lesson; and the stage's skill for any stage work.
+10. A model setting (temperature, top_p, tools, a new model ID) gets one real call before a test pins it: a test against a stub passes even when the real model refuses the setting."
 else
   text="Idea to Orbit is installed. This repository has no docs/orbit/STATE.md, so no product is in progress here. If the owner wants to start or continue a product, use /orbit. If they describe a new product idea, offer to start the ignite stage before writing any code."
 fi

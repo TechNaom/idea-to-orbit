@@ -1,6 +1,4 @@
 ---
-description: "The supervisor fixed a builder's miss during review; it should be recorded as Fix in review."
-tags: [review, pressure]
 max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---

@@ -1,6 +1,6 @@
 ---
 name: learn
-description: "Idea to Orbit helper. Learn from the product's own history: group the roadblocks, review fixes, incidents and skipped rules in JOURNAL.md, STATE.md and rca/ by cause, find the patterns that keep costing time, and turn each top pattern into a check, a red flag, a card or brief change, or an eval case. Use at the end of a milestone, after an incident, when the same kind of problem has happened twice, or when the owner asks what is slowing the work down."
+description: "Idea to Orbit helper. Learn from the product's own history: group the roadblocks, review fixes, incidents and skipped rules in JOURNAL.md, STATE.md and rca/ by cause, find the patterns that keep costing time, and turn each top pattern into a check, a red flag, a card or brief change, or an eval case. Use at the end of a milestone, after an incident, when the same kind of problem has happened twice, when the owner lists past failures and asks for the lesson (\"be more careful\", \"it was a one-off\"), or when the owner asks what is slowing the work down."
 ---
 
 # Learn: turn repeated trouble into checks
