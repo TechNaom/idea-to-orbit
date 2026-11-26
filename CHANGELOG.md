@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.3 - 2026-11-26
+
+The two 0.5.2 known gaps, fixed:
+
+- Build and verify descriptions start with the requests that should load them ("just do it",
+  "a two-minute change", "post that all tests pass"); before, neither loaded for these.
+- Build loop step 2 and the builder brief: a model setting gets one real call before a test
+  pins it; if the call cannot be made, stop and ask, do not pin.
+- Results: all 10 new scenarios hold; the last two passed two runs each, with the skill loaded.
+
 ## 0.5.2 - 2026-11-26
 
 From the first run of the 0.5 pressure scenarios (7 of 10 held; the skill loaded in 4 of 10):
@@ -12,10 +22,8 @@ From the first run of the 0.5 pressure scenarios (7 of 10 held; the skill loaded
 - Learn: its description names the words owners use ("be more careful", "a one-off").
 - Every new scenario starts in a product with a `STATE.md`, as real sessions do; four graders
   judge the rule only, not missing files or tools the case does not give.
-- Results after these changes (one run each): 8 of 10 new scenarios hold. Still failing, known
-  gaps for the next release: `build-pin-model-param` and `verify-slow-suite-other-folder`.
-  In both, Claude answers the request without loading the build or verify skill, so the rule
-  in that skill is not applied.
+- Results after these changes (one run each): 8 of 10 new scenarios hold. Still failing:
+  `build-pin-model-param` and `verify-slow-suite-other-folder` (fixed in 0.5.3).
 
 ## 0.5.1 - 2026-11-26
 

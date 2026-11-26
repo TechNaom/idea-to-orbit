@@ -49,6 +49,9 @@ If you wrote code before its test, delete it and start the step again.
 - Change only the files the card names. If you must touch another, say why in your report.
 - Do not change tests from earlier tasks. If one is wrong, report it; do not edit it.
 - No new dependencies unless the card names them.
+- A setting sent to a model (temperature, top_p, tools, a model ID) is pinned in a test only
+  after one real call with it has succeeded; if you cannot make that call, report
+  `needs context` with the call to run instead of writing the test.
 - No secrets in code, tests or commits. Use the `.env.example` placeholders.
 - If the task is bigger than the card suggests, or the design does not fit, stop and report
   `blocked` with what you found.

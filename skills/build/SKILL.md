@@ -1,6 +1,6 @@
 ---
 name: build
-description: "Idea to Orbit stage 4. Build an approved task list one task at a time under one rule: no production code without a failing test first. Each task goes to a fresh builder agent, then a task check and a code check by two more fresh agents, then a commit, a push and a pull request; the whole branch gets a final review. Use after assemble is approved, or when the owner asks to build the next task or fix a bug in a product."
+description: "Idea to Orbit stage 4. Use for ANY change to a product's code, tests, config or prompts, however small or urgent: \"just do it\", \"a two-minute change\", \"only a test\", \"one line\", a task card to carry out, the next task, or a bug fix. Builds one task at a time under one rule: no production code without a failing test first; a model setting (temperature, tools, a model ID) gets one real call before a test pins it. Each task goes to a fresh builder (a subagent or an outside agent such as Cursor), then a task check and a code check by two more fresh agents, then a commit, a push and a pull request; each milestone gets a branch review."
 ---
 
 # Build: test-first, one task at a time
@@ -49,12 +49,18 @@ write it (see the assemble skill) before building that task.
 ## The loop, for each task
 
 1. **Pick** the next task whose dependencies are done. Say which one and why.
-2. **Branch:** `t<id>-<slug>` from an up-to-date work branch, in its own worktree when
+2. **A model setting?** If the task adds or changes a setting sent to a model (temperature,
+   top_p, tools, a response format, a model ID), make one real call to that model with the
+   setting before anything pins it in a test or a config, and quote the reply. If this
+   session cannot make the call, stop: tell the owner the exact call to run and do not write
+   the test or the change until its result is known. A test against a stub passes even when
+   the real model refuses the setting.
+3. **Branch:** `t<id>-<slug>` from an up-to-date work branch, in its own worktree when
    running in parallel or with outside builders.
-3. **Brief** the builder from `builder-brief.md`, pasting in the full task card, the
+4. **Brief** the builder from `builder-brief.md`, pasting in the full task card, the
    requirement text it serves and the relevant part of `architecture.md`. Never tell it to
    "read the plan": give it what it needs.
-4. **Build:** the builder follows the card step by step:
+5. **Build:** the builder follows the card step by step:
    - **Red:** write the test from the card. Run it. Show it fails, and why.
    - **Green:** write the smallest code that passes. Run the whole suite.
    - **Clean:** tidy names and duplication with the suite still green. No new behaviour.
@@ -63,29 +69,29 @@ write it (see the assemble skill) before building that task.
      `external-builders.md`).
    - **Report** using the report form in the brief: status, what was built, test output, and
      any doubts.
-5. **Handle the report:**
+6. **Handle the report:**
    - `done`: go to the checks.
    - `done with doubts`: read the doubts. Fix anything about correctness or scope before the
      checks; note the rest for the code check.
    - `needs context`: give the missing context and send the task back.
    - `blocked`: find out why. Give more context, split the task, or bring a design question
      to the owner. Never send the same task back unchanged.
-6. **Task check:** a second fresh agent compares the diff with the task card, line by line:
+7. **Task check:** a second fresh agent compares the diff with the task card, line by line:
    does it do everything the card asks, and nothing it does not? Use the review skill's
    `task-check.md`. Fix every gap it finds, then check again. Do not start the code check
    until the task check passes.
-7. **Code check:** a third fresh agent reviews the diff for correctness, edge cases, error
+8. **Code check:** a third fresh agent reviews the diff for correctness, edge cases, error
    handling, tests, secrets and cost. Use the review skill's `code-check.md`. Fix every
    "must fix" finding; fix or explain every "should fix". Check again after fixes.
-8. **Verify:** run the card's done check and the full suite yourself, and read the output.
+9. **Verify:** run the card's done check and the full suite yourself, and read the output.
    A report saying "tests pass" is a claim, not evidence. When the full suite is slow, the
    verify skill says what counts instead.
-9. **Push and pull request:** push the branch and open a pull request (`gh pr create`, or
+10. **Push and pull request:** push the branch and open a pull request (`gh pr create`, or
    `glab mr create`) into the work branch that names the task, its requirement IDs, the test
    count before and after, and both check results. Merge only when CI is green for that
    exact commit and the repository's merge rules allow it. Close the task's issue with a
    link to the pull request.
-10. **Record:** mark the task done in `tasks.md`, add a line to the log in `STATE.md` and a
+11. **Record:** mark the task done in `tasks.md`, add a line to the log in `STATE.md` and a
     row to `JOURNAL.md`. If you or a check fixed something the builder missed, record it as
     **Fix in review**: what was missed, by whom, and why. Those rows show where the cards or
     the checks need to improve.

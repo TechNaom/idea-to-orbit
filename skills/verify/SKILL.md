@@ -1,6 +1,6 @@
 ---
 name: verify
-description: "Idea to Orbit helper. Evidence before claims: before saying anything is done, fixed, passing, deployed, approved or working, run the command that proves it in this session, read its full output, and quote it. Use before every status update, every gate summary, every pull request description and every 'it works' to the owner."
+description: "Idea to Orbit helper. Use before saying, writing or posting that anything is done, fixed, passing, green, deployed or working: a status update, a team or channel message, a gate summary, a pull request description, \"tell them all tests pass\". Evidence before claims: run the command that proves it in this session, read its full output and quote it. When the full suite is slow, the proof is the affected tests found by a repository-wide search for every test that reads a changed file, plus CI green for that exact commit; a claim waits for those."
 ---
 
 # Verify: evidence before claims
