@@ -1,6 +1,6 @@
 ---
 name: learn
-description: "Idea to Orbit helper. Learn from the product's own history: group the roadblocks, review fixes, incidents and skipped rules in JOURNAL.md, STATE.md and rca/ by cause, find the patterns that keep costing time, and turn each top pattern into a check, a red flag, a card or brief change, or an eval case. Use at the end of a milestone, after an incident, when the same kind of problem has happened twice, when the owner lists past failures and asks for the lesson (\"be more careful\", \"it was a one-off\"), or when the owner asks what is slowing the work down."
+description: "Idea to Orbit helper. Learn from the product's own history: group the roadblocks, review fixes, incidents and skipped rules in JOURNAL.md, STATE.md, rca/ and past session transcripts by cause, find the patterns that keep costing time, and turn each top pattern into a check, a red flag, a card or brief change, or an eval case. Use at the end of a milestone, after an incident, when the same kind of problem has happened twice, when the owner lists past failures and asks for the lesson (\"be more careful\", \"it was a one-off\"), when the owner asks what is slowing the work down, or before sharing lessons upstream (strip secrets and personal data first)."
 ---
 
 # Learn: turn repeated trouble into checks
@@ -13,8 +13,16 @@ skill, a line on a card or brief template, or an eval case.
 
 `docs/orbit/JOURNAL.md` (or the product's own journal, if `STATE.md` points to one), its
 Skipped rule rows, the log in `STATE.md`, and `docs/orbit/rca/`. If the product keeps no
-journal yet, start one from the ignite skill's `templates/journal.md` and say that there is little to learn
-from until it has rows.
+journal yet, start one from the ignite skill's `templates/journal.md`.
+
+**Past sessions,** when the journal is thin or the owner asks: Claude Code keeps each session's
+transcript on this machine, as `.jsonl` files under the Claude config folder's `projects/`, in
+the folder named after the project's path (its separators replaced by dashes). Read them for what the journal misses: a tool call refused or retried several
+times, the same command failing in several sessions, the owner correcting the same thing twice,
+a rule skipped under pressure, a long detour before the cause was found. Read only this
+product's sessions; summarise, and quote only the line that shows the pattern. Never copy a
+secret or a personal detail from a transcript into the journal or a report either: use the
+placeholders below, because the journal may live in a public repository.
 
 ## Steps
 
@@ -44,6 +52,21 @@ from until it has rows.
 6. **Report** to the owner: the patterns, their counts and cost, and the change proposed for
    each. Add a Decision row to the journal for what the owner picks.
 
+## Before anything leaves the product
+
+Journal rows and session lines often hold things that must not be shared: tokens and keys,
+internal hostnames and URLs, machine paths with user names, people's names and emails,
+customer or tenant data. Before a lesson goes anywhere outside the product (an issue or pull
+request upstream, a shared page, a message to another team):
+
+1. Summarise instead of pasting. The pattern and its count are the evidence, not the raw rows.
+2. Where a quote is needed, replace each secret or personal detail with a placeholder
+   (`[TOKEN]`, `[HOST]`, `[PATH]`, `[NAME]`, `[EMAIL]`, `[CUSTOMER]`).
+3. Show the owner the text that will be shared, and send it only on their yes.
+
+A secret pasted into a public issue is leaked the moment it is posted, even if the issue is
+deleted later.
+
 ## Red flags: stop if you think
 
 | Thought | What to do instead |
@@ -52,4 +75,5 @@ from until it has rows.
 | "The lesson is to be more careful." | Careful does not scale. Find the check that catches it without anyone remembering. |
 | "I'll add a red flag for every row." | Rank first. A skill with forty red flags gets none of them read. |
 | "The journal says the cause was a flaky test." | Flaky has a cause. Read the evidence and write the real one, or mark it unknown. |
-| "This history is too short to learn from." | Say so, and keep the journal. Two rows with the same cause are already worth a check. |
+| "This history is too short to learn from." | Say so, and keep the journal. Two rows with the same cause are already worth a check. Read past sessions too. |
+| "Paste the rows as they are; it's evidence." | Summarise, and replace secrets and personal details with placeholders before anything leaves the product. |

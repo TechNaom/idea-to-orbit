@@ -76,13 +76,19 @@ write it (see the assemble skill) before building that task.
    - `needs context`: give the missing context and send the task back.
    - `blocked`: find out why. Give more context, split the task, or bring a design question
      to the owner. Never send the same task back unchanged.
+   - **Tests the builder could not run** (no shell, a missing service, a refused command):
+     the task is not done. Run them yourself now and read the output. Until they have run,
+     everything in the report about them is a claim.
 7. **Task check:** a second fresh agent compares the diff with the task card, line by line:
    does it do everything the card asks, and nothing it does not? Use the review skill's
-   `task-check.md`. Fix every gap it finds, then check again. Do not start the code check
-   until the task check passes.
+   `task-check.md`. Every gap goes through the fix loop (`fix-loop.md`): the builder fixes
+   it, a scoped re-check confirms it, four rounds at most. Do not start the code check until
+   the task check passes.
 8. **Code check:** a third fresh agent reviews the diff for correctness, edge cases, error
-   handling, tests, secrets and cost. Use the review skill's `code-check.md`. Fix every
-   "must fix" finding; fix or explain every "should fix". Check again after fixes.
+   handling, tests, secrets and cost. Use the review skill's `code-check.md`. Every "must
+   fix", and every "should fix" you cannot explain away with evidence, goes through the fix
+   loop. Items a check could not verify from the diff are yours to resolve before the task
+   is done (see `fix-loop.md`).
 9. **Verify:** run the card's done check and the full suite yourself, and read the output.
    A report saying "tests pass" is a claim, not evidence. When the full suite is slow, the
    verify skill says what counts instead.
@@ -95,6 +101,12 @@ write it (see the assemble skill) before building that task.
     row to `JOURNAL.md`. If you or a check fixed something the builder missed, record it as
     **Fix in review**: what was missed, by whom, and why. Those rows show where the cards or
     the checks need to improve.
+
+**Batch small changes of the same shape.** When several tasks are each the same small edit
+(one constant, one field, the same one-line fix in many files), give them to one builder in
+one brief that lists every file and its change, with one test that covers them all, and
+check the diff as one unit. Keep one builder per task for work that needs its own judgment,
+its own tests or its own review.
 
 Solo mode uses the same loop: you build, then the two checks still run as separate fresh
 agents. Without the Agent tool, do each check as its own pass: re-read the card and the full
@@ -136,6 +148,8 @@ diff from the start, as if someone else wrote it, and write the findings down be
 | "This is urgent, the owner wants it now." | Urgent work is where shortcuts hurt most. Do the loop; it is minutes, not hours. |
 | "I'll fix this unrelated thing while I'm here." | Out of scope. Note it as a new task. |
 | "Let me just try another fix." | Two failed fixes means you do not know the cause. Use the debug skill. |
+| "One more fix round will settle it." | Four rounds is the cap. Then rule on each open finding and record it. |
+| "The builder couldn't run the tests, but the code looks right." | Run them yourself. Until then the task is not done. |
 | "I'll disable this flaky test for now." | Flaky means a real race or a bad test. Debug it; do not silence it. |
 | "Mock everything, then it's easy to test." | A test of mocks tests nothing. Mock only what crosses the product's edge. |
 | "Pin the model setting in a test, it's obviously supported." | Make one real call with it first. Models refuse settings (temperature, top_p, tools), and a test against a stub passes anyway. |

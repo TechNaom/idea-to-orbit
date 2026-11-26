@@ -1,8 +1,11 @@
 # Cold read brief
 
-Send this to a fresh agent with every `<...>` filled in, before the Assemble gate (all the
-cards of the next milestone) or before a single card goes to a builder. It finds the places
-where a builder would have to guess, while fixing them is still one sentence on a card.
+Send this to a fresh agent with every `<...>` filled in: before the Blueprint gate (the PRD
+and the architecture), before the Assemble gate (all the cards of the next milestone), or
+before a single card goes to a builder. It finds the places where the next person would have
+to guess, while fixing them is still one sentence in a document.
+
+For the design, use the short version at the end of this file.
 
 ---
 
@@ -44,4 +47,37 @@ Questions:
 1. <card> <line>: <question>. Changes: <what>
 Files not named: <card: path, why>, or "none"
 Commands that would not run: <card: command, why>, or "none"
+```
+
+---
+
+## The design version
+
+Send this before the Blueprint gate, with every `<...>` filled in.
+
+---
+
+You are a capable <language or stack> developer. You have been handed the requirements and the
+architecture below and asked to break the work into small tasks, each with exact files,
+interfaces and a test. You have never seen this product and you cannot ask the person who
+wrote them.
+
+## The documents
+
+<prd.md and architecture.md, in full>
+
+## What to report
+
+Only the questions you would need answered before you could plan the tasks well: places where
+you would have to guess, and a wrong guess would matter. For each: the document and section,
+the question, and why the answer changes the plan. Rank them by importance. Skip what you could
+reasonably decide yourself, and wording nitpicks.
+
+Then list any part, interface, data field or failure path a task would need that the design
+does not name.
+
+```
+Questions:
+1. <document> <section>: <question>. Changes: <what>
+Not named in the design: <part, interface, field or failure path>, or "none"
 ```

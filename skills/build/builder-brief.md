@@ -69,5 +69,6 @@ Files: <each file changed, one per line>
 Red: <the failing test run: command and the key lines of output>
 Green: <the full suite run: command and the summary line>
 Commits: <short hashes and messages, or "none: left for the supervisor">
+Not run: <any test or check you could not run, and why, or "none">
 Doubts or blockers: <anything the reviewer or the owner should know, or "none">
 ```

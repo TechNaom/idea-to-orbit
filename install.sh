@@ -69,7 +69,8 @@ for g in groups:  # drop our hook; drop a group only if it held nothing but ours
 groups[:] = kept
 if action == "add":
     groups.append({"matcher": "startup|resume|clear|compact",
-                   "hooks": [{"type": "command", "command": arg, "timeout": 10, "statusMessage": MARK}]})
+                   "hooks": [{"type": "command", "command": arg, "powershell": "& " + arg, "shell": "bash",
+                             "timeout": 10, "statusMessage": MARK}]})
     print(" ".join(created))
 else:
     mine = arg.split()  # keys this installer created: remove them again only if they are empty

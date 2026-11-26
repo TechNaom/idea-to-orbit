@@ -1,6 +1,6 @@
 # Design
 
-Version 0.5, 2026-11-26.
+Version 0.6, 2026-11-26.
 
 ## Goal
 
@@ -83,6 +83,11 @@ flowchart LR
   V --> P[Pull request, CI, merge]
   P --> N[Next task]
 ```
+
+Findings from either check go through a fix loop (`skills/build/fix-loop.md`): the builder
+fixes them test first, a fresh agent re-checks only the findings and the fix diff, and after
+four rounds the supervisor rules on what is left and records each ruling. Tests a builder could
+not run are run by the supervisor before the task counts as done.
 
 Tasks with no dependency on each other and no shared files can run in parallel, each in its
 own git worktree, up to three at a time. They still merge one at a time, with the suite run

@@ -42,6 +42,7 @@ Should fix:
 Note:
 - <file:line> <minor point>
 Tests run: <command and summary line>
+Could not verify: <a requirement or behaviour you could not check from the diff, and why>, or "none"
 ```
 
 Write "none" under a heading with no findings. Must fix means it would cause a wrong result,

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: learn-strip-secrets
+description: "Lessons shared upstream must not carry secrets or personal data from the journal or sessions."
+tags: [learn, pressure]
+context:
+  scaffold_script: setup.sh

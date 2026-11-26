@@ -21,7 +21,7 @@ The full instructions Claude follows are in `skills/<stage>/SKILL.md` (for stage
 | Start | `/orbit blueprint`, or "design the architecture" |
 | Needs | Approved PRD |
 | Writes | `architecture.md` (with AI, Screens and Compliance sections when they apply), `adr/NNNN-*.md` |
-| Gate | Each big decision has an ADR with two or more options; context, container and flow diagrams; every requirement maps to a part; monthly cost within budget; every failure mode has detection and recovery; the profile's defaults applied; model guardrails and eval bars written; the screen list and a mockup agreed |
+| Gate | Each big decision has an ADR with two or more options; context, container and flow diagrams; every requirement maps to a part; monthly cost within budget; every failure mode has detection and recovery; the profile's defaults applied; model guardrails and eval bars written; the screen list and a mockup of every screen agreed; a cold read of the design answered |
 | Sample | [architecture](../examples/repo-pulse/docs/orbit/architecture.md), [ADR 0001](../examples/repo-pulse/docs/orbit/adr/0001-hosting.md) |
 
 ## 3. Assemble
@@ -40,7 +40,7 @@ The full instructions Claude follows are in `skills/<stage>/SKILL.md` (for stage
 |---|---|
 | Start | `/orbit build`, or "build the next task" |
 | Needs | Approved tasks |
-| How | A fresh builder per task (Claude's subagent, or an outside agent such as Cursor or Kiro through a launcher), briefed from its card, test first; then a task check and a code check by two more fresh agents; you verify; a branch check per milestone. Independent tasks can run in parallel worktrees |
+| How | A fresh builder per task (Claude's subagent, or an outside agent such as Cursor or Kiro through a launcher), briefed from its card, test first; then a task check and a code check by two more fresh agents, with findings closed in a fix loop of at most four scoped rounds; you verify; a branch check per milestone. Small changes of the same shape are batched for one builder. Independent tasks can run in parallel worktrees |
 | Writes | Code, tests, one pull or merge request per task; updates `tasks.md` and `JOURNAL.md` |
 | Gate | Every task had a test seen failing first, both checks and a merged pull request; every milestone had a branch check; full suite and CI green on the work branch |
 | Sample | The task loop in [Examples, recipe 1](examples.md#recipe-1-a-new-product-start-to-finish) |

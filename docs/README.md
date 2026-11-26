@@ -12,6 +12,7 @@ New here? Start with **Getting started**, then read one recipe in **Examples**.
 | [FAQ](faq.md) | You have a question about how it behaves |
 | [Troubleshooting](troubleshooting.md) | Something does not work as expected |
 | [Testing the plugin](testing.md) | You change a skill and want to check it still holds |
+| [Eval results](eval-results.md) | You want the pass rates with and without the plugin |
 | [Design](DESIGN.md) | You want to know how it is built and what comes next |
 
 A complete sample product, with every document a run produces, is in

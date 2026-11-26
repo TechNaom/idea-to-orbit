@@ -8,6 +8,8 @@
           {
             "type": "command",
             "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/run.cmd\" session-start",
+            "powershell": "& \"${CLAUDE_PLUGIN_ROOT}/hooks/run.cmd\" session-start",
+            "shell": "bash",
             "timeout": 10
           }
         ]

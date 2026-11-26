@@ -1,5 +1,38 @@
 # Changelog
 
+## 0.6.0 - 2026-11-26
+
+Deeper build discipline and design, from a comparison with another Claude Code plugin
+(superpowers):
+
+- **Fix loop** (`skills/build/fix-loop.md`): findings are sorted (notes recorded, conflicts with
+  the card ruled on), then fixed in rounds of one fix plus one scoped re-check (only the findings
+  and the fix diff); rounds 1-2 the same builder, 3-4 a fresh one; after four rounds the
+  supervisor rules on each open finding and records it. A re-check brief
+  (`skills/review/re-check.md`); a "Could not verify" line in the task and code check reports,
+  resolved before a task is done; the branch check reads the open notes.
+- **Tests a builder could not run** are run by the supervisor before the task counts as done;
+  the builder report has a "Not run" line.
+- **Batching:** small changes of the same shape go to one builder in one brief, checked as one
+  unit.
+- **Blueprint cold read:** a fresh agent reads the PRD and architecture before the gate, with
+  its own version of the cold-read brief.
+- **Mockup step:** for products with screens, one static HTML page of every screen with real
+  labels and example data, walked through with the owner and agreed before the gate.
+- **Learn** also reads past session transcripts, and strips secrets and personal data (with
+  the owner's yes) before any lesson leaves the product.
+- **Project:** SECURITY.md, issue templates (problem, lesson), a pull request template, a
+  release rule (CHANGELOG, versions, a git tag per version) and eval results in
+  `docs/eval-results.md`.
+- **Fixed: the session-start hook never ran on Windows** when Claude Code used PowerShell for
+  hooks: `"<path>/run.cmd" session-start` is a PowerShell parse error. Found by the
+  `hook-reports-stage` scenario. The hook entry (plugin and both installers) now says
+  `"shell": "bash"`, with a `powershell` form for tools that always use PowerShell; the
+  offline check fails if either is missing. Git Bash outside `Program Files` needs
+  `CLAUDE_CODE_GIT_BASH_PATH`; the Windows installer says so, and troubleshooting explains it.
+- 5 new pressure scenarios (28 in all). Results with and without the plugin: 28 and 13 of 28
+  (`docs/eval-results.md`, with what changed between runs and why).
+
 ## 0.5.3 - 2026-11-26
 
 The two 0.5.2 known gaps, fixed:

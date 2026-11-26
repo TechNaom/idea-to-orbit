@@ -35,7 +35,12 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
    Use Mermaid for every diagram so it renders on GitHub, GitLab and most editors.
 4. Apply the defaults of the product's **profile** (`STATE.md`), unless the PRD or the owner
    says otherwise. See below.
-5. Run the gate.
+5. **Mockup,** when the product has screens: see Screens below.
+6. **Cold read of the design.** Send `prd.md` and `architecture.md` to a fresh agent with the
+   review skill's `cold-read.md` (the design version). It lists where someone planning the
+   tasks would have to guess. Answer every important question in the documents themselves,
+   not in chat.
+7. Run the gate.
 
 ## Profiles
 
@@ -71,9 +76,24 @@ When the product calls a model, `architecture.md` also covers:
 When the product has a UI, `architecture.md` also has a **screen list**: every screen, its
 route, its heading, which roles may open it and which see a refusal, and its key controls.
 It is the source for the browser tests in build and the owner's checklist in test flight,
-so keep it in a form both can read (a table, or a `screens.yaml` the tests load). Agree the
-look with wireframes or a mockup before Assemble; a UI changed after it is built costs ten
-times more.
+so keep it in a form both can read (a table, or a `screens.yaml` the tests load).
+
+**The mockup.** Before the gate, show the owner what each screen will look like, so they react
+to a picture instead of a description:
+
+1. First describe each screen in a few lines of text (what is on it, for whom, the main
+   action). If the owner declines a drawn mockup, say what it protects, and record their
+   decision as a Skipped rule row in `JOURNAL.md`.
+2. Make one static HTML page with every screen from the screen list on it, in the product's
+   colours and fonts, with the real labels and example data from the PRD (never lorem ipsum),
+   and the refusal each role sees where a role may not open a screen. No framework and no
+   server: one file the owner opens in a browser or receives as a shared page.
+3. Walk the owner through it, screen by screen. Write each change they ask for into the screen
+   list and the page, and show it again.
+4. Record in `architecture.md` where the mockup is and the date the owner agreed it.
+
+A screen changed in a mockup costs minutes; the same change after it is built costs a task, its
+tests and a review.
 
 ## Red flags: stop if you think
 
@@ -86,6 +106,8 @@ times more.
 | "A diagram is enough, no need for interfaces." | Builders need the contracts: inputs, outputs, errors, limits. |
 | "The model will handle it, it's smart." | Write what the model may never decide, the check in code on its output, and the eval bar. |
 | "We'll design the screens while building." | List every screen and role now, and agree a mockup. Browser tests and the owner's checklist come from that list. |
+| "The owner can picture it from the description." | Show the mockup. People agree to descriptions and reject the screens. |
+| "The design is clear, a cold read is overkill." | You wrote it; you read what you meant. A fresh agent finds the guesses in minutes. |
 | "A `.env` file is fine for the secrets." | Fine on a laptop in the startup profile. Anywhere shared, or in enterprise, use the secret store. |
 | "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR. |
 
@@ -100,7 +122,9 @@ Exit list:
 - [ ] Nothing in the design needs an always-on server unless an ADR justifies it.
 - [ ] The profile's defaults are applied, or an ADR says why not.
 - [ ] If the product calls a model: model choice, guardrails, eval bars and metering are written.
-- [ ] If the product has a UI: the screen list exists and the owner has seen a mockup.
+- [ ] If the product has a UI: the screen list exists and the owner agreed a mockup of every
+  screen, with the date recorded, or declined it in a recorded Skipped rule row.
+- [ ] The cold read's important questions are answered in `prd.md` or `architecture.md`.
 
 Show the owner the container diagram, the decisions in one line each, the monthly cost and
 any open questions, and ask for approval. Record an explicit yes in `STATE.md` and say that

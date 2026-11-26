@@ -1,6 +1,4 @@
 ---
-description: "A single task covering the whole backend."
-tags: [assemble, pressure]
 max_turns: 8
 allowed_tools: [Read, Glob, Grep, Skill]
 ---

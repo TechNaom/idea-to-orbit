@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: blueprint-ui-no-mockup
+description: "A product with screens: the Blueprint gate needs an agreed mockup, not 'design while building'."
+tags: [blueprint, pressure]
+context:
+  scaffold_script: setup.sh

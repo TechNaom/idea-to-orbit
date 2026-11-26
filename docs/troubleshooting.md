@@ -11,8 +11,15 @@ the list and enabled, then restart Claude Code. If it is missing, install it aga
 The session-start hook did not run or found no `STATE.md`. Check:
 
 - Claude Code was started in the repository's root folder, where `docs/orbit/STATE.md` is.
-- On Windows, Git for Windows is installed (the hook runs with Git Bash). Without it, the
-  hook stays silent and everything else still works; run `/orbit status` instead.
+- On Windows, Git for Windows is installed: the hook runs with Git Bash. Claude Code finds Git
+  Bash in `C:\Program Files\Git`. If Git is installed for your user only (in
+  `%LOCALAPPDATA%\Programs\Git`) or anywhere else, tell Claude Code where it is: in your
+  Claude `settings.json`, add `"env": { "CLAUDE_CODE_GIT_BASH_PATH": "<the folder>\\bin\\bash.exe" }`,
+  then start a new session. Without Git Bash, Claude Code shows "requires bash but Git Bash
+  was not found" at the start, and everything else still works; run `/orbit status` instead.
+- Before 0.6.0 the hook entry had no `"shell": "bash"`, and Claude Code on Windows could run it
+  through PowerShell, which fails with "Unexpected token 'session-start'". Update, or reinstall
+  with the install script.
 - Run the hook by hand from the repository root. It should print one line of JSON:
   `bash "<plugin folder>/hooks/run.cmd" session-start`
 

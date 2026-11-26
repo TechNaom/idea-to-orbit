@@ -16,10 +16,10 @@ with no memory of the work reads what is there.
 | Task check | Does the change do everything the task card asks, and nothing it does not? | After each task is built | `task-check.md` |
 | Code check | Is the code correct, safe, tested and affordable? | After the task check passes | `code-check.md` |
 | Branch check | Do the pieces fit together? | At the end of each milestone, or before a release | `branch-check.md` |
-| Cold read | Where would a builder have to guess? | Before the Assemble gate, or before a card goes to a builder | `cold-read.md` |
+| Cold read | Where would the next person have to guess? | Before the Blueprint gate (the design), before the Assemble gate (the cards), or before a card goes to a builder | `cold-read.md` |
 
 The task, code and branch checks run in that order: a code check on a change that does the
-wrong thing wastes the review. The cold read runs on cards, before anything is built.
+wrong thing wastes the review. The cold read runs on documents (the design or the cards), before anything is built.
 
 ## Asking for a check
 

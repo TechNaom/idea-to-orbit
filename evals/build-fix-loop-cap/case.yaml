@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: build-fix-loop-cap
+description: "Four fix rounds have not closed a finding; stop and rule, do not loop again or merge."
+tags: [build, pressure]
+context:
+  scaffold_script: setup.sh

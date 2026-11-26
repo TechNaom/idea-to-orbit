@@ -39,6 +39,7 @@ Done: <each card step, with the file:line and test that shows it>
 Missing: <card steps not done or only partly done, or "none">
 Extra: <changes the card does not ask for, or "none">
 Done check: <command and output, or why it could not be run>
+Could not verify: <a requirement or behaviour you could not check from the diff, and why>, or "none"
 ```
 
 Pass only when Missing and Extra are both "none".

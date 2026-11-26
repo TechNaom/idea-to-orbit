@@ -150,12 +150,13 @@ docs/orbit/
 
 ## Status
 
-Version 0.5: the seven stages and four helper skills, the session-start hook, install scripts for
-surfaces without `/plugin`, catch-up steps for products that already have code, a build stage
-with fresh-agent checks on every task and support for outside builders (Cursor, Kiro), task
-cards with a cold read, GitHub or GitLab, startup and enterprise profiles, checks for AI
-features and screens, lanes for work on a live product, a journal and a learn skill, red flags
-in every skill, 23 pressure scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
+Version 0.6: the seven stages and four helper skills, the session-start hook, install scripts
+for surfaces without `/plugin`, catch-up steps for products that already have code, a build
+stage with fresh-agent checks on every task, a bounded fix loop and support for outside
+builders (Cursor, Kiro), a cold read of the design and of the cards, a mockup step for screens,
+GitHub or GitLab, startup and enterprise profiles, checks for AI features, lanes for work on a
+live product, a journal and a learn skill that also reads past sessions, red flags in every
+skill, 28 pressure scenarios and an offline check that runs in CI. The docs and a complete sample product. See [CHANGELOG.md](CHANGELOG.md) for changes and [docs/DESIGN.md](docs/DESIGN.md)
 for how it works and what comes next.
 
 ## License

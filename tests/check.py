@@ -347,6 +347,19 @@ def check_install_safety() -> None:
                     fail(f"installed with {a}, removed with {b}: left skills {left}, hook left {hook_left}")
 
 
+def windows_safe(entry: dict) -> bool:
+    """On Windows, Claude Code may run a hook command through PowerShell, where '"<path>" session-start' is a
+    parse error ("Unexpected token 'session-start'") and the hook never runs. Found by the hook-reports-stage eval,
+    2026-11-26. "shell": "bash" sends it to Git Bash; the powershell form uses the & call operator."""
+    return entry.get("shell") == "bash" and str(entry.get("powershell", "")).startswith("& ")         and str(entry.get("powershell", "")).endswith(" session-start")
+
+
+def check_plugin_hook() -> None:
+    entries = [h for g in json.loads(read(ROOT / "hooks" / "hooks.json"))["hooks"]["SessionStart"] for h in g["hooks"]]
+    if not entries or not all(windows_safe(h) for h in entries):
+        fail(f"hooks/hooks.json: the session-start hook would not run on Windows: {entries}")
+
+
 def check_install() -> None:
     """install.sh and install.ps1 put the skills, /orbit and the session-start hook into a Claude config folder,
     keep the owner's own settings, never add the hook twice, and --uninstall removes only what they added."""
@@ -391,6 +404,9 @@ def check_install() -> None:
                     fail(f"{name} run {attempt}: the owner's own settings were not kept: {settings}")
                 if len(ours) != 1:
                     fail(f"{name} run {attempt}: expected one session-start hook of ours, found {len(ours)}")
+                elif not windows_safe(ours[0]):
+                    fail(f"{name} run {attempt}: the hook entry would not run on Windows (needs shell bash and a "
+                         f"powershell form with &): {ours[0]}")
             if bash and (cfg / "idea-to-orbit" / "hooks" / "run.cmd").exists():
                 proj = pathlib.Path(tmp) / "proj"
                 (proj / "docs" / "orbit").mkdir(parents=True)
@@ -432,6 +448,7 @@ def main() -> int:
     check_links()
     check_evals()
     check_hook()
+    check_plugin_hook()
     check_install()
     check_install_safety()
     if failures:

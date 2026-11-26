@@ -69,7 +69,9 @@ function Update-Settings([string]$Action, [string]$Arg) {
     if ($Action -eq "add") {
         $groups += [PSCustomObject]@{
             matcher = "startup|resume|clear|compact"
-            hooks   = @([PSCustomObject]@{ type = "command"; command = $Arg; timeout = 10; statusMessage = $MARK })
+            # shell bash: on Windows a quoted path followed by an argument is a PowerShell parse error, so the hook
+            # would never run; the powershell form (with &) is for tools that always use PowerShell.
+            hooks   = @([PSCustomObject]@{ type = "command"; command = $Arg; powershell = "& $Arg"; shell = "bash"; timeout = 10; statusMessage = $MARK })
         }
     }
     $mine = if ($Action -eq "remove") { @($Arg -split "\s+" | Where-Object { $_ }) } else { @() }
@@ -145,3 +147,14 @@ if (-not (Test-Path $keysFile)) { [System.IO.File]::WriteAllText($keysFile, "$cr
 
 Write-Output "Idea to Orbit installed in ${cfg}: $($skills.Count) skills, /orbit and the session-start hook."
 Write-Output "Start a new Claude Code session and type /orbit."
+# The hook runs with Git Bash (shell: bash). Claude Code finds it in Program Files; anywhere else
+# it needs CLAUDE_CODE_GIT_BASH_PATH, or the hook fails with "Git Bash was not found".
+$userBash = Join-Path $env:LOCALAPPDATA "Programs\Git\bin\bash.exe"
+if (-not (Test-Path (Join-Path $env:ProgramFiles "Git\bin\bash.exe")) -and -not $env:CLAUDE_CODE_GIT_BASH_PATH) {
+    if (Test-Path $userBash) {
+        Write-Output "Git Bash is installed for your user only. So that Claude Code can run the hook, add this to $cfg\settings.json and start a new session:"
+        Write-Output ('  "env": { "CLAUDE_CODE_GIT_BASH_PATH": "' + ($userBash -replace '\\', '\\') + '" }')
+    } else {
+        Write-Output "Git for Windows was not found. The hook needs Git Bash: install it from https://git-scm.com/downloads/win. Everything else works without it."
+    }
+}

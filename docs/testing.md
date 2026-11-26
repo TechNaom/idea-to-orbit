@@ -66,7 +66,7 @@ claude plugin eval . --runs 1 --scaffold --max-cost-usd 5
 claude plugin eval . --runs 3 --scaffold --ablation with-without --max-cost-usd 15
 ```
 
-Results go to `evals/results/`, which is not committed.
+Results go to `evals/results/`, which is not committed. Published results for each release are in [Eval results](eval-results.md).
 
 **What it costs.** Each run is a real conversation with Claude, the same as using Claude Code
 yourself. Signed in with a Claude Pro or Max plan, runs count against the plan's usage, with

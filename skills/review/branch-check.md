@@ -14,6 +14,8 @@ checked on their own. Look for what per-task checks cannot see: how the pieces f
 - Milestone: <name>, which should leave the product able to: <the milestone's goal>
 - Tasks in it: <IDs and titles>
 - Architecture: `docs/orbit/architecture.md`. Requirements: `docs/orbit/prd.md`.
+- Open notes from this milestone's checks (the "open note" rows in `JOURNAL.md`): <paste them>.
+  Say which must be fixed before release.
 - Repository: <path>. Range: `<sha before the milestone>...<sha now>`. Run tests with
   `<command>`.
 

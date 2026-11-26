@@ -11,3 +11,7 @@ Issues and pull requests are welcome.
 - **Before a pull request:** run `python tests/check.py`. CI runs it too.
 - **Writing docs?** Plain words, short sentences, and a real example wherever one helps.
 - Keep each pull request to one change, and describe why it is needed.
+- **Releases:** each version gets a CHANGELOG entry, the same version in `plugin.json`,
+  `marketplace.json`, the README and the design doc (the offline check compares them), and a
+  git tag `v<version>` on its commit. Eval results for a release go in `docs/eval-results.md`.
+- **Security problems:** see [SECURITY.md](SECURITY.md); do not open a public issue.
