@@ -53,7 +53,9 @@ Commands that would not run: <card: command, why>, or "none"
 
 ## The design version
 
-Send this before the Blueprint gate, with every `<...>` filled in.
+Send this before the Blueprint gate, with every `<...>` filled in. Before the Ignite gate, send
+the same brief with `brief.md` and `prd.md` only, and ask where designing the product would need
+a guess.
 
 ---
 

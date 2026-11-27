@@ -1,7 +1,7 @@
 {
   "name": "idea-to-orbit",
   "description": "Take a product from idea to a running product that stays up: plan, architecture, task breakdown, test-first build, release gate, budget-safe deploy and self-healing operations, with an owner approval at every stage.",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "author": { "name": "Manohar Papasani", "url": "https://github.com/TechNaom" },
   "homepage": "https://github.com/TechNaom/idea-to-orbit",
   "repository": "https://github.com/TechNaom/idea-to-orbit",

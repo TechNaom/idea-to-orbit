@@ -41,7 +41,12 @@ The idea in any form: a sentence, a voice note transcript, a list, an existing d
 4. Write `docs/orbit/brief.md` from `templates/brief.md`: one page, plain words.
 5. Write `docs/orbit/prd.md` from `templates/prd.md`. Every requirement gets an ID
    (R1, R2, ...) and an acceptance check, so later stages can trace it.
-6. Run the gate.
+6. **Cold read.** Send `brief.md` and `prd.md` to a fresh agent with the review skill's
+   `cold-read.md` (the design version). It lists where someone designing the product would have
+   to guess: modes nobody named (another tool calling it, nobody present to answer), outside
+   services and their prices, how the parts fit together, security and privacy of the input.
+   Answer every important question in the documents themselves, not in chat.
+7. Run the gate.
 
 ## A feature lane
 
@@ -78,7 +83,9 @@ asking from a blank page:
 4. Where step 3 found nothing, write `brief.md`, `prd.md` and `architecture.md` from what
    is built, each marked **reconstructed** with the date. Give every requirement a state (built, not built, or
    built but its acceptance check not met). Mark every line you inferred rather than read as
-   *(inferred)*, so the owner can correct it.
+   *(inferred)*, so the owner can correct it. When the owner then widens the scope, the new
+   scope gets **new requirement IDs** and a dated line under **Scope changes** in the PRD;
+   reconstructed requirements keep their IDs and text.
 5. **ADRs:** where the decisions and their options are already written down (a design doc,
    a README section), cite that source in `architecture.md` and list the decisions there;
    writing them as ADRs is an open question for the owner at the Blueprint gate. Where a
@@ -105,6 +112,7 @@ Do not rewrite or redo code that works.
 | "It's on GitHub and main, like most products." | Ask. The code host, the branches and the builders change every later stage. |
 | "It's just catching up with our other product; I'll list the steps to build." | That is a feature lane. Requirements with checks and out of scope first, then the owner's yes. |
 | "Let me sketch the architecture while we talk." | Design comes in blueprint, after the PRD is approved. |
+| "The PRD is clear, a cold read can wait for Blueprint." | Gaps in the PRD become wrong designs. A fresh agent reads the brief and PRD in minutes; do it before the Ignite yes. |
 | "The owner said 'sounds good', that's approval." | Only an explicit yes passes a gate. Ask for it. |
 
 ## Gate
@@ -118,6 +126,11 @@ Exit list:
 - [ ] The Settings in `STATE.md` are filled in, except the test commands, or each gap is an
   open question.
 - [ ] If the product calls a model, its eval bars are requirements with IDs.
+- [ ] Every non-functional area in the template (cost, availability, security, performance,
+  release, guardrails, governance, token guard, budget guard) has a requirement, or is
+  marked "not needed" with a reason.
+- [ ] A cold read of the brief and PRD by a fresh agent is done, and its important questions
+  are answered in the documents.
 
 Show the owner a short summary (problem, users, first-version scope, success measures, open
 questions) and ask for approval. Only an explicit yes passes. Record it in `STATE.md` with

@@ -50,8 +50,9 @@ if [ -f "$state" ]; then
   # "idea-to-orbit:" prefix exists only when installed as a plugin; the install scripts add plain names.
   pre=""
   [ -n "${CLAUDE_PLUGIN_ROOT:-}" ] && pre="idea-to-orbit:"
-  skill="$stage"
-  [ "$stage" = "orbit" ] && skill="keep-running"
+  # The skill is the Stage field's first word: "ignite (catching up ...)" means the ignite skill.
+  skill="${stage%%[[:space:]]*}"
+  [ "$skill" = "orbit" ] && skill="keep-running"
 
   text="This repository is a product built with Idea to Orbit: ${product:-unnamed}.
 Stage: ${stage}. Status: ${status}. Open questions: ${questions}.
