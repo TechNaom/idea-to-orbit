@@ -22,6 +22,13 @@ something is missing, stop and ask rather than guess.
 <the relevant part of architecture.md: the container, its interfaces, the data it touches,
 the failure path for this part>
 
+## Lessons from earlier tasks
+
+<the recent Fix in review rows from JOURNAL.md for this product, rewritten as things to get
+right first time (for example: every check needs a test that fails when the check is removed;
+corrupt input files; odd environment values; two copies running at once). Leave out any that do
+not apply to this task.>
+
 ## Where to work
 
 - Repository: <path>. Branch: `t<id>-<slug>`, already created from an up-to-date <work branch>.

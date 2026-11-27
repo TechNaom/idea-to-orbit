@@ -11,7 +11,9 @@ nothing in the PRD is left without a task.
 ## Inputs
 
 The approved `docs/orbit/architecture.md` and `docs/orbit/prd.md`. Blueprint must be
-`approved` in `STATE.md`.
+`approved` in `STATE.md`. Every ADR that adds a new vendor, paid service, account or change of
+where the product runs must also have its own yes recorded in `STATE.md`; if one does not,
+stop and ask the owner before writing any task.
 
 ## Steps
 
@@ -70,6 +72,10 @@ Cards for some kinds of task carry one more test:
 
 Write commands for the shell the builder runs in (see **Builders** in `STATE.md`). On
 Windows under Git Bash, use forward slashes: backslashes are eaten.
+
+Invented names in examples, fixtures and test data (a client, a company, a person, a
+domain) must not belong to anyone real: search the web for each one before it goes on a card,
+and pick another if it matches or comes close to a real one, above all in a public repository.
 
 Use real names, never placeholders such as "add error handling" or "write tests for the
 above". If a step cannot be written precisely, the design is not finished: go back to the

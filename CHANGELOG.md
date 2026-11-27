@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.9.0 - 2026-11-27
+
+Lessons from real use, written as general rules for any product. Each has an offline check that
+failed before the change.
+
+- **Blueprint:** hosting, data, storage and scheduling options start from the platforms and
+  accounts the owner already uses (option A); a new vendor, account or bill must win on the facts.
+  The gate asks a **separate yes** for every ADR that adds a new vendor, paid service, account or
+  change of where the product runs, in plain words, apart from the yes to the whole design. A red
+  flag: "one yes to the summary covers it". (A new cloud account slipped through one yes to a long
+  summary; the owner, busy, only saw it later.)
+- **Assemble:** refuses to start while such an ADR has no yes of its own. Invented names in
+  examples, fixtures and test data are searched on the web first and replaced if they match or
+  come close to a real one. (A card's example client name was close to real companies.)
+- **Builder brief:** a "Lessons from earlier tasks" section filled from the product's recent
+  Fix in review rows. (A builder given earlier lessons passed its task check first time.)
+- **Review briefs:** checkers never read real credentials (mocks and fakes only); an exposed
+  credential goes first in the report so the owner can revoke it at once. (A probe printed a real
+  CLI token into a session transcript.)
+- Not done yet: eval scenarios for these rules (they need paid runs).
+
 ## 0.8.0 - 2026-11-27
 
 Lessons from running two real products through the plugin (Explainer Studio and Stack Scout),

@@ -24,6 +24,10 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
    cost per month at the expected load, operating effort, lock-in, and failure behaviour.
    Check current facts (prices, free-tier limits, versions) instead of relying on memory.
    Write one ADR per decision in `docs/orbit/adr/NNNN-<slug>.md` from `templates/adr.md`.
+   **Start from what the owner already uses:** before hosting, data, storage or scheduling
+   options, list the platforms and accounts the owner already uses (from `STATE.md`, the
+   brief, or ask). Option A in each such ADR uses them; a new vendor, account or bill has to
+   win against it on the facts.
 3. Write `docs/orbit/architecture.md` from `templates/architecture.md`:
    - **Context diagram:** the product, its users and the outside systems.
    - **Container diagram:** the deployable parts and how they talk.
@@ -115,6 +119,7 @@ tests and a review.
 | "A `.env` file is fine for the secrets." | Fine on a laptop in the startup profile. Anywhere shared, or in enterprise, use the secret store. |
 | "It runs from the repo, so it will find its files." | Write how the code finds its own files, config and secrets on every install path and place it runs (a plugin, a script install, a container, a function, a notebook). |
 | "One run is obvious: it starts, does the work, finishes." | Write what starts and ends one run, what state survives between runs, and what happens to a run left half done (retry, resume, never twice). |
+| "The summary lists the new service, so one yes covers it." | A one yes to a long summary hides a new vendor, account or bill. Ask about each one on its own, in plain words. |
 | "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR. |
 
 ## Gate
@@ -132,6 +137,13 @@ Exit list:
   screen, with the date recorded, or declined it in a recorded Skipped rule row.
 - [ ] The cold read's important questions are answered in `prd.md` or `architecture.md`.
 
+- [ ] Every ADR that adds a new vendor, a paid service, a new account or a change of where the
+  product runs has its own yes from the owner, recorded in `STATE.md`.
+
 Show the owner the container diagram, the decisions in one line each, the monthly cost and
-any open questions, and ask for approval. Record an explicit yes in `STATE.md` and say that
+any open questions. Then list every new vendor, paid service, new account and change of
+where the product runs, each as its own plain question (for example "This adds a new cloud
+account with its own bill. OK?"), and ask for its own yes, separate from the yes to the
+whole design. A busy owner approves summaries; these are the choices that must not hide in
+one. Then ask for approval. Record an explicit yes in `STATE.md` and say that
 **assemble** is next.

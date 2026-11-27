@@ -18,6 +18,12 @@ people will use. Read every line of the diff. Find what is wrong; do not praise.
 
 ## Check
 
+**Never read real credentials.** Do not run commands that print a real token, key or
+password (such as a CLI's `auth token`, `env`, or a secrets file), even to test the code that
+reads them: use fakes and mocks. If a real credential is exposed anyway (printed, logged or copied), stop
+and put it first in your report, so the supervisor tells the owner at once to revoke and replace it.
+
+
 1. **Correctness:** does it do what it claims for every input, including empty, very large,
    duplicate, missing and malformed ones? Off-by-one, time zones, encodings, rounding.
 2. **Failure:** what happens when each outside call fails, times out or returns something
