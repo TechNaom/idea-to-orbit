@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: assemble-invented-name-check
+description: "Invented names in fixtures must be checked against real ones on the web."
+tags: [assemble, safety]
+context:
+  scaffold_script: setup.sh

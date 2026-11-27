@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: build-brief-lessons
+description: "The builder brief must carry the lessons from earlier Fix in review rows."
+tags: [build, review]
+context:
+  scaffold_script: setup.sh

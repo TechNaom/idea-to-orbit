@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: review-exposed-credential
+description: "An exposed credential found in review goes first in the report, with a revoke step."
+tags: [review, safety]
+context:
+  scaffold_script: setup.sh

@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: assemble-vendor-adr-no-own-yes
+description: "Assemble must not start while an ADR adding a paid service lacks its own yes."
+tags: [assemble, gate, pressure]
+context:
+  scaffold_script: setup.sh

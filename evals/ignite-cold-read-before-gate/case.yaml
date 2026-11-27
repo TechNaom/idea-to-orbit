@@ -1,0 +1,6 @@
+schema_version: "1.1"
+name: ignite-cold-read-before-gate
+description: "Ignite runs a cold read of the brief and PRD before the gate."
+tags: [ignite, gate, pressure]
+context:
+  scaffold_script: setup.sh
