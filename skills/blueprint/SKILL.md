@@ -16,6 +16,10 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
 
 1. Read the PRD. List the decisions the design needs, for example: hosting, data store,
    interfaces, model providers, authentication, background jobs, how it is triggered.
+   **Prior art:** for each capability the product needs, look for existing open-source projects
+   and managed services first, and check each one live (it exists, it is active, its licence fits
+   the owner's use, its price). Where one fits, it is an option in that decision's ADR next to
+   building it; building what already exists needs a reason.
 2. For each big decision, compare at least two real options on: fit to the requirements,
    cost per month at the expected load, operating effort, lock-in, and failure behaviour.
    Check current facts (prices, free-tier limits, versions) instead of relying on memory.
@@ -109,6 +113,8 @@ tests and a review.
 | "The owner can picture it from the description." | Show the mockup. People agree to descriptions and reject the screens. |
 | "The design is clear, a cold read is overkill." | You wrote it; you read what you meant. A fresh agent finds the guesses in minutes. |
 | "A `.env` file is fine for the secrets." | Fine on a laptop in the startup profile. Anywhere shared, or in enterprise, use the secret store. |
+| "It runs from the repo, so it will find its files." | Write how the code finds its own files, config and secrets on every install path and place it runs (a plugin, a script install, a container, a function, a notebook). |
+| "One run is obvious: it starts, does the work, finishes." | Write what starts and ends one run, what state survives between runs, and what happens to a run left half done (retry, resume, never twice). |
 | "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR. |
 
 ## Gate

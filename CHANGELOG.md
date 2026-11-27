@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.8.0 - 2026-11-27
+
+Lessons from running two real products through the plugin (Explainer Studio and Stack Scout),
+logged in their `plugin-feedback.md` files. Each has an offline check that failed before the change.
+
+- **Ignite:** a cold read of the brief and PRD by a fresh agent before the gate (it found five
+  real gaps on Stack Scout that the steps did not prompt for). The PRD template's non-functional
+  table adds release, guardrails, governance, token guard and budget guard, and the gate needs
+  each area to have a requirement or "not needed" with a reason. A **Scope changes** list in the
+  PRD; on an existing product, widened scope gets new requirement IDs.
+- **Blueprint:** a **prior-art** step (existing open-source projects and managed services,
+  checked live, are options next to building), and two red flags: how the code finds its files
+  on every install path, and what starts and ends one run.
+- **Hook:** the skill is the Stage field's first word, so `- Stage: ignite (catching up ...)`
+  points at the ignite skill.
+- **Testing guide:** run a changed case more than once; one run is noise.
+- Not done yet: eval scenarios for the new Ignite and Blueprint rules (they need paid runs).
+
 ## 0.7.1 - 2026-11-26
 
 From lesson issue #1: a feature request on a live product ("make our assistant like our other

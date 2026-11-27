@@ -196,6 +196,16 @@ def check_hook() -> None:
                 continue
             if expect not in ctx:
                 fail(f"hook {label}: expected {expect!r} in {ctx[:200]!r}")
+        # A Stage line with extra words ("ignite (catching up ...)") names the skill by its first word only.
+        wordy = pathlib.Path(tmp) / "wordy-stage"
+        (wordy / "docs" / "orbit").mkdir(parents=True)
+        text = read(sample).replace("- Stage: orbit", "- Stage: ignite (catching up an existing product)", 1)
+        (wordy / "docs" / "orbit" / "STATE.md").write_text(text, encoding="utf-8")
+        run = subprocess.run([bash, hook, "session-start"], cwd=wordy, env=dict(os.environ, CLAUDE_PROJECT_DIR=str(wordy)),
+                             capture_output=True, text=True, timeout=30)
+        ctx = json.loads(run.stdout)["hookSpecificOutput"]["additionalContext"]
+        if not re.search(r"current stage \((?:[\w-]+:)?ignite\)", ctx):
+            fail(f"hook with a wordy Stage line: expected the skill 'ignite' in {ctx[:400]!r}")
         # A STATE.md from before 0.5 has no Settings: the hook says so instead of stating defaults as facts.
         old = pathlib.Path(tmp) / "old-state"
         (old / "docs" / "orbit").mkdir(parents=True)
@@ -457,6 +467,33 @@ def check_install() -> None:
                 fail(f"{name}: overwrote a different skill named 'build' (exit {r.returncode})")
 
 
+def check_field_feedback() -> None:
+    """Lessons from running real products through the plugin (Explainer Studio, Stack Scout)."""
+    prd = read(ROOT / "skills" / "ignite" / "templates" / "prd.md")
+    for area in ["Release", "Guardrails", "Governance", "Token guard", "Budget guard"]:
+        if f"| {area} |" not in prd:
+            fail(f"prd template: no non-functional row for {area}")
+    if "## Scope changes" not in prd:
+        fail("prd template: no 'Scope changes' section")
+    ignite = read(ROOT / "skills" / "ignite" / "SKILL.md")
+    gate = ignite.split("## Gate", 1)[-1]
+    if "cold read" not in gate.lower():
+        fail("ignite gate: no cold read of the brief and PRD")
+    if "not needed" not in gate.lower():
+        fail("ignite gate: non-functional areas need a requirement or 'not needed' with a reason")
+    if "new requirement IDs" not in ignite:
+        fail("ignite: widened scope on an existing product must get new requirement IDs")
+    blueprint = read(ROOT / "skills" / "blueprint" / "SKILL.md")
+    if "Prior art" not in blueprint:
+        fail("blueprint: no prior-art step (existing projects and services before designing)")
+    flags = blueprint.split("## Red flags", 1)[-1].split("## Gate", 1)[0].lower()
+    for words in ["install path", "starts and ends"]:
+        if words not in flags:
+            fail(f"blueprint red flags: nothing about '{words}'")
+    if "more than once" not in read(ROOT / "docs" / "testing.md"):
+        fail("docs/testing.md: no rule to run a changed case more than once (results vary run to run)")
+
+
 def main() -> int:
     data = check_json()
     check_versions(data)
@@ -465,6 +502,7 @@ def main() -> int:
     check_existing_products()
     check_links()
     check_evals()
+    check_field_feedback()
     check_hook()
     check_plugin_hook()
     check_session_scan()

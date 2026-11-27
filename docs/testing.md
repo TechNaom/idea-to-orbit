@@ -66,6 +66,10 @@ claude plugin eval . --runs 1 --scaffold --max-cost-usd 5
 claude plugin eval . --runs 3 --scaffold --ablation with-without --max-cost-usd 15
 ```
 
+**Run a changed case more than once** (at least 3 runs) before calling a change better or
+worse: the same case can pass one run and fail the next, so one run is noise, not a result.
+The `--runs 3` line above is the usual check after changing a skill.
+
 Results go to `evals/results/`, which is not committed. Published results for each release are in [Eval results](eval-results.md).
 
 **What it costs.** Each run is a real conversation with Claude, the same as using Claude Code
