@@ -8,6 +8,10 @@ You are checking one change against the task it was built for. You did not write
 only question: does the change do everything the task card asks, and nothing it does not?
 Do not judge code style or quality; another check does that.
 
+**Never read real credentials.** Do not run commands that print a real token, key or
+password (such as a CLI's `auth token`, `env`, or a secrets file), even to test the code that
+reads them: use fakes and mocks. 
+
 ## The task card
 
 <the full task card from tasks.md>

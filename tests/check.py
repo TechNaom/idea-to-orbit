@@ -494,6 +494,35 @@ def check_field_feedback() -> None:
         fail("docs/testing.md: no rule to run a changed case more than once (results vary run to run)")
 
 
+def check_field_feedback_v09() -> None:
+    """0.9 lessons: big choices hidden in one yes, unchecked names, briefs without past lessons, real credentials."""
+    blueprint = read(ROOT / "skills" / "blueprint" / "SKILL.md")
+    steps = blueprint.split("## Steps", 1)[-1].split("## Profiles", 1)[0]
+    if "already uses" not in steps:
+        fail("blueprint steps: hosting options must start from the platforms and accounts the owner already uses")
+    gate = blueprint.split("## Gate", 1)[-1]
+    if "own yes" not in gate or "new vendor" not in gate:
+        fail("blueprint gate: each new vendor, paid service, account or hosting change needs its own yes")
+    flags = blueprint.split("## Red flags", 1)[-1].split("## Gate", 1)[0].lower()
+    if "one yes" not in flags:
+        fail("blueprint red flags: nothing about one yes covering a new vendor or bill")
+    assemble = read(ROOT / "skills" / "assemble" / "SKILL.md")
+    inputs = assemble.split("## Inputs", 1)[-1].split("## Steps", 1)[0]
+    if "own yes" not in inputs:
+        fail("assemble inputs: must refuse to start while a new vendor or hosting ADR lacks its own yes")
+    if "search the web" not in assemble.lower():
+        fail("assemble: invented names in examples and test data must be checked on the web")
+    brief = read(ROOT / "skills" / "build" / "builder-brief.md")
+    if "Fix in review" not in brief:
+        fail("builder brief: no section for the product's recent Fix in review lessons")
+    for name in ["code-check.md", "task-check.md", "cold-read.md"]:
+        text = read(ROOT / "skills" / "review" / name).lower()
+        if "real credential" not in text:
+            fail(f"review/{name}: no rule against reading real credentials")
+    if "exposed" not in read(ROOT / "skills" / "review" / "code-check.md").lower():
+        fail("review/code-check.md: an exposed credential must be reported to the owner at once")
+
+
 def main() -> int:
     data = check_json()
     check_versions(data)
@@ -503,6 +532,7 @@ def main() -> int:
     check_links()
     check_evals()
     check_field_feedback()
+    check_field_feedback_v09()
     check_hook()
     check_plugin_hook()
     check_session_scan()

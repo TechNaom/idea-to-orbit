@@ -23,6 +23,11 @@ wrote them.
 
 ## What to report
 
+**Never read real credentials.** Do not run commands that print a real token, key or
+password (such as a CLI's `auth token`, `env`, or a secrets file), even to test the code that
+reads them: use fakes and mocks.
+
+
 Only the questions you would need answered before you could build these well: places where
 you would have to guess, and a wrong guess would matter. For each one:
 
@@ -69,6 +74,11 @@ wrote them.
 <prd.md and architecture.md, in full>
 
 ## What to report
+
+**Never read real credentials.** Do not run commands that print a real token, key or
+password (such as a CLI's `auth token`, `env`, or a secrets file), even to test the code that
+reads them: use fakes and mocks.
+
 
 Only the questions you would need answered before you could plan the tasks well: places where
 you would have to guess, and a wrong guess would matter. For each: the document and section,
