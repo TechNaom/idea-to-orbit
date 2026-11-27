@@ -50,6 +50,7 @@ sequenceDiagram
 
 | Interface | Type | Contract | Consumers |
 |---|---|---|---|
+| Observability for tests | <attributes, status endpoint, test-mode flag> | <the state a test can read, and how a test pins what the product changes on its own> | Tests |
 
 ## Security
 - Secrets: <where they live, who can read them>
@@ -75,6 +76,10 @@ Delete this section if the product has no UI.
 
 | Screen | Route | Heading | Roles that open it | Roles refused | Key controls |
 |---|---|---|---|---|---|
+
+**Visual system:** the colour and spacing tokens, the layers in z-order (what sits above what),
+and what changes per state (for example what turns see-through when a background effect runs,
+and what every fallback looks like).
 
 Mockup: <link>. Browser tests load this list (or `<path>/screens.yaml`).
 

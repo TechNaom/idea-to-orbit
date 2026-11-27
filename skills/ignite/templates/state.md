@@ -21,6 +21,8 @@ How this product is built and shipped. Every stage reads these instead of assumi
 - Fast tests: <command>   <!-- the affected tests a builder and the checks run; filled at Assemble's T1 if there is no code yet -->
 - Full suite: <command> (about <n> minutes)   <!-- over 15 minutes: see the verify skill, "A slow suite" -->
 - CI: <CI system>; a run per commit on the work branch
+- Toolchain: <runtime and minimum version; how to install what is missing without changing lock files>
+- Pace: ask at every gate   <!-- ask at every gate | run on: <the owner's words, date>; still stop at: new vendor or bill, a change to the live product, UAT -->
 
 ## Gates
 

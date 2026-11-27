@@ -52,10 +52,28 @@ Several lanes can be in flight at once when they change different files, as with
 tasks. The rules do not change in a lane: test first, cause before fix, evidence before
 claims, and the owner's yes.
 
+## Spikes
+
+Exploring before a gate (does this library run here, what does this effect look like) is
+allowed as a **spike**: the owner agrees to it, it is labelled as a spike, it lives on a local
+branch or a scratch folder, it is never merged, and what it taught goes into an ADR. Record it
+as a Skipped rule row in `JOURNAL.md`. Concept pages and mockups shown to the owner are not
+spikes; code in the product's repository is.
+
+## Pace
+
+The **Pace** setting in `STATE.md` says how the owner wants the gates run. `ask at every gate`
+is the default. When the owner gives a standing yes ("no need to stop"), record their words
+and the date as `run on`; that recorded yes is the explicit yes for the gates it covers. It
+never covers: a new vendor, account or bill, a change to the live product, or the owner's UAT;
+those still stop and ask. Show the owner each gate's summary anyway, so a standing yes is not
+a blind one.
+
 Inside every stage and lane, use the helper skills: **review** before any change is merged,
 **debug** when something fails, **verify** before any status you report, and **learn** at the
 end of a milestone or after an incident.
 
-Never mark a gate approved without an explicit yes from the owner in this conversation.
+Never mark a gate approved without an explicit yes from the owner in this conversation, or a
+standing yes recorded under **Pace** that covers that gate.
 
 Arguments: $ARGUMENTS
