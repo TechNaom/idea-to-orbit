@@ -42,7 +42,7 @@ MAX_TOKENS = int(os.environ.get("FREE_ROUTER_MAX_TOKENS", "4096"))
 
 # Prompts that look like they carry credentials never leave the machine.
 _SECRET_PATTERNS = [r"sk-[A-Za-z0-9_-]{16,}", r"sk-ant-[A-Za-z0-9_-]{16,}", r"gh[pousr]_[A-Za-z0-9]{20,}",
-                    r"AIza[0-9A-Za-z_-]{20,}", r"gsk_[A-Za-z0-9]{16,}", r"nvapi-[A-Za-z0-9_-]{16,}",
+                    r"AIza[0-9A-Za-z_-]{20,}", r"AQ\.[A-Za-z0-9_-]{40,}", r"gsk_[A-Za-z0-9]{16,}", r"nvapi-[A-Za-z0-9_-]{16,}",
                     r"AKIA[0-9A-Z]{16}", r"-----BEGIN [A-Z ]*PRIVATE KEY-----"]
 
 
@@ -171,6 +171,24 @@ def fanout(task_prompt: str, tier: str = "heavy_code", caller=_call_openai) -> s
     return "\n\n---\n\n".join(results)
 
 
+def verify(caller=_call_openai) -> list[dict]:
+    """One tiny real call per configured model with a key: which ones answer today. Never prints keys."""
+    rows = []
+    for tier, chain in TIERS.items():
+        for p in chain:
+            if not os.environ.get(p["env"]):
+                rows.append({"tier": tier, "model": _label(p), "ok": False, "why": "no key"})
+                continue
+            t = time.time()
+            try:
+                caller(p, "Reply with just: OK", 60)
+                rows.append({"tier": tier, "model": p["model"], "label": _label(p), "ok": True, "why": "",
+                             "seconds": round(time.time() - t, 1)})
+            except Exception as e:  # report and go on
+                rows.append({"tier": tier, "model": p["model"], "label": _label(p), "ok": False, "why": _why(e)})
+    return rows
+
+
 def _build_server():
     try:  # MCP Python SDK 2.x renamed FastMCP to MCPServer
         from mcp.server.mcpserver import MCPServer as Server
@@ -196,4 +214,12 @@ def _build_server():
 
 
 if __name__ == "__main__":
-    _build_server().run()
+    import sys
+
+    if "--verify" in sys.argv:  # python free_router_mcp.py --verify
+        for r in verify():
+            mark = f"OK   {r.get('seconds', '')}s" if r["ok"] else f"FAIL {r['why'][:90]}"
+            print(f"{r['tier']:10} {r.get('label', r['model']):55} {mark}")
+        print(f"Set 'status' in providers.json to 'verified {time.strftime('%Y-%m-%d')}' for the OK rows.")
+    else:
+        _build_server().run()

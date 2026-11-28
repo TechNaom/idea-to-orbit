@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.10.1 - 2026-11-28
+
+- **Free worker router: models that answer today.** Real calls showed 6 of the 8 starting model IDs
+  retired or renamed (404 and 410); every key worked. `providers.json` now lists models verified on
+  2026-11-28 (7 answer; `gemini-3.1-pro-preview` is rate-limited on the free tier). Each model
+  carries `status: "verified <date>"` or `"to verify"`, and `python free_router_mcp.py --verify` makes
+  one tiny call per model and reports which answer, without printing keys. Lesson: free model IDs rot
+  within weeks, so a config that names them needs a date and a check command.
+- The secret guard also refuses Google's newer `AQ.` key format.
+- The router's behaviour tests run on a fixed test list (`test_providers.json`), so changing the real
+  model list never breaks them.
+
 ## 0.10.0 - 2026-11-28
 
 Lessons from a third real product: a feature lane that turns a live personal website into a 3D
