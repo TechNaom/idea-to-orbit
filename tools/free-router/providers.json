@@ -31,7 +31,8 @@
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
         "env": "GEMINI_API_KEY",
         "model": "gemini-3.5-flash",
-        "status": "verified 2026-11-28"
+        "status": "verified 2026-11-28",
+        "note": "took 51 s, timed out once at 90 s, and answered in 2.4 s on 2026-11-28"
       },
       {
         "name": "nvidia-nim",
@@ -39,6 +40,14 @@
         "env": "NVIDIA_NIM_API_KEY",
         "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
         "status": "verified 2026-11-28"
+      },
+      {
+        "name": "google-ai-studio",
+        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
+        "env": "GEMINI_API_KEY",
+        "model": "gemini-3.1-flash-lite",
+        "status": "to verify",
+        "note": "answered in about 4 s once and returned 503 once on 2026-11-28; free tiers swing, so failover order is not a ranking"
       }
     ],
     "fast": [
