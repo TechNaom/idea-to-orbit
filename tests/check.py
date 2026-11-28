@@ -582,6 +582,30 @@ def check_token_meter() -> None:
         fail("build: the token guard does not point to token_meter.py")
 
 
+def check_free_router() -> None:
+    """The optional worker router: present, generic, tested in CI, and the build stage's rules for workers."""
+    tool = ROOT / "tools" / "free-router"
+    for name in ["free_router_mcp.py", "providers.json", ".env.example", "install.py", "README.md",
+                 "test_free_router.py", "test_install.py"]:
+        if not (tool / name).exists():
+            fail(f"tools/free-router/{name} missing")
+    if (tool / ".env").exists() or (tool / "cursor_mcp_snippet.json").exists():
+        fail("tools/free-router: no .env or machine-specific Cursor snippet in the repo")
+    workflows = "".join(read(w) for w in (ROOT / ".github" / "workflows").glob("*.yml"))
+    if "tools/free-router" not in workflows:
+        fail("CI does not run the free-router tests")
+    workers = ROOT / "skills" / "build" / "workers.md"
+    if not workers.exists():
+        fail("build: no workers.md (supervisor rules for outside worker models)")
+    else:
+        text = read(workers).lower()
+        for must in ["quality gate", "secrets", "personal data", "confidential", "unreleased", "minimum"]:
+            if must not in text:
+                fail(f"build/workers.md: no rule about {must!r}")
+    if "workers.md" not in read(ROOT / "skills" / "build" / "SKILL.md"):
+        fail("build: SKILL.md does not point to workers.md")
+
+
 def main() -> int:
     data = check_json()
     check_versions(data)
@@ -595,6 +619,7 @@ def main() -> int:
     check_field_feedback_v010()
     sys.path.insert(0, str(ROOT / "tests"))
     check_token_meter()
+    check_free_router()
     check_hook()
     check_plugin_hook()
     check_session_scan()

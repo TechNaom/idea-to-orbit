@@ -69,6 +69,9 @@ model is built by one, so the build has its own guards (N7 to N10 in the PRD):
 - **At the limit:** stop cleanly with the work saved (uncommitted is fine, recorded in
   `STATE.md`), and resume the same agent after the reset rather than starting a new one.
 - Over budget: record why in the ledger; the learn skill looks at those rows first.
+- **Outside workers:** sub-tasks may go to other models (for example `tools/free-router`) only
+  under the rules in `workers.md`: Claude keeps planning, security, git and every final write;
+  send the minimum; never secrets, personal, confidential data or unreleased IP; review every answer.
 
 ## The loop, for each task
 

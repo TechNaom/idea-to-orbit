@@ -38,6 +38,11 @@ and the card cold read 12 more (6 important), all before any code.
   never content. Plain Python, unit-tested in CI. (On its first real run, 96% of 47.7M tokens were
   cache reads, and the main session used 75% of the fresh tokens, more than all subagents together;
   the hand-copied numbers had hidden both.)
+- **Free worker router** (`tools/free-router`, optional): an MCP server that hands self-contained
+  sub-tasks to free or other OpenAI-compatible models in three tiers with failover, a size guard, a
+  secret guard and a log without prompts; providers in `providers.json`, each "to verify"; an
+  installer that never overwrites `.env` and writes the Cursor snippet per machine. The build stage's
+  `workers.md` keeps Claude as supervisor and quality gate. Tested with fakes in CI.
 - Eval cases added: `ignite-visual-direction`, `orbit-pace-standing-yes`,
   `blueprint-runtime-fallback-ci`, `assemble-lane-preview-not-prod`. Not run yet (paid runs wait
   for the owner).
