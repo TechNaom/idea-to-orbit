@@ -150,7 +150,7 @@ docs/orbit/
 
 ## Status
 
-Version 0.9: the seven stages and four helper skills, the session-start hook, install scripts
+Version 0.10: the seven stages and four helper skills, the session-start hook, install scripts
 for surfaces without `/plugin`, catch-up steps for products that already have code, a build
 stage with fresh-agent checks on every task, a bounded fix loop and support for outside
 builders (Cursor, Kiro), a cold read of the design and of the cards, a mockup step for screens,
