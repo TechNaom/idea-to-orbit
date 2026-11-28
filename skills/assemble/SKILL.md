@@ -29,14 +29,19 @@ stop and ask the owner before writing any task.
 3. Put the first tasks in this order: repository and CI (and, once the tests exist, the
    **Fast tests** and **Full suite** settings in `STATE.md`), budget guard and `.env.example`,
    a walking skeleton deployed end to end, then features. Operations tasks (health check,
-   alerts, backup tag, rollback) belong in the plan, not after it.
+   alerts, backup tag, rollback) belong in the plan, not after it. **For a feature lane** on a
+   product that is already live, "deployed end to end" means the **promotion environment** (a
+   branch preview or staging), never production; keep each standard first task or mark it
+   "not needed" with the reason (nothing billed, no secrets), as the PRD does for NFRs.
 4. Write a **task card** for every task in the first milestone (see below). Cards for later
    milestones are written when each milestone starts, using what the earlier ones taught.
 5. Check coverage: every requirement ID maps to at least one task. List any gaps.
 6. Write `docs/orbit/tasks.md`.
 7. **Cold read.** Send the first milestone's cards to a fresh agent with the review skill's
    `cold-read.md`. Answer every question it ranks as important by fixing the card, not by
-   explaining it to the agent; a builder will have the same question. Run it again if more
+   explaining it to the agent; a builder will have the same question. Point the reader at the
+   **real code** each card names (data files, config, the gate scripts, the bundler) as well as
+   the documents: a card's guesses hide where it meets existing code. Run it again if more
    than a few cards changed.
 8. After the gate passes, create one issue per task on the **Code host** in `STATE.md`
    (`gh issue create` on GitHub, `glab issue create` on GitLab), labelled with its

@@ -46,6 +46,33 @@ write it (see the assemble skill) before building that task.
    - **Parallel**: tasks with no dependency on each other and no shared files run at the
      same time, each in its own worktree. See `parallel.md`.
 
+## Token guard: the builders are an AI system too
+
+Agents cost tokens, and the owner's plan or API budget is finite. Even a product that calls no
+model is built by one, so the build has its own guards (N7 to N10 in the PRD):
+
+- **Ledger:** every agent run is a row in `docs/orbit/token-ledger.md` (from
+  `templates/token-ledger.md`): stage, task, role, model, tokens, result. Per task: tokens against
+  its budget, first-pass task check, fixes in review. **Measure, don't copy:** run
+  `python token_meter.py <project log folder> --session <id> --sizes T1=M,T2=S --budget S=60000,M=150000`
+  (this folder) to read the real counts from Claude Code's session logs, subagents included, and
+  `--ledger` for the rows. Name each subagent with its task ID ("Build T3", "Code check T3") so the
+  meter can map it. Budgets count **fresh tokens** (input, output, cache writes); cache reads
+  re-read the context at a far lower price and are reported apart. Count the **supervisor** too:
+  a long main session usually costs more than all its subagents, so a solo build is not free.
+- **Estimate first:** before each milestone, write its expected tokens from the task sizes
+  (defaults: S 60k, M 150k, all agents together) and compare with what the plan has left.
+- **Lean by default:** an S task with pure code and no CI, security or UI change may be built
+  solo and gets **one combined check** (task and code, in one fresh agent on a smaller model);
+  M tasks and any CI, security, money or UI change keep the two separate checks. Briefs point to
+  the card file instead of pasting documents; checkers get the diff and the card only.
+- **At the limit:** stop cleanly with the work saved (uncommitted is fine, recorded in
+  `STATE.md`), and resume the same agent after the reset rather than starting a new one.
+- Over budget: record why in the ledger; the learn skill looks at those rows first.
+- **Outside workers:** sub-tasks may go to other models (for example `tools/free-router`) only
+  under the rules in `workers.md`: Claude keeps planning, security, git and every final write;
+  send the minimum; never secrets, personal, confidential data or unreleased IP; review every answer.
+
 ## The loop, for each task
 
 1. **Pick** the next task whose dependencies are done. Say which one and why.

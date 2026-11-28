@@ -36,7 +36,9 @@ The idea in any form: a sentence, a voice note transcript, a list, an existing d
    - **AI and screens:** does the product call a model, and does it have screens people
      use? If it calls a model, ask what it must get right and how well (for example "every
      figure matches the source; at most 1 answer in 20 not grounded"): those become eval bars,
-     as requirements with IDs.
+     as requirements with IDs. If it has screens, ask for its **visual direction** as a
+     multiple-choice question with two to four sketched options (a world, a mood, a metaphor,
+     light or dark), before the PRD: a look you pick yourself becomes the owner's product.
    Do not invent answers. Mark anything unanswered as an open question in `STATE.md`.
 4. Write `docs/orbit/brief.md` from `templates/brief.md`: one page, plain words.
 5. Write `docs/orbit/prd.md` from `templates/prd.md`. Every requirement gets an ID
@@ -49,6 +51,11 @@ The idea in any form: a sentence, a voice note transcript, a list, an existing d
 7. Run the gate.
 
 ## A feature lane
+
+**An existing product and a feature lane together** (the product joins Idea to Orbit and the
+owner asks for something new in the same breath): first catch up the Settings and a short,
+reconstructed requirement list (see Existing product), then open the lane with new requirement
+IDs. The reconstructed list is what the lane must not break.
 
 A new feature on a product that is already built or live does not restart the product at
 Ignite; it gets a short ignite of its own, before any build plan, comparison-based step list or
@@ -72,6 +79,9 @@ asking from a blank page:
 
 1. Pull first (other sessions may be working), then read the code, tests, README, history,
    CI and any design notes. Run the tests now and note the result, and how long they took.
+   If they do not run, record the **toolchain** in Settings as you get them running: the
+   runtime and its minimum version, and how to install what is missing without changing lock
+   files (a package installed with no save, for example). The next builder hits the same wall.
 2. **Fill the Settings** in `STATE.md` from what is there: the code host (the CI file and the
    remote), the branches and how they promote, who builds, the fast test command and the
    full suite with its time, and the profile. Mark each one you inferred.

@@ -18,7 +18,9 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
    interfaces, model providers, authentication, background jobs, how it is triggered.
    **Prior art:** for each capability the product needs, look for existing open-source projects
    and managed services first, and check each one live (it exists, it is active, its licence fits
-   the owner's use, its price). Where one fits, it is an option in that decision's ADR next to
+   the owner's use, its price). Judge by measurement, not reputation: for anything that runs
+   on the user's side, measure the cost the user pays (download size, start time, memory) and
+   check its activity live (last release, open issues). Where one fits, it is an option in that decision's ADR next to
    building it; building what already exists needs a reason.
 2. For each big decision, compare at least two real options on: fit to the requirements,
    cost per month at the expected load, operating effort, lock-in, and failure behaviour.
@@ -40,6 +42,13 @@ The approved `docs/orbit/prd.md`. Check `STATE.md`: ignite must be `approved`.
    - **Traceability:** which parts satisfy which requirement IDs.
    - **AI** (when the product calls a model): see below.
    - **Screens** (when the product has a UI): see below.
+   - **What the product changes on its own at run time** (quality levels, retries, fallbacks,
+     caching, feature switches by device): list each one and how a test pins it. A test
+     browser or a CI runner is the slowest, oddest device there is; without a pin, every test
+     sees the fallback and passes for the wrong reason.
+   - **Observability for tests:** how a test reads the product's state (attributes, a status
+     endpoint, a test-mode flag), so tests assert on state instead of guessing from pixels or
+     timings.
    Use Mermaid for every diagram so it renders on GitHub, GitLab and most editors.
 4. Apply the defaults of the product's **profile** (`STATE.md`), unless the PRD or the owner
    says otherwise. See below.
@@ -95,7 +104,10 @@ to a picture instead of a description:
 2. Make one static HTML page with every screen from the screen list on it, in the product's
    colours and fonts, with the real labels and example data from the PRD (never lorem ipsum),
    and the refusal each role sees where a role may not open a screen. No framework and no
-   server: one file the owner opens in a browser or receives as a shared page.
+   server: one file the owner opens in a browser or receives as a shared page. When motion is
+   the point (3D, animation, scroll-driven screens), make it a **live mockup**: the same single
+   page, with the motion running on example data, since a still picture hides what the owner is
+   deciding on.
 3. Walk the owner through it, screen by screen. Write each change they ask for into the screen
    list and the page, and show it again.
 4. Record in `architecture.md` where the mockup is and the date the owner agreed it.
@@ -120,7 +132,7 @@ tests and a review.
 | "It runs from the repo, so it will find its files." | Write how the code finds its own files, config and secrets on every install path and place it runs (a plugin, a script install, a container, a function, a notebook). |
 | "One run is obvious: it starts, does the work, finishes." | Write what starts and ends one run, what state survives between runs, and what happens to a run left half done (retry, resume, never twice). |
 | "The summary lists the new service, so one yes covers it." | A one yes to a long summary hides a new vendor, account or bill. Ask about each one on its own, in plain words. |
-| "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR. |
+| "Let me start some code to test the idea." | A spike is allowed only if the owner agrees, it is thrown away, and its result goes into an ADR (see `/orbit`, Spikes). |
 
 ## Gate
 

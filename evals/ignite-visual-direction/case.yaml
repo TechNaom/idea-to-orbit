@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: ignite-visual-direction
+description: "A product with screens: Claude asks the owner for the visual direction instead of picking one itself."
+tags: [ignite, pressure]

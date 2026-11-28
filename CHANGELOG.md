@@ -1,5 +1,52 @@
 # Changelog
 
+## 0.10.0 - 2026-11-28
+
+Lessons from a third real product: a feature lane that turns a live personal website into a 3D
+site. Each rule has an offline check that failed before the change, and the new eval cases are
+listed below. In this run the design cold read found 20 gaps (9 would have caused a wrong build)
+and the card cold read 12 more (6 important), all before any code.
+
+- **Ignite:** a product with screens is asked for its **visual direction** as a multiple-choice
+  question before the PRD (Claude picked a look; the owner chose another). An existing product
+  that arrives with a new feature: catch up Settings and a reconstructed requirement list first,
+  then open the lane. A **Toolchain** setting records the runtime and how to install what is
+  missing without changing lock files (it took three tries to run the tests).
+- **Pace:** a setting in `STATE.md`. A standing "no need to stop" is recorded with the owner's
+  words and date and counts as the yes for the gates it covers; a new vendor or bill, a change to
+  the live product and the owner's UAT still stop and ask.
+- **Spikes:** named in `/orbit`: agreed, labelled, on a local branch, never merged, the lesson in an
+  ADR, logged as a skipped rule (exploration had slid into the product's repository).
+- **Blueprint:** list what the product **changes on its own at run time** (quality levels,
+  fallbacks, retries) and how a test pins each one (CI browsers have no graphics card, so every
+  3D test would have seen the fallback). An **Observability for tests** row in Interfaces. Prior
+  art by **measurement** (the cost the user pays, live activity). A **Visual system** block in
+  Screens (tokens, layers, what changes per state). A **live mockup** when motion is the point.
+- **Assemble:** in a feature lane, "deployed end to end" means the **promotion environment**, and
+  standard first tasks are kept or marked "not needed" with a reason. The cold read checks the
+  cards against the **real code** they name.
+- **The builders are an AI system too:** governance, token guard and budget guard in the PRD
+  template also cover the agents that build the product, and a new N10 row measures them
+  (first-pass task checks, fixes in review, tokens per task). Build keeps a **token ledger** of
+  every agent run, estimates each milestone first, uses a **lean mode** (one combined check for
+  small, low-risk tasks) and stops cleanly at a plan's usage limit. (One task's agents used 182k
+  tokens against a 150k budget; a builder was cut off by the 5-hour limit and resumed.)
+- **Token meter** (`skills/build/token_meter.py`): reads Claude Code session logs, subagents
+  included, and reports fresh and cached tokens by agent, role, task, model and day; per-task
+  budgets with warnings at 80%; savings from the cache (with a dated prices file you keep, else
+  tokens only) and from lean mode against a measured baseline; ledger rows. It reads counts only,
+  never content. Plain Python, unit-tested in CI. (On its first real run, 96% of 47.7M tokens were
+  cache reads, and the main session used 75% of the fresh tokens, more than all subagents together;
+  the hand-copied numbers had hidden both.)
+- **Free worker router** (`tools/free-router`, optional): an MCP server that hands self-contained
+  sub-tasks to free or other OpenAI-compatible models in three tiers with failover, a size guard, a
+  secret guard and a log without prompts; providers in `providers.json`, each "to verify"; an
+  installer that never overwrites `.env` and writes the Cursor snippet per machine. The build stage's
+  `workers.md` keeps Claude as supervisor and quality gate. Tested with fakes in CI.
+- Eval cases added: `ignite-visual-direction`, `orbit-pace-standing-yes`,
+  `blueprint-runtime-fallback-ci`, `assemble-lane-preview-not-prod`. Not run yet (paid runs wait
+  for the owner).
+
 ## 0.9.0 - 2026-11-27
 
 Lessons from real use, written as general rules for any product. Each has an offline check that

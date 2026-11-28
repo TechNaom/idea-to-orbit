@@ -523,6 +523,89 @@ def check_field_feedback_v09() -> None:
         fail("review/code-check.md: an exposed credential must be reported to the owner at once")
 
 
+def check_field_feedback_v010() -> None:
+    """0.10 lessons from a live website's 3D feature lane: look, motion, adaptive runtime, pace, lanes in assemble."""
+    ignite = read(ROOT / "skills" / "ignite" / "SKILL.md")
+    if "visual direction" not in ignite.lower():
+        fail("ignite: a product with screens must be asked for its visual direction before the PRD")
+    if "existing product and a feature lane" not in ignite.lower():
+        fail("ignite: no order for an existing product that arrives with a new feature")
+    if "toolchain" not in ignite.lower():
+        fail("ignite (existing product): no step to record the toolchain and how to install it")
+    state = read(ROOT / "skills" / "ignite" / "templates" / "state.md")
+    for word in ["Toolchain:", "Pace:"]:
+        if word not in state:
+            fail(f"state template: no {word} setting")
+    blueprint = read(ROOT / "skills" / "blueprint" / "SKILL.md")
+    low = blueprint.lower()
+    if "changes on its own at run time" not in low:
+        fail("blueprint: no question about behaviour the product changes on its own, and how a test pins it")
+    if "cost the user pays" not in low:
+        fail("blueprint prior art: measure the cost the user pays, not reputation")
+    if "live mockup" not in low:
+        fail("blueprint mockup: no live mockup when motion is the point")
+    arch = read(ROOT / "skills" / "blueprint" / "templates" / "architecture.md")
+    if "Observability for tests" not in arch:
+        fail("architecture template: no row for how tests read the product's state")
+    if "Visual system" not in arch:
+        fail("architecture template: no visual system block (tokens, layers, states) in Screens")
+    if "spike" not in read(ROOT / "commands" / "orbit.md").lower():
+        fail("orbit command: a spike is not named (allowed before the gate, labelled, never merged)")
+    assemble = read(ROOT / "skills" / "assemble" / "SKILL.md")
+    if "promotion environment" not in assemble.lower():
+        fail("assemble: for a feature lane, 'deployed' must mean the promotion environment")
+    prd = read(ROOT / "skills" / "ignite" / "templates" / "prd.md")
+    if "builders" not in prd.split("| N7 |", 1)[-1].split("| N10 |", 1)[0].lower():
+        fail("prd template: governance, token and budget guards must also cover the AI builders, even with no model in the product")
+    if "| N10 |" not in prd:
+        fail("prd template: no evals row for the build process")
+    build = read(ROOT / "skills" / "build" / "SKILL.md")
+    if "token-ledger.md" not in build:
+        fail("build: no token ledger of every agent run")
+    if "combined check" not in build.lower():
+        fail("build: no lean mode (one combined check for small, low-risk tasks)")
+    if not (ROOT / "skills" / "build" / "templates" / "token-ledger.md").exists():
+        fail("build: no token ledger template")
+    cold = assemble.split("**Cold read.**", 1)[-1].split("\n8.", 1)[0].lower()
+    if "real code" not in cold:
+        fail("assemble cold read: the reader must check the cards against the real code they name")
+
+
+def check_token_meter() -> None:
+    """The token meter's unit tests (skills/build/token_meter.py), on every platform CI runs."""
+    import unittest
+    suite = unittest.defaultTestLoader.loadTestsFromName("test_token_meter")
+    result = unittest.TextTestRunner(stream=open(os.devnull, "w"), verbosity=0).run(suite)
+    for test, err in result.failures + result.errors:
+        fail(f"token meter: {test.id().rsplit('.', 1)[-1]}: {err.strip().splitlines()[-1]}")
+    if "token_meter.py" not in read(ROOT / "skills" / "build" / "SKILL.md"):
+        fail("build: the token guard does not point to token_meter.py")
+
+
+def check_free_router() -> None:
+    """The optional worker router: present, generic, tested in CI, and the build stage's rules for workers."""
+    tool = ROOT / "tools" / "free-router"
+    for name in ["free_router_mcp.py", "providers.json", ".env.example", "install.py", "README.md",
+                 "test_free_router.py", "test_install.py"]:
+        if not (tool / name).exists():
+            fail(f"tools/free-router/{name} missing")
+    if (tool / ".env").exists() or (tool / "cursor_mcp_snippet.json").exists():
+        fail("tools/free-router: no .env or machine-specific Cursor snippet in the repo")
+    workflows = "".join(read(w) for w in (ROOT / ".github" / "workflows").glob("*.yml"))
+    if "tools/free-router" not in workflows:
+        fail("CI does not run the free-router tests")
+    workers = ROOT / "skills" / "build" / "workers.md"
+    if not workers.exists():
+        fail("build: no workers.md (supervisor rules for outside worker models)")
+    else:
+        text = read(workers).lower()
+        for must in ["quality gate", "secrets", "personal data", "confidential", "unreleased", "minimum"]:
+            if must not in text:
+                fail(f"build/workers.md: no rule about {must!r}")
+    if "workers.md" not in read(ROOT / "skills" / "build" / "SKILL.md"):
+        fail("build: SKILL.md does not point to workers.md")
+
+
 def main() -> int:
     data = check_json()
     check_versions(data)
@@ -533,6 +616,10 @@ def main() -> int:
     check_evals()
     check_field_feedback()
     check_field_feedback_v09()
+    check_field_feedback_v010()
+    sys.path.insert(0, str(ROOT / "tests"))
+    check_token_meter()
+    check_free_router()
     check_hook()
     check_plugin_hook()
     check_session_scan()
