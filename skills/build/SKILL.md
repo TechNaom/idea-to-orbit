@@ -52,8 +52,14 @@ Agents cost tokens, and the owner's plan or API budget is finite. Even a product
 model is built by one, so the build has its own guards (N7 to N10 in the PRD):
 
 - **Ledger:** every agent run is a row in `docs/orbit/token-ledger.md` (from
-  `templates/token-ledger.md`): stage, task, role, model, tokens as the harness reports them,
-  result. Per task: tokens against its budget, first-pass task check, fixes in review.
+  `templates/token-ledger.md`): stage, task, role, model, tokens, result. Per task: tokens against
+  its budget, first-pass task check, fixes in review. **Measure, don't copy:** run
+  `python token_meter.py <project log folder> --session <id> --sizes T1=M,T2=S --budget S=60000,M=150000`
+  (this folder) to read the real counts from Claude Code's session logs, subagents included, and
+  `--ledger` for the rows. Name each subagent with its task ID ("Build T3", "Code check T3") so the
+  meter can map it. Budgets count **fresh tokens** (input, output, cache writes); cache reads
+  re-read the context at a far lower price and are reported apart. Count the **supervisor** too:
+  a long main session usually costs more than all its subagents, so a solo build is not free.
 - **Estimate first:** before each milestone, write its expected tokens from the task sizes
   (defaults: S 60k, M 150k, all agents together) and compare with what the plan has left.
 - **Lean by default:** an S task with pure code and no CI, security or UI change may be built

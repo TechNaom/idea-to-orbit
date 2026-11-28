@@ -571,6 +571,17 @@ def check_field_feedback_v010() -> None:
         fail("assemble cold read: the reader must check the cards against the real code they name")
 
 
+def check_token_meter() -> None:
+    """The token meter's unit tests (skills/build/token_meter.py), on every platform CI runs."""
+    import unittest
+    suite = unittest.defaultTestLoader.loadTestsFromName("test_token_meter")
+    result = unittest.TextTestRunner(stream=open(os.devnull, "w"), verbosity=0).run(suite)
+    for test, err in result.failures + result.errors:
+        fail(f"token meter: {test.id().rsplit('.', 1)[-1]}: {err.strip().splitlines()[-1]}")
+    if "token_meter.py" not in read(ROOT / "skills" / "build" / "SKILL.md"):
+        fail("build: the token guard does not point to token_meter.py")
+
+
 def main() -> int:
     data = check_json()
     check_versions(data)
@@ -582,6 +593,8 @@ def main() -> int:
     check_field_feedback()
     check_field_feedback_v09()
     check_field_feedback_v010()
+    sys.path.insert(0, str(ROOT / "tests"))
+    check_token_meter()
     check_hook()
     check_plugin_hook()
     check_session_scan()

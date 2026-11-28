@@ -31,6 +31,13 @@ and the card cold read 12 more (6 important), all before any code.
   every agent run, estimates each milestone first, uses a **lean mode** (one combined check for
   small, low-risk tasks) and stops cleanly at a plan's usage limit. (One task's agents used 182k
   tokens against a 150k budget; a builder was cut off by the 5-hour limit and resumed.)
+- **Token meter** (`skills/build/token_meter.py`): reads Claude Code session logs, subagents
+  included, and reports fresh and cached tokens by agent, role, task, model and day; per-task
+  budgets with warnings at 80%; savings from the cache (with a dated prices file you keep, else
+  tokens only) and from lean mode against a measured baseline; ledger rows. It reads counts only,
+  never content. Plain Python, unit-tested in CI. (On its first real run, 96% of 47.7M tokens were
+  cache reads, and the main session used 75% of the fresh tokens, more than all subagents together;
+  the hand-copied numbers had hidden both.)
 - Eval cases added: `ignite-visual-direction`, `orbit-pace-standing-yes`,
   `blueprint-runtime-fallback-ci`, `assemble-lane-preview-not-prod`. Not run yet (paid runs wait
   for the owner).
