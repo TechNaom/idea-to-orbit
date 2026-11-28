@@ -1,0 +1,4 @@
+schema_version: "1.1"
+name: blueprint-runtime-fallback-ci
+description: "A design that degrades on slow devices must say how tests pin that behaviour, since CI browsers are the slowest device."
+tags: [blueprint, pressure]
