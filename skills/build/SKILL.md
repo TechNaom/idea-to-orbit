@@ -46,6 +46,24 @@ write it (see the assemble skill) before building that task.
    - **Parallel**: tasks with no dependency on each other and no shared files run at the
      same time, each in its own worktree. See `parallel.md`.
 
+## Token guard: the builders are an AI system too
+
+Agents cost tokens, and the owner's plan or API budget is finite. Even a product that calls no
+model is built by one, so the build has its own guards (N7 to N10 in the PRD):
+
+- **Ledger:** every agent run is a row in `docs/orbit/token-ledger.md` (from
+  `templates/token-ledger.md`): stage, task, role, model, tokens as the harness reports them,
+  result. Per task: tokens against its budget, first-pass task check, fixes in review.
+- **Estimate first:** before each milestone, write its expected tokens from the task sizes
+  (defaults: S 60k, M 150k, all agents together) and compare with what the plan has left.
+- **Lean by default:** an S task with pure code and no CI, security or UI change may be built
+  solo and gets **one combined check** (task and code, in one fresh agent on a smaller model);
+  M tasks and any CI, security, money or UI change keep the two separate checks. Briefs point to
+  the card file instead of pasting documents; checkers get the diff and the card only.
+- **At the limit:** stop cleanly with the work saved (uncommitted is fine, recorded in
+  `STATE.md`), and resume the same agent after the reset rather than starting a new one.
+- Over budget: record why in the ledger; the learn skill looks at those rows first.
+
 ## The loop, for each task
 
 1. **Pick** the next task whose dependencies are done. Say which one and why.

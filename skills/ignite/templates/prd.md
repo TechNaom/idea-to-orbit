@@ -24,9 +24,10 @@ Version <n>, <YYYY-MM-DD>. Brief: [brief.md](brief.md)
 | N4 | Performance | | |
 | N5 | Release | <versioned, tagged; how a rollback works> | |
 | N6 | Guardrails | <what the product may never do or decide on its own> | |
-| N7 | Governance | <audit log, kill switch, who can change what> | |
-| N8 | Token guard | <tokens per call and per day; what happens past the limit> | |
-| N9 | Budget guard | <spend cap per day and month; what stops at the cap> | |
+| N7 | Governance | <audit log, kill switch, who can change what; and for the AI builders: what agents may never do (merge to production, read secrets, add a vendor, weaken a test)> | |
+| N8 | Token guard | <tokens per call and per day; what happens past the limit; and for the builders: tokens per task, logged in `token-ledger.md`> | |
+| N9 | Budget guard | <spend cap per day and month; what stops at the cap; and for the builders: the plan or API budget, an estimate before each milestone, a clean stop at the limit> | |
+| N10 | Evals | <the product's eval bars if it calls a model; and for the builders: first-pass task checks, fixes in review and tokens per task> | |
 
 Every area above gets a requirement, or "not needed" with a reason (a product with no model
 call needs no token guard; say so).

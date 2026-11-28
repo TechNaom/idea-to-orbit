@@ -554,6 +554,18 @@ def check_field_feedback_v010() -> None:
     assemble = read(ROOT / "skills" / "assemble" / "SKILL.md")
     if "promotion environment" not in assemble.lower():
         fail("assemble: for a feature lane, 'deployed' must mean the promotion environment")
+    prd = read(ROOT / "skills" / "ignite" / "templates" / "prd.md")
+    if "builders" not in prd.split("| N7 |", 1)[-1].split("| N10 |", 1)[0].lower():
+        fail("prd template: governance, token and budget guards must also cover the AI builders, even with no model in the product")
+    if "| N10 |" not in prd:
+        fail("prd template: no evals row for the build process")
+    build = read(ROOT / "skills" / "build" / "SKILL.md")
+    if "token-ledger.md" not in build:
+        fail("build: no token ledger of every agent run")
+    if "combined check" not in build.lower():
+        fail("build: no lean mode (one combined check for small, low-risk tasks)")
+    if not (ROOT / "skills" / "build" / "templates" / "token-ledger.md").exists():
+        fail("build: no token ledger template")
     cold = assemble.split("**Cold read.**", 1)[-1].split("\n8.", 1)[0].lower()
     if "real code" not in cold:
         fail("assemble cold read: the reader must check the cards against the real code they name")

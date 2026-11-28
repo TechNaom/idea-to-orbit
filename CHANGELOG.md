@@ -25,6 +25,12 @@ and the card cold read 12 more (6 important), all before any code.
 - **Assemble:** in a feature lane, "deployed end to end" means the **promotion environment**, and
   standard first tasks are kept or marked "not needed" with a reason. The cold read checks the
   cards against the **real code** they name.
+- **The builders are an AI system too:** governance, token guard and budget guard in the PRD
+  template also cover the agents that build the product, and a new N10 row measures them
+  (first-pass task checks, fixes in review, tokens per task). Build keeps a **token ledger** of
+  every agent run, estimates each milestone first, uses a **lean mode** (one combined check for
+  small, low-risk tasks) and stops cleanly at a plan's usage limit. (One task's agents used 182k
+  tokens against a 150k budget; a builder was cut off by the 5-hour limit and resumed.)
 - Eval cases added: `ignite-visual-direction`, `orbit-pace-standing-yes`,
   `blueprint-runtime-fallback-ci`, `assemble-lane-preview-not-prod`. Not run yet (paid runs wait
   for the owner).
