@@ -6,6 +6,10 @@ import sys
 import pytest
 
 HERE = pathlib.Path(__file__).resolve().parent
+import os
+
+# Behaviour tests route over a fixed test list, so they never break when providers.json changes.
+os.environ["FREE_ROUTER_PROVIDERS"] = str(HERE / "test_providers.json")
 spec = importlib.util.spec_from_file_location("free_router_mcp", HERE / "free_router_mcp.py")
 fr = importlib.util.module_from_spec(spec)
 sys.modules["free_router_mcp"] = fr
@@ -153,8 +157,8 @@ def test_providers_config_is_complete_and_marked():
         for p in chain:
             assert {"name", "base_url", "env", "model", "status"} <= set(p)
             assert p["base_url"].startswith("https://")
-            assert p["status"] in {"to verify", "verified"}
-    assert fr.TIERS["fast"][0]["model"] == data["tiers"]["fast"][0]["model"]
+            assert p["status"] == "to verify" or p["status"].startswith("verified ")
+    assert set(data["tiers"]) == set(fr.TIERS)
 
 
 def test_env_example_lists_every_key_and_holds_no_values():
@@ -162,3 +166,30 @@ def test_env_example_lists_every_key_and_holds_no_values():
     pairs = dict(l.split("=", 1) for l in lines if "=" in l and not l.startswith("#"))
     assert set(pairs) == set(fr.KEY_ENVS)
     assert all(v == "" for v in pairs.values())
+
+
+def test_google_aq_keys_are_refused(env):
+    key = "AQ." + "Ab1_" * 12  # the newer Google key format (53 characters)
+    out = fr.route(f"debug this: GEMINI_API_KEY={key}", "fast", caller=lambda *a: "never")
+    assert out.startswith("[WORKER: none] Refused")
+
+
+def test_every_model_carries_a_verified_date_or_to_verify():
+    import json, re
+    data = json.loads((HERE / "providers.json").read_text(encoding="utf-8"))
+    for chain in data["tiers"].values():
+        for p in chain:
+            assert p["status"] == "to verify" or re.fullmatch(r"verified \d{4}-\d{2}-\d{2}", p["status"]), p
+
+
+def test_verify_reports_each_model_without_keys(env, capsys):
+    script = {"openai/gpt-oss-120b": "OK"}
+    def call(p, prompt, timeout):
+        if p["model"] in script:
+            return script[p["model"]]
+        e = Exception("Error code: 404"); e.status_code = 404; raise e
+    rows = fr.verify(caller=call)
+    by = {r["model"]: r for r in rows}
+    assert by["openai/gpt-oss-120b"]["ok"] is True
+    assert any(not r["ok"] and "404" in r["why"] for r in rows)
+    assert all("fake" not in r["why"] for r in rows)  # key values never appear

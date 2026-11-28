@@ -1,28 +1,28 @@
 {
-  "_about": "Free worker tiers for free_router_mcp.py. Edit freely: any OpenAI-compatible endpoint works. 'status' stays 'to verify' until one real call with that model succeeds; failover covers bad ones.",
+  "_about": "Free worker tiers for free_router_mcp.py. Any OpenAI-compatible endpoint works. Free models are renamed or retired within weeks: run `python free_router_mcp.py --verify` and set 'status' to 'verified <date>' for the ones that answer; failover covers the rest.",
   "tiers": {
     "heavy_code": [
-      {
-        "name": "nvidia-nim",
-        "base_url": "https://integrate.api.nvidia.com/v1",
-        "env": "NVIDIA_NIM_API_KEY",
-        "model": "deepseek-ai/deepseek-v3.2",
-        "status": "to verify"
-      },
       {
         "name": "openrouter",
         "base_url": "https://openrouter.ai/api/v1",
         "env": "OPENROUTER_API_KEY",
-        "model": "qwen/qwen3-coder:free",
-        "status": "to verify"
+        "model": "nvidia/nemotron-3-ultra-550b-a55b:free",
+        "status": "verified 2026-11-28"
+      },
+      {
+        "name": "nvidia-nim",
+        "base_url": "https://integrate.api.nvidia.com/v1",
+        "env": "NVIDIA_NIM_API_KEY",
+        "model": "nvidia/nemotron-3-ultra-550b-a55b",
+        "status": "verified 2026-11-28"
       },
       {
         "name": "google-ai-studio",
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
         "env": "GEMINI_API_KEY",
-        "model": "gemini-2.5-pro",
+        "model": "gemini-3.1-pro-preview",
         "status": "to verify",
-        "note": "Pro models were reported to leave Google's free tier in 2026"
+        "note": "exists; rate-limited (429) on the free tier on 2026-11-28"
       }
     ],
     "context": [
@@ -30,15 +30,15 @@
         "name": "google-ai-studio",
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
         "env": "GEMINI_API_KEY",
-        "model": "gemini-2.5-flash",
-        "status": "to verify"
+        "model": "gemini-3.5-flash",
+        "status": "verified 2026-11-28"
       },
       {
         "name": "nvidia-nim",
         "base_url": "https://integrate.api.nvidia.com/v1",
         "env": "NVIDIA_NIM_API_KEY",
-        "model": "google/gemma-4-31b-it",
-        "status": "to verify"
+        "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+        "status": "verified 2026-11-28"
       }
     ],
     "fast": [
@@ -47,21 +47,21 @@
         "base_url": "https://api.groq.com/openai/v1",
         "env": "GROQ_API_KEY",
         "model": "openai/gpt-oss-120b",
-        "status": "to verify"
+        "status": "verified 2026-11-28"
       },
       {
         "name": "groq",
         "base_url": "https://api.groq.com/openai/v1",
         "env": "GROQ_API_KEY",
         "model": "qwen/qwen3.8-27b",
-        "status": "to verify"
+        "status": "verified 2026-11-28"
       },
       {
         "name": "google-ai-studio",
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
         "env": "GEMINI_API_KEY",
-        "model": "gemini-2.5-flash-lite",
-        "status": "to verify"
+        "model": "gemini-3.5-flash-lite",
+        "status": "verified 2026-11-28"
       }
     ]
   }
